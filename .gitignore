@@ -4,3 +4,9 @@ node_modules/
 veritech-app/
 herramientas/envios-locales.jsonl
 dist/
+
+# Respuestas reales de la prueba: nunca en git (el script las guarda en ~/Documents/VeriTech-resultados/)
+VeriTech-resultados-ULTIMO.xlsx
+VeriTech-resultados-2*.xlsx
+.estado-resultados.json
+herramientas/__pycache__/
