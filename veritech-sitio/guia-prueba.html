@@ -64,6 +64,14 @@ footer a:hover{color:var(--accent)}
 .accesos span{font-size:.8rem;color:var(--muted)}
 ol{padding-left:1.25em;margin:0 0 .9em}
 .tiempo{white-space:nowrap}
+@media (max-width:560px){
+  table.apilar thead{display:none}
+  table.apilar tr{display:block;padding:.7em 0;border-bottom:1px solid var(--line)}
+  table.apilar td{display:block;border:0;padding:.12em 0}
+  table.apilar td:first-child{font-weight:600;font-family:Archivo,sans-serif}
+  table.apilar td.tiempo{color:var(--muted);font-size:.84rem}
+  table.apilar td.tiempo::before{content:"Tiempo: "}
+}
 @media print{body{background:#fff;padding:0}.card{box-shadow:none;border:0;padding:0}.back,footer{display:none}}
 </style>
 <meta name="description" content="Qué probar de VeriTech, cuánto tiempo toma, qué no incluye todavía y cómo enviar su opinión.">
@@ -106,7 +114,7 @@ ol{padding-left:1.25em;margin:0 0 .9em}
 <p>Funciona en cualquier navegador, sin crear cuentas. Lo que se pega se analiza en el propio equipo y no se envía a ningún servidor.</p>
 
 <h2>2. Qué le pedimos</h2>
-<table>
+<table class="apilar">
   <thead><tr><th>Quién</th><th>Qué hacer</th><th>Tiempo</th></tr></thead>
   <tbody>
     <tr><td>Docentes</td><td>Probar la herramienta con fuentes de su área (tareas de la sección 3), calificar de 10 a 20 fuentes en <a href="/calibracion.html">Calibración</a> y responder la <a href="/opinion-docentes.html">opinión docente</a>.</td><td class="tiempo">45 min en total</td></tr>

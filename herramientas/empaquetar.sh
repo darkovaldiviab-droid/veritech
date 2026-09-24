@@ -9,6 +9,14 @@ cp -R "$RAIZ/veritech-sitio/." "$DIST/"
 for f in index.html panel.css panel.js datos.js datos-memoria.js datos-supabase.js bibliografia.js; do
   cp "$RAIZ/veritech-app/panel/$f" "$DIST/vista-previa-panel/"
 done
+# En el sitio, la vista previa enlaza de vuelta a la guía (el original en veritech-app no lo necesita)
+python3 - "$DIST/vista-previa-panel/index.html" <<'PY'
+import sys, pathlib
+p = pathlib.Path(sys.argv[1]); s = p.read_text(encoding="utf-8")
+a = '<strong>Demostración con datos ficticios.</strong>'
+assert a in s, "cambió el aviso del panel"
+p.write_text(s.replace(a, '<strong>Vista previa con datos ficticios.</strong> <a href="/guia-prueba.html">← Volver a la guía de la prueba</a>.', 1), encoding="utf-8")
+PY
 find "$DIST" -name '.DS_Store' -delete
 rm -f "$RAIZ/veritech-prueba-colegio.zip"
 (cd "$DIST" && zip -qr "$RAIZ/veritech-prueba-colegio.zip" .)

@@ -71,9 +71,13 @@ var work=[];
 function load(){try{var s=localStorage.getItem("veritech.work");work=s?JSON.parse(s):[];}catch(e){work=[];}}
 function save(){try{localStorage.setItem("veritech.work",JSON.stringify(work));}catch(e){}}
 function host(u){try{return new URL(u).hostname.replace(/^www\./,"");}catch(e){return u||"fuente sin dirección";}}
+/* El título es la primera línea con largo de título que no sea firma, fecha ni dirección
+   («Por Ana Torres», «Publicado el 3 de marzo de 2026», «https://…» no son títulos). */
+var NO_TITULO=/^(?:por|autor(?:a|es)?|escrito por|redactado por|texto de|by|publicado|actualizado|fecha|última (?:revisión|actualización)|compartir|inicio|menú)\b|^https?:\/\/|^\d{1,2}[\/ -]|^\d{4}-\d{2}-\d{2}/i;
 function title(t){
   var l=t.split("\n").map(function(s){return s.trim();}).filter(Boolean);
-  for(var i=0;i<l.length;i++){if(l[i].length>12&&l[i].length<130)return l[i];}
+  for(var i=0;i<l.length;i++){if(l[i].length>12&&l[i].length<130&&!NO_TITULO.test(l[i]))return l[i];}
+  for(i=0;i<l.length;i++){if(l[i].length>12&&l[i].length<130)return l[i];}
   return l[0]||"Documento sin título";
 }
 /* En español el primer nombre suele ser el de pila y lo demás apellidos:

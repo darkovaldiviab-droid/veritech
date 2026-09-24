@@ -57,6 +57,13 @@ footer a{color:var(--muted); text-decoration:underline; margin:0 .45em}
 footer a:hover{color:var(--accent)}
 :focus-visible{outline:2px solid var(--accent); outline-offset:2px}
 @media (max-width:560px){.card{padding:20px 18px} h1{font-size:1.5rem}}
+@media (max-width:560px){
+  table.apilar thead{display:none}
+  table.apilar tr{display:block;padding:.7em 0;border-bottom:1px solid var(--line)}
+  table.apilar td{display:block;border:0;padding:.12em 0}
+  table.apilar td:first-child{font-weight:600;font-family:Archivo,sans-serif}
+  table.apilar td[data-label]:not(:first-child)::before{content:attr(data-label) ": ";font-weight:600;color:var(--muted)}
+}
 </style>
 <meta name="description" content="VeriTech no usa cookies de analítica ni publicidad: esto es lo que guarda en tu navegador y por qué.">
 <title>Cookies y almacenamiento · VeriTech</title>
@@ -76,7 +83,7 @@ footer a:hover{color:var(--accent)}
   </header>
   <main class="card">
 <h1>Cookies y almacenamiento en tu navegador</h1>
-<p class="fecha">Última actualización: 22 de septiembre de 2026</p>
+<p class="fecha">Última actualización: 24 de septiembre de 2026</p>
 
 <div class="nota">Este sitio <b>no instala cookies propias</b> ni de analítica ni de publicidad. Sí guarda cosas en tu navegador con <code>localStorage</code>, y eso nunca sale de tu equipo.</div>
 
@@ -85,14 +92,14 @@ footer a:hover{color:var(--accent)}
 <p>Poner un banner que pidiera permiso para cookies inexistentes sería confuso y falso, así que preferimos explicarte exactamente qué se guarda.</p>
 
 <h2>2. Qué se guarda en tu navegador</h2>
-<table>
+<table class="apilar">
   <thead><tr><th>Clave</th><th>Qué guarda</th><th>Cuánto dura</th></tr></thead>
   <tbody>
-    <tr><td><code>veritech.work</code></td><td>Las fuentes que analizas y guardas en «Mi trabajo», con su puntaje y sus datos, para armar tu bibliografía.</td><td>Hasta que pulses «Borrar todo» o limpies el navegador.</td></tr>
-    <tr><td><code>veritech.borrador</code></td><td>Las respuestas de la encuesta que ya marcaste, para no perderlas si cierras la página a medias.</td><td>Se borra al enviar la encuesta.</td></tr>
-    <tr><td><code>veritech.enviada</code></td><td>Una marca de que ya respondiste la encuesta, para no pedírtelo dos veces.</td><td>Hasta que la borres desde la propia página.</td></tr>
-    <tr><td><code>veritech.calibracion.n</code> y <code>veritech.calibracion.docente</code></td><td>Solo en la página de calibración: cuántas fuentes calificó el docente en ese navegador y, si lo escribió, su apodo o iniciales.</td><td>Hasta que se limpie el navegador.</td></tr>
-    <tr><td><code>veritech.pitch.campos</code></td><td>Solo en la página de presentación del equipo: los datos que el equipo escribe en el guion del pitch.</td><td>Hasta que se limpie el navegador.</td></tr>
+    <tr><td data-label="Clave"><code>veritech.work</code></td><td data-label="Qué guarda">Las fuentes que analizas y guardas en «Mi trabajo», con su puntaje y sus datos, para armar tu bibliografía.</td><td data-label="Cuánto dura">Hasta que pulses «Borrar todo» o limpies el navegador.</td></tr>
+    <tr><td data-label="Clave"><code>veritech.borrador</code></td><td data-label="Qué guarda">Las respuestas de la encuesta que ya marcaste, para no perderlas si cierras la página a medias.</td><td data-label="Cuánto dura">Se borra al enviar la encuesta.</td></tr>
+    <tr><td data-label="Clave"><code>veritech.enviada</code></td><td data-label="Qué guarda">Una marca de que ya respondiste la encuesta, para no pedírtelo dos veces.</td><td data-label="Cuánto dura">Hasta que la borres desde la propia página.</td></tr>
+    <tr><td data-label="Clave"><code>veritech.calibracion.n</code> y <code>veritech.calibracion.docente</code></td><td data-label="Qué guarda">Solo en la página de calibración: cuántas fuentes calificó el docente en ese navegador y, si lo escribió, su apodo o iniciales.</td><td data-label="Cuánto dura">Hasta que se limpie el navegador.</td></tr>
+    <tr><td data-label="Clave"><code>veritech.pitch.campos</code></td><td data-label="Qué guarda">Solo en la página de presentación del equipo: los datos que el equipo escribe en el guion del pitch.</td><td data-label="Cuánto dura">Hasta que se limpie el navegador.</td></tr>
   </tbody>
 </table>
 <p>Nada de esto viaja a ningún servidor, no se comparte entre dispositivos y nosotros no podemos leerlo. Es información tuya, en tu equipo.</p>
@@ -105,11 +112,11 @@ footer a:hover{color:var(--accent)}
 </ul>
 
 <h2>3. Servicios de terceros</h2>
-<table>
+<table class="apilar">
   <thead><tr><th>Servicio</th><th>Qué hace</th><th>Qué recibe</th></tr></thead>
   <tbody>
-    <tr><td>Google Fonts</td><td>Sirve las tipografías Archivo e IBM Plex.</td><td>Tu dirección IP y datos técnicos del navegador, por el hecho de descargar el archivo. No instala cookies.</td></tr>
-    <tr><td>Netlify</td><td>Aloja la web y recibe los formularios.</td><td>Datos técnicos de conexión en sus registros de servidor; puede usar cookies estrictamente necesarias de seguridad o balanceo.</td></tr>
+    <tr><td data-label="Servicio">Google Fonts</td><td data-label="Qué hace">Sirve las tipografías Archivo e IBM Plex.</td><td data-label="Qué recibe">Tu dirección IP y datos técnicos del navegador, por el hecho de descargar el archivo. No instala cookies.</td></tr>
+    <tr><td data-label="Servicio">Netlify</td><td data-label="Qué hace">Aloja la web y recibe los formularios.</td><td data-label="Qué recibe">Datos técnicos de conexión en sus registros de servidor; puede usar cookies estrictamente necesarias de seguridad o balanceo.</td></tr>
   </tbody>
 </table>
 <p>No hay vídeos, mapas, píxeles de redes sociales, chats ni ningún otro contenido de terceros incrustado en el sitio.</p>
