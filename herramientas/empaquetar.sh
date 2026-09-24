@@ -9,13 +9,16 @@ cp -R "$RAIZ/veritech-sitio/." "$DIST/"
 for f in index.html panel.css panel.js datos.js datos-memoria.js datos-supabase.js bibliografia.js; do
   cp "$RAIZ/veritech-app/panel/$f" "$DIST/vista-previa-panel/"
 done
-# En el sitio, la vista previa enlaza de vuelta a la guía (el original en veritech-app no lo necesita)
+# En el sitio, la vista previa se rotula como tal y lleva el botón «Volver a la guía» (el original en veritech-app no lo necesita)
 python3 - "$DIST/vista-previa-panel/index.html" <<'PY'
 import sys, pathlib
 p = pathlib.Path(sys.argv[1]); s = p.read_text(encoding="utf-8")
 a = '<strong>Demostración con datos ficticios.</strong>'
 assert a in s, "cambió el aviso del panel"
-p.write_text(s.replace(a, '<strong>Vista previa con datos ficticios.</strong> <a href="/guia-prueba.html">← Volver a la guía de la prueba</a>.', 1), encoding="utf-8")
+s = s.replace(a, '<strong>Vista previa con datos ficticios.</strong>', 1)
+# el panel no tiene margen lateral en <body>: el botón necesita el suyo
+s = s.replace('</head>', '<link rel="stylesheet" href="/css/volver.css">\n<style>.volver-guia-barra{padding:10px 16px 0}</style>\n</head>', 1).replace('</body>', '<script src="/js/volver.js"></script>\n</body>', 1)
+p.write_text(s, encoding="utf-8")
 PY
 find "$DIST" -name '.DS_Store' -delete
 rm -f "$RAIZ/veritech-prueba-colegio.zip"

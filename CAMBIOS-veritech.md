@@ -65,3 +65,4 @@ Paquete para Netlify: `veritech-prueba-colegio.zip` (se regenera con `bash herra
 - **Pitch (M23)**: ya no presenta como existentes la extensión, el informe del curso, el modo tarea ni los formatos de revista, y el plan de implementación coincide con el plan real.
 - **Privacidad y cookies**: cubren los nuevos formularios y las claves de `localStorage`.
 - **`veritech-app/test`**: las pruebas de paridad y de bibliografía leen ahora `js/motor.js` y `js/index.js`.
+- **Botón «← Volver a la guía de la prueba»** (`js/volver.js`, `css/volver.css`): aparece fijo arriba en la herramienta, los formularios, la calibración, las páginas legales y la vista previa del panel, pero solo si la persona entró por la guía en esa pestaña. Quien usa la herramienta sin la guía no lo ve.
