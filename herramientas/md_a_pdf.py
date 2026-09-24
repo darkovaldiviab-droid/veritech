@@ -31,7 +31,7 @@ def inline(t):
     t = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", t)
     t = re.sub(r"(?<!\*)\*(?!\s)(.+?)(?<!\s)\*(?!\*)", r"<em>\1</em>", t)
     t = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r'<a href="\2">\1</a>', t)
-    t = re.sub(r"\[([^\]<>]{2,80})\]", r'<span class="pend">[\1]</span>', t)  # huecos por completar
+    t = re.sub(r"\[(?!estimación|precio a verificar)([^\]<>]{2,80})\]", r'<span class="pend">[\1]</span>', t)  # huecos por completar
     return t
 
 def convertir(md):
