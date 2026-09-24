@@ -3,7 +3,7 @@
    La prueba veritech-app/test/paridad.test.js lee el bloque MOTORES…RENDER de este archivo. */
 var YEAR=new Date().getFullYear();
 /* Cambiar al modificar reglas o pesos: la calibración guarda con qué versión se calculó cada puntaje. */
-var MOTOR_VERSION="sitio-1.1";
+var MOTOR_VERSION="sitio-1.2";
 
 /* ==================== MOTORES ==================== */
 var FILLER=["en el mundo actual","en la era digital","es importante destacar","es importante mencionar",
@@ -45,31 +45,39 @@ function findYear(text){
   }
   return best;
 }
-/* opts (opcional): {fragmento, autor, anio, textoCompleto}.
-   fragmento: el alumno pegó o subió solo la parte que va a usar (un párrafo de un PDF, una captura).
-   autor / anio: escritos a mano por el alumno; mandan sobre lo que se detecte.
-   textoCompleto: el documento entero (p. ej. todo el PDF); de ahí salen autoría, fecha y referencias.
+/* opts (opcional): {textoCompleto, autorFuente, anioFuente, enlaces, fragmento, autor, anio}.
+   textoCompleto: la fuente entera (la página leída desde su dirección, o el PDF subido).
+     Si está, se evalúa la fuente entera y no el párrafo pegado, que es solo lo que se va a citar.
+   autorFuente / anioFuente: datos que trae la propia fuente (metadatos de la página o del PDF).
+   enlaces: enlaces a otros sitios dentro del contenido de la página (en una web no se ven como «https://»).
+   fragmento: no hay fuente completa y el alumno pegó o subió solo la parte que va a usar.
+   autor / anio: escritos a mano por el alumno; mandan sobre todo lo demás.
    Sin opts el resultado es el mismo que en sitio-1.0. */
 var FALTA_EN_FRAGMENTO="No aparece en el fragmento: búscalo en la portada o en la página y escríbelo arriba.";
 function analyzeSource(url,text,opts){
   opts=opts||{};
+  var conCompleto=!!opts.textoCompleto;
+  if(conCompleto)text=opts.textoCompleto;
   var checks=[],score=50,low=text.toLowerCase();
   var words=text.trim()?text.trim().split(/\s+/).length:0;
-  var frag=!!opts.fragmento, full=opts.textoCompleto||text, conCompleto=!!opts.textoCompleto;
+  var frag=!!opts.fragmento&&!conCompleto, full=text;
+  var DE_LA_FUENTE=" (según los datos de la página)";
   function add(label,status,detail,pts){checks.push({label:label,status:status,detail:detail,pts:pts});score+=pts;}
 
   /* 1 autoría */
-  var autorManual=String(opts.autor||"").trim();
-  var author=autorManual||findAuthor(full);
+  var autorManual=String(opts.autor||"").trim(), autorFuente=String(opts.autorFuente||"").trim();
+  var author=autorManual||autorFuente||findAuthor(full);
   if(autorManual)add("Autoría","ok","Firmado por "+author+" (indicado por ti). Se puede rastrear quién responde por lo que dice.",18);
+  else if(autorFuente)add("Autoría","ok","Firmado por "+author+DE_LA_FUENTE+". Se puede rastrear quién responde por lo que dice.",18);
   else if(author)add("Autoría","ok","Firmado por "+author+". Se puede rastrear quién responde por lo que dice.",18);
   else if(frag)add("Autoría","warn",FALTA_EN_FRAGMENTO,0);
   else add("Autoría","bad","Nadie firma este texto. Si no hay un responsable, no hay a quién pedirle cuentas.",-14);
 
   /* 2 fecha */
-  var anioManual=parseInt(opts.anio,10);
+  var anioManual=parseInt(opts.anio,10), anioFuente=parseInt(opts.anioFuente,10);
   if(!(anioManual>=1900&&anioManual<=YEAR))anioManual=null;
-  var y=anioManual||findYear(full), tuyo=anioManual?" (indicado por ti)":"";
+  if(!(anioFuente>=1900&&anioFuente<=YEAR))anioFuente=null;
+  var y=anioManual||anioFuente||findYear(full), tuyo=anioManual?" (indicado por ti)":anioFuente?DE_LA_FUENTE:"";
   if(y===null&&frag)add("Fecha","warn",FALTA_EN_FRAGMENTO,0);
   else if(y===null)add("Fecha","bad","No aparece ninguna fecha. No sabes si esto se escribió ayer o hace quince años.",-12);
   else if(y>=YEAR-2)add("Fecha","ok","Publicado en "+y+tuyo+". Información reciente.",16);
@@ -77,9 +85,9 @@ function analyzeSource(url,text,opts){
   else add("Fecha","bad","Publicado en "+y+tuyo+" — hace "+(YEAR-y)+" años. En ciencia y tecnología eso suele estar obsoleto.",-6);
 
   /* 3 referencias (en el documento completo, si lo hay) */
-  var links=(full.match(/https?:\/\//g)||[]).length;
+  var links=(full.match(/https?:\/\//g)||[]).length+(parseInt(opts.enlaces,10)||0);
   var acad=(full.match(/\([12]\d{3}\)/g)||[]).length+(full.match(/et al\.?/gi)||[]).length+(full.match(/\[\d{1,3}\]/g)||[]).length;
-  var refs=links+acad, enDoc=conCompleto?" en el documento completo":"";
+  var refs=links+acad, enDoc=conCompleto?" en la fuente completa":"";
   if(refs>=8)add("Referencias","ok",refs+" referencias o enlaces"+enDoc+". Puedes ir a comprobar cada afirmación en su origen.",20);
   else if(refs>=3)add("Referencias","ok",refs+" referencias"+enDoc+". Apoya lo que dice en fuentes rastreables.",12);
   else if(refs>=1)add("Referencias","warn","Solo "+refs+" referencia"+(refs>1?"s":"")+enDoc+". Casi todo lo afirma sin respaldo.",4);
@@ -144,7 +152,9 @@ function analyzeSource(url,text,opts){
   if(incompleto)score=Math.min(score,69);
   var level=score>=70?"ok":(score>=40?"warn":"bad");
   var res={score:score,level:level,checks:checks,author:author,year:y,words:words};
-  if(frag){res.fragmento=true;res.incompleto=incompleto;}   /* solo en modo fragmento: sin opts, el objeto es el de sitio-1.0 */
+  /* campos extra solo cuando se usan: sin opts, el objeto es el de sitio-1.0 */
+  if(frag){res.fragmento=true;res.incompleto=incompleto;}
+  if(conCompleto)res.fuenteCompleta=true;
   return res;
 }
 

@@ -152,6 +152,7 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.65}
 .paginas label,.meta-campos label{flex:1 1 120px; min-width:0}
 .check{flex-direction:row; align-items:flex-start; gap:.6em; font-size:.82rem; color:var(--ink); font-weight:500; cursor:pointer}
 .check input{width:auto; margin:.2em 0 0; accent-color:var(--accent); flex:none}
+.check:has(input:disabled){opacity:.55; cursor:default}
 .sugerencia{color:var(--warn)}
 .chk b{font-size:.82rem; font-weight:600; display:block}
 .chk span{font-size:.765rem; color:var(--muted); line-height:1.45; display:block; margin-top:.1em; overflow-wrap:anywhere}
@@ -232,9 +233,10 @@ footer .legal a:hover{color:var(--accent)}
     <div class="grid">
       <div class="card">
         <h2>La página que quieres citar</h2>
-        <label for="u"><span>Dirección de la página <span style="font-weight:400">(opcional, mejora el análisis)</span></span>
-          <input id="u" type="url" placeholder="https://...">
+        <label for="u"><span>Dirección de la página <span style="font-weight:400">(recomendado: así se evalúa la fuente completa)</span></span>
+          <input id="u" type="url" inputmode="url" autocomplete="off" placeholder="https://...">
         </label>
+        <p class="progreso" id="estado-url" role="status" aria-live="polite" hidden></p>
         <div class="modo" role="group" aria-label="Cómo quieres traer la fuente">
           <button type="button" id="m-pegar" aria-pressed="true">Pegar texto</button>
           <button type="button" id="m-subir" aria-pressed="false">Subir archivo</button>
@@ -264,8 +266,8 @@ footer .legal a:hover{color:var(--accent)}
           </div>
         </div>
 
-        <label for="t"><span id="t-label">Pega aquí el texto de la página</span>
-          <textarea id="t" spellcheck="false" placeholder="Pega aquí el texto que quieres revisar…"></textarea>
+        <label for="t"><span id="t-label">El texto que vas a usar <span style="font-weight:400">(si pusiste la dirección, basta con el párrafo que vas a citar, o nada)</span></span>
+          <textarea id="t" spellcheck="false" placeholder="Pega aquí el párrafo que vas a citar, o todo el texto de la página…"></textarea>
         </label>
 
         <label class="check" for="frag">
@@ -287,7 +289,7 @@ footer .legal a:hover{color:var(--accent)}
           <button class="btn primary" id="go" type="button">Analizar</button>
           <button class="btn" id="clr" type="button">Limpiar</button>
         </div>
-        <p class="hint" id="ayuda-pegar">Para sacar el texto de una página: selecciona todo con <span class="mono">Ctrl+A</span> (o <span class="mono">Cmd+A</span>), copia y pega aquí. ¿Tu fuente es un PDF largo o una infografía? Súbela con «Subir archivo» y elige la parte que vas a usar.</p>
+        <p class="hint" id="ayuda-pegar">Con la dirección, VeriTech lee la página o el PDF entero y saca de ahí el autor, la fecha y las referencias, aunque tu párrafo no los tenga. Si la página no se deja leer, pega su texto: selecciona todo con <span class="mono">Ctrl+A</span> (o <span class="mono">Cmd+A</span>), copia y pega aquí. ¿Tienes el PDF o una captura? Súbelos con «Subir archivo».</p>
         <p class="hint" id="ayuda-subir" hidden>El archivo se lee en tu navegador: no se sube a ningún servidor ni se guarda. El texto sacado de una imagen puede traer errores; revísalo antes de analizar. Si el autor o el año no salen, búscalos en la portada o en la página y escríbelos arriba.</p>
       </div>
 
@@ -366,12 +368,13 @@ footer .legal a:hover{color:var(--accent)}
   <footer>
     <p>VeriTech evalúa señales verificables de una fuente. No determina si un contenido es verdadero — esa sigue siendo tu responsabilidad, y ese es el punto.</p>
     <p class="legal"><a href="/privacidad.html">Privacidad</a> · <a href="/terminos.html">Términos y condiciones</a> · <a href="/cookies.html">Cookies y almacenamiento</a> · <a href="/encuesta.html">Encuesta</a> · <a href="/guia-prueba.html">Guía de la prueba</a></p>
-    <p class="legal">Lo que pegas o subes aquí se analiza en tu navegador y no se envía a ningún servidor. Proyecto escolar · 2026</p>
+    <p class="legal">Lo que pegas o subes aquí se analiza en tu navegador y no se envía a ningún servidor. Si escribes la dirección de una página, esa dirección (solo ella) pasa por nuestro servidor para leer la página. Proyecto escolar · 2026</p>
   </footer>
 </div>
 
 <script src="/js/motor.js"></script>
 <script src="/js/archivos.js"></script>
+<script src="/js/fuente-url.js"></script>
 <script src="/js/index.js"></script>
 
 <script src="/js/volver.js"></script>

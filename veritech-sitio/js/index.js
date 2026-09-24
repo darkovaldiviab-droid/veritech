@@ -35,20 +35,69 @@ function autollenar(el,val){
   if(el.value.trim()&&!el.dataset.auto)return;
   el.value=val||""; if(val)el.dataset.auto="1"; else delete el.dataset.auto;
 }
-function completo(){return window.VeriTechArchivos?window.VeriTechArchivos.textoCompleto():null;}
+function archivo(){return window.VeriTechArchivos&&window.VeriTechArchivos.nombre()?window.VeriTechArchivos:null;}
+
+/* ---------- la fuente completa, leída desde su dirección (js/fuente-url.js) ----------
+   fuenteURL: {url, estado:"cargando"|"ok"|"error", datos, mensaje}. Si hay un archivo
+   subido, manda el archivo y la dirección no se lee. */
+var fuenteURL=null;
+function estadoURL(msg,error){
+  var el=$("estado-url"); el.hidden=!msg; el.textContent=msg||""; el.className="progreso"+(error?" error":"");
+}
+function dirValida(u){try{var x=new URL(u);return /^https?:$/.test(x.protocol)&&x.hostname.indexOf(".")>0;}catch(e){return false;}}
+function pedirFuente(){
+  var url=$("u").value.trim();
+  if(!url||archivo()||!window.VeriTechURL){fuenteURL=null;estadoURL("");return;}
+  if(!dirValida(url)){fuenteURL=null;estadoURL("Revisa la dirección: debe empezar por https:// o http://",true);return;}
+  if(fuenteURL&&fuenteURL.url===url)return;
+  var f=fuenteURL={url:url,estado:"cargando"};
+  estadoURL("Leyendo la página completa…");
+  window.VeriTechURL.leer(url,function(m){if(fuenteURL===f)estadoURL(m);}).then(function(d){
+    if(fuenteURL!==f)return;
+    f.estado="ok"; f.datos=d;
+    var n=d.texto.split(/\s+/).length;
+    estadoURL("Se leyó la fuente completa"+(d.tipo==="pdf"?" (PDF de "+d.paginas+" página"+(d.paginas>1?"s":"")+")":"")+": "+n.toLocaleString("es")+" palabras.");
+    renderSource();
+  },function(e){
+    if(fuenteURL!==f)return;
+    f.estado="error"; f.mensaje=e&&e.message||"No se pudo abrir la página.";
+    estadoURL("No se pudo leer la página. "+f.mensaje+" Se analiza solo el texto que pegaste.",true);
+    renderSource();
+  });
+}
+/* Datos de la fuente completa para el motor: el PDF subido o la página leída */
+function fuenteCompleta(){
+  var a=archivo();
+  if(a&&a.textoCompleto()){
+    var full=a.textoCompleto(), m=a.meta()||{};
+    return {texto:full,
+      autor:findAuthor(full)?"":m.autor, anio:findYear(full)!==null?null:m.anio,
+      titulo:m.titulo, enlaces:0};
+  }
+  if(fuenteURL&&fuenteURL.estado==="ok"&&fuenteURL.url===$("u").value.trim())return fuenteURL.datos;
+  return null;
+}
+function analizar(){pedirFuente();renderSource();}
 function renderSource(){
   var url=$("u").value.trim(), text=$("t").value;
-  if(!text.trim()){
-    $("verdict").innerHTML='<div class="empty">Pega el texto de una página, o sube un archivo, y pulsa Analizar.</div>';
+  var cargando=fuenteURL&&fuenteURL.estado==="cargando"&&fuenteURL.url===url;
+  var fuente=fuenteCompleta();
+  $("frag").disabled=!!fuente;
+  if(!text.trim()&&!fuente){
+    $("verdict").innerHTML='<div class="empty">'+(cargando?"Leyendo la página completa…":
+      "Escribe la dirección de la página, pega su texto o sube un archivo, y pulsa Analizar.")+'</div>';
     $("checks").innerHTML=""; $("frag-sug").hidden=true; last=null; return;
   }
-  var full=completo();
-  var r=analyzeSource(url,text,{fragmento:$("frag").checked,autor:manual($("autor")),anio:manual($("anio")),textoCompleto:full});
-  last=r; last.url=url; last.text=text; last.full=full;
+  var r=analyzeSource(url,text,{
+    textoCompleto:fuente&&fuente.texto, autorFuente:fuente&&fuente.autor, anioFuente:fuente&&fuente.anio, enlaces:fuente&&fuente.enlaces,
+    fragmento:$("frag").checked, autor:manual($("autor")), anio:manual($("anio"))});
+  last=r; last.url=url; last.text=text; last.full=fuente&&fuente.texto; last.titulo=fuente&&fuente.titulo;
   autollenar($("autor"),r.author); autollenar($("anio"),r.year);
-  $("frag-sug").hidden=r.fragmento||r.words>=400;
+  $("frag-sug").hidden=!!fuente||r.fragmento||r.words>=400;
   var t=TITLES[r.level];
-  var cuerpo=r.incompleto?"Es un fragmento: para un veredicto final, escribe arriba el autor y el año (búscalos en la portada o en la página).":t[1];
+  var cuerpo=r.incompleto?"Es un fragmento: para un veredicto final, escribe arriba el autor y el año (búscalos en la portada o en la página), o la dirección de la página.":
+    r.fuenteCompleta?t[1]+" Se evaluó la fuente completa ("+r.words.toLocaleString("es")+" palabras), no solo el texto que pegaste.":
+    cargando?t[1]+" Todavía se está leyendo la página completa: el puntaje puede cambiar.":t[1];
   $("verdict").innerHTML='<div class="verdict v-'+r.level+'">'+dial(r.score,r.level)+
     '<div><div class="v-title">'+t[0]+'</div><p class="v-body">'+cuerpo+'</p></div></div>';
   $("checks").innerHTML=r.checks.map(function(c){
@@ -99,7 +148,10 @@ function bare(a){return (a||"").replace(/^(?:Dr[ao]?|Dra|Prof|Lic|Mtr[ao]?|Ing|M
 function invert(a){
   var p=bare(a).split(/\s+/).filter(Boolean);
   if(p.length<2)return {sur:p[0]||"",ini:""};
-  return {sur:p.slice(1).join(" "),ini:p[0].charAt(0).toUpperCase()+"."};
+  /* las iniciales sueltas tras el nombre también son del nombre: «María C. Vázquez Torres» -> «Vázquez Torres, M. C.» */
+  var ini=[p[0].charAt(0).toUpperCase()+"."], i=1;
+  while(i<p.length-1&&/^[A-ZÁÉÍÓÚÑ]\.?$/.test(p[i])){ini.push(p[i].charAt(0)+".");i++;}
+  return {sur:p.slice(i).join(" "),ini:ini.join(" ")};
 }
 function apa(e,h){
   h=h||same;
@@ -192,12 +244,15 @@ function runAI(btn,box,txt,prompt){
     });
   });
 })();
-$("go").addEventListener("click",renderSource);
-$("u").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();renderSource();}});
+$("go").addEventListener("click",analizar);
+$("u").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();analizar();}});
+/* se empieza a leer la página en cuanto el alumno termina de escribir la dirección */
+$("u").addEventListener("change",function(){olvidarAuto();pedirFuente();if(last||fuenteURL)renderSource();});
 $("clr").addEventListener("click",function(){
   $("u").value="";$("t").value="";$("autor").value="";$("anio").value="";$("frag").checked=false;
   delete $("autor").dataset.auto; delete $("anio").dataset.auto;
   if(window.VeriTechArchivos)window.VeriTechArchivos.quitar();
+  fuenteURL=null; estadoURL("");
   renderSource();
 });
 ["autor","anio"].forEach(function(id){
@@ -209,16 +264,14 @@ $("frag").addEventListener("change",function(){if(last)renderSource();});
 $("t").addEventListener("input",function(){
   ["autor","anio"].forEach(function(id){if($(id).dataset.auto){$(id).value="";delete $(id).dataset.auto;}});
 });
-document.addEventListener("veritech:archivo",function(){
-  ["autor","anio"].forEach(function(id){if($(id).dataset.auto){$(id).value="";delete $(id).dataset.auto;}});
-  renderSource();
-});
+function olvidarAuto(){["autor","anio"].forEach(function(id){if($(id).dataset.auto){$(id).value="";delete $(id).dataset.auto;}});}
+document.addEventListener("veritech:archivo",function(){olvidarAuto();analizar();});
 $("go2").addEventListener("click",renderClaim);
 $("clr2").addEventListener("click",function(){$("claim").value="";$("srctext").value="";renderClaim();});
 $("save").addEventListener("click",function(){
   renderSource();                        /* reanaliza por si editaste el texto */
-  if(!last){flash("Primero pega el texto de una página.","bad");return;}
-  var ttl=title(last.full||last.text), k=(last.url||"")+"|"+ttl;
+  if(!last){flash("Primero escribe la dirección de la página, pega su texto o sube un archivo.","bad");return;}
+  var ttl=last.titulo||title(last.full||last.text), k=(last.url||"")+"|"+ttl;
   if(work.some(function(e){return (e.url||"")+"|"+e.title===k;})){flash("Esa fuente ya está en tu trabajo.","warn");return;}
   work.push({title:ttl,url:last.url,author:last.author,year:last.year,score:last.score,level:last.level});
   save(); flash("Fuente guardada.","ok"); $("tab-work").click();

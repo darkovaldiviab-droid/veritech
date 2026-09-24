@@ -66,35 +66,57 @@ function leerImagen(fuente,etiqueta){
 function unir(items){
   return items.map(function(it){return (it.str||"")+(it.hasEOL?"\n":" ");}).join("");
 }
-function leerPDF(file,t){
+/* Metadatos del PDF (campo Autor y fecha de creación). Muchos PDF traen ahí el nombre
+   del programa o del usuario del equipo, así que solo se aceptan nombres con pinta de nombre. */
+var NO_ES_AUTOR=/^(user|usuario|admin|administra|owner|propietario|microsoft|word|autor|author|unknown|desconocido|pc|hp|dell|lenovo|acer|asus|windows|mac|equipo)\b/i;
+function metaPDF(pdf){
+  return pdf.getMetadata().then(function(m){
+    var info=m&&m.info||{}, autor=String(info.Author||"").trim(), titulo=String(info.Title||"").trim();
+    if(autor.length<4||autor.length>80||!/[a-záéíóúñ]{2}/i.test(autor)||NO_ES_AUTOR.test(autor)||/@|\.(docx?|pdf)$/i.test(autor))autor="";
+    var y=parseInt((String(info.CreationDate||"").match(/^D:(\d{4})/)||[])[1],10);
+    if(!(y>=1900&&y<=new Date().getFullYear()))y=null;
+    if(titulo.length<6||/\.(docx?|pdf|indd)$/i.test(titulo)||/^microsoft/i.test(titulo))titulo="";
+    return {autor:autor,anio:y,titulo:titulo};
+  }).catch(function(){return {autor:"",anio:null,titulo:""};});
+}
+/* Texto de cada página (hasta MAX_PAGINAS) y metadatos. La usa también fuente-url.js
+   para los PDF que se leen desde su dirección. */
+function textoPDF(buf,aviso,vigente){
   return cargarScript(V+"pdfjs/pdf.min.js").then(function(){
     var lib=window.pdfjsLib;
     lib.GlobalWorkerOptions.workerSrc=V+"pdfjs/pdf.worker.min.js";
-    return file.arrayBuffer().then(function(buf){return lib.getDocument({data:buf,isEvalSupported:false}).promise;});
+    return lib.getDocument({data:buf,isEvalSupported:false}).promise;
   }).then(function(pdf){
     var n=pdf.numPages, lim=Math.min(n,MAX_PAGINAS), textos=[], i=0;
     function siguiente(){
-      if(t!==turno)return Promise.reject(new Error("cancelado"));
+      if(vigente&&!vigente())return Promise.reject(new Error("cancelado"));
       if(i>=lim)return Promise.resolve();
-      i++; progreso("Leyendo el PDF… página "+i+" de "+lim);
+      i++; if(aviso)aviso("Leyendo el PDF… página "+i+" de "+lim);
       return pdf.getPage(i).then(function(p){return p.getTextContent();})
         .then(function(tc){textos.push(limpio(unir(tc.items)));return siguiente();});
     }
-    return siguiente().then(function(){
-      var letras=textos.join("").replace(/\s/g,"").length;
-      estado.pdf=pdf; estado.textos=textos; estado.total=n;
-      estado.escaneado=letras<30*lim;          /* casi sin texto: son fotos de páginas */
-      estado.completo=estado.escaneado?null:textos.join("\n\n");
-      estado.ocr={};
-      $("pag-total").textContent="PDF de "+n+" página"+(n>1?"s":"")+
-        (n>lim?" (se leyeron las primeras "+lim+")":"")+
-        (estado.escaneado?". Es un PDF escaneado: se leerá como imagen, hasta "+MAX_PAGINAS_OCR+" páginas a la vez.":".");
-      ["pag-desde","pag-hasta"].forEach(function(id){$(id).max=lim;});
-      $("pag-desde").value=1;
-      $("pag-hasta").value=estado.escaneado?Math.min(lim,1):lim;
-      $("paginas").hidden=false;
-      return aplicarRango();
-    });
+    return siguiente().then(function(){return metaPDF(pdf);})
+      .then(function(meta){return {pdf:pdf,textos:textos,total:n,meta:meta};});
+  });
+}
+function leerPDF(file,t){
+  return file.arrayBuffer().then(function(buf){
+    return textoPDF(buf,progreso,function(){return t===turno;});
+  }).then(function(d){
+    var pdf=d.pdf, n=d.total, textos=d.textos, lim=textos.length;
+    var letras=textos.join("").replace(/\s/g,"").length;
+    estado.pdf=pdf; estado.textos=textos; estado.total=n; estado.meta=d.meta;
+    estado.escaneado=letras<30*lim;          /* casi sin texto: son fotos de páginas */
+    estado.completo=estado.escaneado?null:textos.join("\n\n");
+    estado.ocr={};
+    $("pag-total").textContent="PDF de "+n+" página"+(n>1?"s":"")+
+      (n>lim?" (se leyeron las primeras "+lim+")":"")+
+      (estado.escaneado?". Es un PDF escaneado: se leerá como imagen, hasta "+MAX_PAGINAS_OCR+" páginas a la vez.":".");
+    ["pag-desde","pag-hasta"].forEach(function(id){$(id).max=lim;});
+    $("pag-desde").value=1;
+    $("pag-hasta").value=estado.escaneado?Math.min(lim,1):lim;
+    $("paginas").hidden=false;
+    return aplicarRango();
   });
 }
 function renderizar(pagina){
@@ -167,8 +189,8 @@ function modo(subir){
   $("m-pegar").setAttribute("aria-pressed",!subir);
   $("m-subir").setAttribute("aria-pressed",subir);
   $("subir").hidden=!subir; $("ayuda-subir").hidden=!subir; $("ayuda-pegar").hidden=subir;
-  $("t-label").textContent=subir?"Texto sacado del archivo (revísalo y corrígelo si hace falta)":"Pega aquí el texto de la página";
-  if(!subir&&estado){quitar();}           /* al volver a pegar, el PDF anterior deja de contar */
+  $("t-label").textContent=subir?"Texto sacado del archivo (revísalo y corrígelo si hace falta)":"El texto que vas a usar (si pusiste la dirección, basta con el párrafo que vas a citar, o nada)";
+  if(!subir&&estado){quitar();avisar("quitado");}   /* al volver a pegar, el PDF anterior deja de contar */
 }
 $("m-pegar").addEventListener("click",function(){modo(false);});
 $("m-subir").addEventListener("click",function(){modo(true);});
@@ -194,6 +216,8 @@ window.addEventListener("drop",function(e){
 window.VeriTechArchivos={
   textoCompleto:function(){return estado&&estado.completo||null;},
   nombre:function(){return estado&&estado.nombre||null;},
+  meta:function(){return estado&&estado.meta||null;},
+  textoPDF:textoPDF,
   quitar:quitar
 };
 })();

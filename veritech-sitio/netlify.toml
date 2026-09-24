@@ -1,0 +1,15 @@
+# Configuración de Netlify para veritech-sitio.
+# La función que lee una fuente desde su dirección (netlify/functions/fuente.mjs)
+# solo se publica con la CLI o desde Git; arrastrando el .zip a Netlify no se
+# despliega. Sin ella, la herramienta sigue funcionando con el texto pegado.
+#   npx netlify-cli deploy --dir . --functions netlify/functions --prod
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+# El código de la función no se sirve como archivo estático.
+[[redirects]]
+  from = "/netlify/*"
+  to = "/404.html"
+  status = 404
+  force = true

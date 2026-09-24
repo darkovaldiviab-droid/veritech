@@ -95,3 +95,32 @@ Paquete para Netlify: `veritech-prueba-colegio.zip` (se regenera con `bash herra
 | Pegado, sin marcar «fragmento» (igual que antes) | 28, rojo |
 | Marcado como fragmento, sin autor ni año | 69, amarillo («completa autor y año») |
 | Marcado como fragmento, con autor y año escritos | 100, verde |
+
+# VeriTech — cambios del 24/09/2026 (evaluar la fuente completa desde su dirección)
+
+**El problema:** aunque existía la casilla «fragmento», el alumno que solo tenía el párrafo que iba a citar seguía sin autor ni fecha, y tenía que buscarlos y escribirlos a mano.
+
+## Nuevo
+- **Leer la fuente desde su dirección.** Si el alumno escribe la dirección de la página, VeriTech lee la página o el PDF entero y **evalúa la fuente completa**: autor, fecha, referencias, tono y extensión. El párrafo pegado es solo lo que va a citar y no cambia el puntaje. También se puede analizar escribiendo solo la dirección, sin pegar nada.
+  - **Página web:** el autor y la fecha salen de los metadatos (`citation_*` de las revistas académicas, `article:*`, JSON-LD, `author`). El texto sale del artículo, sin menús ni pies de página. Los enlaces a otros sitios dentro del artículo cuentan como referencias.
+  - **PDF por dirección:** se lee con pdf.js. El autor y la fecha salen de la portada o, si no están ahí, de los metadatos del PDF (se descartan nombres como «Usuario» o «Microsoft Word»).
+  - Si la página no se deja leer (pide sesión, bloquea programas, se arma con JavaScript), VeriTech lo avisa y analiza el texto pegado, como antes.
+- **Función de Netlify `netlify/functions/fuente.mjs`** (`/api/fuente`). Solo descarga la página; el análisis sigue en el navegador. Al servidor va únicamente la dirección, nunca el texto. Protecciones:
+  - bloquea direcciones internas o privadas, también en cada redirección;
+  - admite como máximo 3 redirecciones, espera hasta 8 s y descarga hasta 2 MB de HTML o 4 MB de PDF;
+  - devuelve el HTML como texto plano con CSP `sandbox`;
+  - solo responde a peticiones de la propia web.
+- **Metadatos del PDF subido:** si la portada no trae el autor o la fecha, se usan los del archivo.
+
+## Cambiado
+- **Motor `sitio-1.2`:** `opts` admite `autorFuente`, `anioFuente` y `enlaces`. Con `textoCompleto` se evalúa la fuente entera. Sin `opts` el resultado sigue siendo idéntico al de `sitio-1.0` (145/145 pruebas de `veritech-app`).
+- **Bibliografía:** las iniciales del segundo nombre se tratan como parte del nombre: «María C. Vázquez Torres» → «Vázquez Torres, M. C.».
+- **Privacidad, guía y pie de la herramienta:** explican que la dirección, y solo ella, pasa por nuestro servidor.
+
+## Publicar (importante)
+Arrastrar el `.zip` a Netlify **no despliega la función**. Sin ella la web funciona igual, pero sin leer páginas por su dirección (avisa y usa el texto pegado). Para activarla:
+```bash
+bash herramientas/empaquetar.sh
+cd dist && npx netlify-cli deploy --dir . --functions netlify/functions --prod
+```
+(la primera vez pide iniciar sesión en Netlify y elegir el sitio).
