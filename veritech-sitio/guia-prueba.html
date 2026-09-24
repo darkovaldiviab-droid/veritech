@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='29' fill='none' stroke='%230F4C9C' stroke-width='5'/%3E%3Cpath d='M19 33 L28 42 L45 23' stroke='%230F4C9C' stroke-width='6' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#E4EAF1; --panel:#FDFEFF; --ink:#0B1726; --muted:#556678;
+  --accent:#0F4C9C; --accent-soft:rgba(15,76,156,.10); --accent-line:rgba(15,76,156,.30);
+  --line:rgba(11,23,38,.13); --grid:rgba(11,23,38,.05); --mark:#FFE9A8; --mark-ink:#5B4300;
+  --shadow:0 1px 2px rgba(11,23,38,.05),0 14px 36px -18px rgba(11,23,38,.35);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#060D16; --panel:#0D1A28; --ink:#E7EDF4; --muted:#8FA3B8;
+  --accent:#6BA5F2; --accent-soft:rgba(107,165,242,.13); --accent-line:rgba(107,165,242,.38);
+  --line:rgba(231,237,244,.13); --grid:rgba(231,237,244,.045); --mark:#5A4A12; --mark-ink:#FFE9A8;
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 18px 44px -20px rgba(0,0,0,.8);
+}}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px; line-height:1.62;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:40px 40px; padding:20px 16px 40px;
+}
+.wrap{max-width:760px; margin-inline:auto; display:flex; flex-direction:column; gap:18px}
+header{display:flex; align-items:center; gap:14px; flex-wrap:wrap}
+.rose{width:40px; height:40px; color:var(--accent); flex:none}
+.brand{font-family:Archivo,sans-serif; font-variation-settings:"wdth" 118,"wght" 800; font-size:1.7rem; line-height:1; letter-spacing:-.03em}
+.sub{font-size:.84rem; color:var(--muted); line-height:1.3; margin:0}
+.back{margin-left:auto; font-size:.8rem; font-weight:600; color:var(--accent); text-decoration:none; border:1px solid var(--accent-line); border-radius:5px; padding:.6em .85em; background:var(--accent-soft)}
+.back:hover{border-color:var(--accent)}
+.card{background:var(--panel); border:1px solid var(--line); border-radius:8px; box-shadow:var(--shadow); padding:26px 28px}
+h1{font-family:Archivo,sans-serif; font-variation-settings:"wdth" 108,"wght" 800; font-size:1.9rem; letter-spacing:-.02em; margin:0 0 .25em}
+.fecha{font-size:.8rem; color:var(--muted); margin:0 0 1.6em}
+h2{font-family:Archivo,sans-serif; font-variation-settings:"wdth" 106,"wght" 700; font-size:1.06rem; margin:1.9em 0 .5em}
+h2:first-of-type{margin-top:0}
+h3{font-family:Archivo,sans-serif; font-size:.95rem; margin:1.3em 0 .35em}
+p,li{margin:0 0 .75em}
+ul{padding-left:1.15em; margin:0 0 .9em}
+li{margin-bottom:.4em}
+a{color:var(--accent)}
+table{width:100%; border-collapse:collapse; font-size:.86rem; margin:0 0 1em}
+th,td{text-align:left; vertical-align:top; padding:.55em .6em; border-bottom:1px solid var(--line)}
+th{font-weight:600; color:var(--muted); font-size:.78rem; text-transform:uppercase; letter-spacing:.04em}
+.nota{border-left:3px solid var(--accent); background:var(--accent-soft); padding:.85em 1em; border-radius:0 6px 6px 0; font-size:.9rem; margin:0 0 1.1em}
+mark.pendiente{background:var(--mark); color:var(--mark-ink); padding:.1em .35em; border-radius:3px; font-weight:600}
+footer{font-size:.78rem; color:var(--muted); text-align:center; line-height:1.9}
+footer a{color:var(--muted); text-decoration:underline; margin:0 .45em}
+footer a:hover{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+@media (max-width:560px){.card{padding:20px 18px} h1{font-size:1.5rem}}
+.accesos{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:0 0 1.4em}
+.accesos a{display:block;text-decoration:none;border:1px solid var(--accent-line);background:var(--accent-soft);border-radius:7px;padding:12px 14px;color:var(--ink)}
+.accesos a:hover{border-color:var(--accent)}
+.accesos b{display:block;color:var(--accent);font-family:Archivo,sans-serif;font-size:.98rem}
+.accesos span{font-size:.8rem;color:var(--muted)}
+ol{padding-left:1.25em;margin:0 0 .9em}
+.tiempo{white-space:nowrap}
+@media print{body{background:#fff;padding:0}.card{box-shadow:none;border:0;padding:0}.back,footer{display:none}}
+</style>
+<meta name="description" content="Qué probar de VeriTech, cuánto tiempo toma, qué no incluye todavía y cómo enviar su opinión.">
+<title>Guía de la prueba · VeriTech</title>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <svg class="rose" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+      <circle cx="32" cy="32" r="29" stroke="currentColor" stroke-width="2.5"/>
+      <path d="M19 33 L28 42 L45 23" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    <div>
+      <div class="brand">VeriTech</div>
+      <p class="sub">Verify Your Sources</p>
+    </div>
+    <a class="back" href="/">Abrir la herramienta →</a>
+  </header>
+  <main class="card">
+<h1>Guía de la prueba</h1>
+<p class="fecha">Para <mark class="pendiente">[completar: colegio]</mark> · Del <mark class="pendiente">[completar: fecha de inicio]</mark> al <mark class="pendiente">[completar: fecha de cierre]</mark></p>
+
+<div class="nota">En una línea: le pedimos una o dos semanas de uso real y unos minutos de opinión. Con sus respuestas decidimos qué construir antes de proponer un servicio para el colegio.</div>
+
+<div class="accesos">
+  <a href="/"><b>Herramienta</b><span>Semáforo, verificar una cita y bibliografía</span></a>
+  <a href="/calibracion.html"><b>Calibración</b><span>Docentes · califique fuentes reales</span></a>
+  <a href="/opinion-docentes.html"><b>Opinión docente</b><span>12 preguntas · 6 minutos</span></a>
+  <a href="/feedback.html"><b>Opinión de estudiantes</b><span>Anónima · 3 minutos</span></a>
+  <a href="/vista-previa-panel/"><b>Vista previa del panel</b><span>Cómo se vería para el profesor · datos ficticios</span></a>
+</div>
+
+<h2>1. Qué es VeriTech hoy</h2>
+<p>Una herramienta web que ayuda a los estudiantes a juzgar sus fuentes antes de citarlas. Tiene tres funciones:</p>
+<ul>
+  <li><b>Semáforo de fuentes.</b> Se pega el texto de una página y VeriTech revisa nueve señales comprobables (autor, fecha, referencias, tipo de dominio, tono, etc.). Devuelve un puntaje de 0 a 100 y explica cada razón.</li>
+  <li><b>Verificar una cita.</b> Compara una afirmación del trabajo con el texto de la fuente y muestra qué conceptos aparecen y cuáles no.</li>
+  <li><b>Mi trabajo y bibliografía.</b> Guarda las fuentes analizadas y arma la bibliografía en APA 7 o MLA 9.</li>
+</ul>
+<p>Funciona en cualquier navegador, sin crear cuentas. Lo que se pega se analiza en el propio equipo y no se envía a ningún servidor.</p>
+
+<h2>2. Qué le pedimos</h2>
+<table>
+  <thead><tr><th>Quién</th><th>Qué hacer</th><th>Tiempo</th></tr></thead>
+  <tbody>
+    <tr><td>Docentes</td><td>Probar la herramienta con fuentes de su área (tareas de la sección 3), calificar de 10 a 20 fuentes en <a href="/calibracion.html">Calibración</a> y responder la <a href="/opinion-docentes.html">opinión docente</a>.</td><td class="tiempo">45 min en total</td></tr>
+    <tr><td>Estudiantes</td><td>Usar VeriTech en una tarea o ejercicio con fuentes y responder la <a href="/feedback.html">opinión de estudiantes</a>.</td><td class="tiempo">20 + 3 min</td></tr>
+    <tr><td>Dirección</td><td>Responder las preguntas de la sección 6 para preparar un posible piloto.</td><td class="tiempo">10 min</td></tr>
+  </tbody>
+</table>
+
+<h2>3. Tareas sugeridas</h2>
+<h3>Para docentes</h3>
+<ol>
+  <li>Analice una fuente que usted <b>sabe que es buena</b> (por ejemplo, de un ministerio o una universidad) y otra que <b>sabe que es mala</b>. ¿El color coincide con su criterio?</li>
+  <li>Busque en Google un tema de su curso y analice los tres primeros resultados, como haría un alumno.</li>
+  <li>En «Verificar una cita», escriba una afirmación que la fuente <b>no</b> respalda y vea si VeriTech lo detecta.</li>
+  <li>Guarde tres fuentes en «Mi trabajo» y copie la bibliografía en APA. ¿Está bien formateada?</li>
+  <li>Revise la <a href="/vista-previa-panel/">vista previa del panel del profesor</a> y díganos en el formulario si le serviría.</li>
+</ol>
+<h3>Para estudiantes</h3>
+<ol>
+  <li>Analizar las fuentes que usarían en su próximo trabajo.</li>
+  <li>Si alguna sale amarilla o roja, leer las razones y buscar una mejor.</li>
+  <li>Armar la bibliografía en «Mi trabajo» y copiarla.</li>
+</ol>
+
+<h2>4. Qué todavía no incluye</h2>
+<p>Esto es una prueba de validación, no el servicio final. Hoy <b>no</b> hay:</p>
+<ul>
+  <li><b>Extensión del navegador instalada:</b> por ahora se copia y se pega el texto de la página. La extensión está en desarrollo.</li>
+  <li><b>Cuentas</b> con el correo del colegio.</li>
+  <li><b>Panel del profesor con datos reales</b> ni <b>informe del curso</b>: solo la vista previa con datos ficticios.</li>
+  <li><b>Formatos de cita</b> para libros o artículos de revista: solo páginas web.</li>
+  <li><b>Análisis con inteligencia artificial.</b></li>
+</ul>
+<p>También hay límites conocidos, y sus comentarios nos ayudan a medirlos:</p>
+<ul>
+  <li>El verificador de citas compara palabras, no entiende el sentido: no distingue «reduce» de «no reduce» ni reconoce sinónimos.</li>
+  <li>Si la página no muestra su fecha, VeriTech puede tomar el año de un estudio citado en el texto.</li>
+  <li>El título de la fuente se deduce de las primeras líneas del texto pegado.</li>
+</ul>
+<div class="nota"><b>El puntaje es orientativo.</b> Resume señales que se pueden comprobar, pero no reemplaza el criterio del docente y no debe usarse como nota.</div>
+
+<h2>5. Privacidad durante la prueba</h2>
+<ul>
+  <li>No se crean cuentas ni se piden nombres de alumnos.</li>
+  <li>Lo que se pega en la herramienta se analiza en el navegador y no sale del equipo.</li>
+  <li>La opinión de estudiantes es anónima. En la opinión docente, el correo es opcional y solo sirve para una conversación de seguimiento.</li>
+  <li>En Calibración se envía la dirección de la página, el juicio del docente y el resultado del análisis; el texto de la página no se envía.</li>
+  <li>Las respuestas se guardan en el servicio de formularios de Netlify (Estados Unidos) y se borran a más tardar el <mark class="pendiente">[completar: fecha límite de borrado]</mark>.</li>
+  <li>Recomendamos que el colegio avise a las familias de la prueba. Los menores de 14 años necesitan el permiso de su padre, madre o apoderado para responder el formulario.</li>
+</ul>
+<p>Detalles en la <a href="/privacidad.html">política de privacidad</a>.</p>
+
+<h2>6. Después de la prueba</h2>
+<p>En los <mark class="pendiente">[completar: número de días]</mark> días siguientes al cierre le enviaremos un resumen: qué funcionó, qué no, cuánto coincidió el semáforo con el criterio de los docentes y qué cambiaremos.</p>
+<p>Para preparar un posible piloto con cuentas reales, nos ayudaría que la dirección nos confirme:</p>
+<ol>
+  <li>¿El colegio usa <b>Google Workspace</b> o <b>Microsoft 365</b>? ¿Desde qué grado tienen cuenta los alumnos?</li>
+  <li>¿Cuántos alumnos y docentes usarían VeriTech, y en qué grados?</li>
+  <li>¿Qué dispositivos y navegador usan los alumnos (Chromebooks, laptops propias, sala de cómputo)?</li>
+  <li>¿Quién decide la contratación de herramientas digitales y con qué presupuesto?</li>
+  <li>¿Aceptaría un piloto gratuito de 4 a 6 semanas con una o dos clases, con un acuerdo de protección de datos firmado?</li>
+</ol>
+
+<h2>7. Contacto</h2>
+<p>Equipo VeriTech: <mark class="pendiente">[completar: nombres del equipo]</mark>.<br>
+Responsable adulto: <mark class="pendiente">[completar: nombre del responsable]</mark>.<br>
+Correo: <mark class="pendiente">[completar: correo del equipo]</mark>.</p>
+  </main>
+  <footer>
+    <a href="/">Herramienta</a>·<a href="/calibracion.html">Calibración</a>·<a href="/opinion-docentes.html">Opinión docente</a>·<a href="/feedback.html">Opinión de estudiantes</a><br>
+    <a href="/privacidad.html">Privacidad</a>·<a href="/terminos.html">Términos y condiciones</a>·<a href="/cookies.html">Cookies y almacenamiento</a><br>
+    Proyecto escolar VeriTech · <mark class="pendiente">[completar: colegio y curso]</mark> · 2026
+  </footer>
+</div>
+</body>
+</html>

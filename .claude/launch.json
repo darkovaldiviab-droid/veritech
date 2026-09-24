@@ -1,2 +1,3 @@
 { "version": "0.0.1", "configurations": [
-  { "name": "veritech", "runtimeExecutable": "python3", "runtimeArgs": ["-m","http.server","8830","--directory","/Users/usuario/Hackaton/veritech-sitio"], "port": 8830 } ] }
+  { "name": "veritech", "runtimeExecutable": "python3", "runtimeArgs": ["-m","http.server","8830","--directory","/Users/usuario/Hackaton/veritech-sitio"], "port": 8830 },
+  { "name": "veritech-netlify", "runtimeExecutable": "python3", "runtimeArgs": ["/Users/usuario/Hackaton/herramientas/servidor-local.py","8831","dist"], "port": 8831 } ] }
