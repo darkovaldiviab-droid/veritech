@@ -1,0 +1,11 @@
+created_at,docente,area,url,juicio_docente,puntaje_veritech,nivel_veritech,coincide,senales,version_motor,motivo
+2026-10-02,MR,Comunicación,https://www.minedu.gob.pe/guia-lectura,confiable,82,confiable,si,"Autoría:ok:+18 | Fecha:ok:+16 | Referencias:ok:+12",sitio-1.0,
+2026-10-02,MR,Comunicación,https://blog-tareas.wordpress.com/resumen,dudosa,48,dudosa,si,"Autoría:bad:-14 | Fecha:ok:+16 | Dominio:warn:-6",sitio-1.0,
+2026-10-02,MR,Comunicación,https://www.bbc.com/mundo/articulo,confiable,58,dudosa,no,"Autoría:bad:-14 | Fecha:ok:+16 | Referencias:warn:+4",sitio-1.0,Es un medio serio aunque no firme el autor
+2026-10-02,MR,Ciencia y Tecnología,https://www.senamhi.gob.pe/informe,confiable,35,no confiable,no,"Autoría:bad:-14 | Fecha:bad:-12 | Referencias:bad:-14",sitio-1.0,"Institución oficial, pero la página no muestra autor ni fecha"
+2026-10-02,Ana,Ciencia y Tecnología,https://datoscuriosos24.net/top-10,no confiable,12,no confiable,si,"Autoría:bad:-14 | Sensacionalismo:bad:-14 | Escritura de relleno:bad:-16",sitio-1.0,
+2026-10-02,Ana,Ciencia y Tecnología,https://www.scielo.org.pe/articulo,confiable,88,confiable,si,"Autoría:ok:+18 | Referencias:ok:+20 | Precisión:ok:+10",sitio-1.0,
+2026-10-02,Ana,Ciencia y Tecnología,https://salud-natural-hoy.com/curas,no confiable,52,dudosa,no,"Autoría:ok:+18 | Sensacionalismo:bad:-14 | Dominio:bad:-12",sitio-1.0,Firma alguien pero vende productos
+2026-10-02,Ana,Comunicación,https://es.wikipedia.org/wiki/Fotosintesis,dudosa,64,dudosa,si,"Autoría:bad:-14 | Referencias:ok:+20",sitio-1.0,
+2026-10-02,MR,Comunicación,https://www.rae.es/articulo,confiable,74,confiable,si,"Autoría:ok:+18 | Fecha:ok:+16",sitio-1.0,
+2026-10-02,MR,Comunicación,https://foro-estudiantes.net/respuestas,no confiable,22,no confiable,si,"Autoría:bad:-14 | Referencias:bad:-14",sitio-1.0,

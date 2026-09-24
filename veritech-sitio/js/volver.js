@@ -15,6 +15,10 @@
   var barra=document.createElement("div");
   barra.className="volver-guia-barra"; barra.appendChild(a);
   document.body.insertBefore(barra,document.body.firstChild);
+  /* el botón se alinea con la columna de contenido de cada página (que tienen anchos distintos) */
+  var columna=document.querySelector("body > .wrap, body > main, body > .deck");
+  function alinear(){if(columna)barra.style.maxWidth=columna.getBoundingClientRect().width+"px";}
+  alinear(); window.addEventListener("resize",alinear);
   /* el enlace pequeño de la cabecera a la guía queda repetido: se oculta */
   [].forEach.call(document.querySelectorAll('header a[href="'+GUIA+'"]'),function(el){el.hidden=true;});
 })();
