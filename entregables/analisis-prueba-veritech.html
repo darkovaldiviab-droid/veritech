@@ -1,0 +1,617 @@
+<title>Análisis de la prueba VeriTech</title>
+<meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#E4EAF1; --panel:#FDFEFF; --sunk:#EDF1F6; --ink:#0B1726; --muted:#556678;
+  --accent:#0F4C9C; --on-accent:#FFFFFF; --accent-soft:rgba(15,76,156,.09); --accent-line:rgba(15,76,156,.32);
+  --line:rgba(11,23,38,.13); --line-strong:rgba(11,23,38,.26);
+  --ok:#1D6349; --ok-bg:rgba(29,99,73,.11); --bad:#A8342A;
+  --grid:rgba(11,23,38,.05);
+  --shadow:0 1px 2px rgba(11,23,38,.05),0 14px 36px -18px rgba(11,23,38,.35);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;
+  --bg:#060D16; --panel:#0D1A28; --sunk:#08111C; --ink:#E7EDF4; --muted:#8FA3B8;
+  --accent:#6BA5F2; --on-accent:#04101F; --accent-soft:rgba(107,165,242,.12); --accent-line:rgba(107,165,242,.4);
+  --line:rgba(231,237,244,.13); --line-strong:rgba(231,237,244,.28);
+  --ok:#5DBE94; --ok-bg:rgba(93,190,148,.13); --bad:#EE8574;
+  --grid:rgba(231,237,244,.045);
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 18px 44px -20px rgba(0,0,0,.8);
+}}
+:root[data-theme="dark"]{color-scheme:dark;
+  --bg:#060D16; --panel:#0D1A28; --sunk:#08111C; --ink:#E7EDF4; --muted:#8FA3B8;
+  --accent:#6BA5F2; --on-accent:#04101F; --accent-soft:rgba(107,165,242,.12); --accent-line:rgba(107,165,242,.4);
+  --line:rgba(231,237,244,.13); --line-strong:rgba(231,237,244,.28);
+  --ok:#5DBE94; --ok-bg:rgba(93,190,148,.13); --bad:#EE8574;
+  --grid:rgba(231,237,244,.045);
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 18px 44px -20px rgba(0,0,0,.8);
+}
+:root[data-theme="dark"]{
+  --bg:#060D16; --panel:#0D1A28; --sunk:#08111C; --ink:#E7EDF4; --muted:#8FA3B8;
+  --accent:#6BA5F2; --on-accent:#04101F; --accent-soft:rgba(107,165,242,.12); --accent-line:rgba(107,165,242,.4);
+  --line:rgba(231,237,244,.13); --line-strong:rgba(231,237,244,.28);
+  --ok:#5DBE94; --ok-bg:rgba(93,190,148,.13); --bad:#EE8574;
+  --grid:rgba(231,237,244,.045);
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 18px 44px -20px rgba(0,0,0,.8);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px; line-height:1.55;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:40px 40px;
+  padding-block:22px; padding-left:16px; padding-right:16px;
+}
+.wrap{max-width:880px; margin-inline:auto; display:flex; flex-direction:column; gap:16px}
+h1,h2,h3{font-family:Archivo,sans-serif; margin:0; text-wrap:balance; letter-spacing:-.02em}
+p{margin:0}
+header{display:flex; align-items:center; gap:12px}
+.rose{width:34px; height:34px; color:var(--accent); flex:none}
+h1{font-variation-settings:"wdth" 116,"wght" 800; font-size:1.45rem; line-height:1}
+.sub{font-size:.8rem; color:var(--muted); line-height:1.3}
+
+.card{background:var(--panel); border:1px solid var(--line); border-radius:9px; box-shadow:var(--shadow); padding:18px; display:flex; flex-direction:column; gap:12px}
+.card h2{font-size:1rem; font-variation-settings:"wdth" 108,"wght" 700}
+.pasos{display:flex; flex-direction:column; gap:.7em; counter-reset:p}
+.paso{display:grid; grid-template-columns:auto 1fr; gap:.85em; align-items:start; font-size:.87rem; color:var(--muted); line-height:1.5}
+.paso b{
+  font-family:"IBM Plex Mono",monospace; font-size:.68rem; color:var(--accent);
+  border:1px solid var(--accent); border-radius:99px; width:1.85em; height:1.85em;
+  display:grid; place-items:center; flex:none;
+}
+.paso strong{color:var(--ink); font-weight:600}
+textarea{
+  font-family:"IBM Plex Mono",monospace; font-size:.78rem; color:var(--ink); background:var(--sunk);
+  border:1px solid var(--line); border-radius:7px; padding:12px; width:100%; min-height:130px;
+  resize:vertical; line-height:1.5;
+}
+textarea:focus{outline:2px solid var(--accent); outline-offset:-1px}
+button{
+  font-family:"IBM Plex Mono",monospace; font-size:.73rem; font-weight:600; letter-spacing:.07em;
+  text-transform:uppercase; border-radius:6px; padding:.75em 1.1em; cursor:pointer;
+  background:var(--panel); color:var(--ink); border:1px solid var(--line-strong);
+}
+button:hover{border-color:var(--accent); color:var(--accent)}
+button:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+button.primary{background:var(--accent); border-color:var(--accent); color:var(--on-accent)}
+button.primary:hover{filter:brightness(1.1); color:#fff}
+.row{display:flex; gap:9px; flex-wrap:wrap}
+
+.n{
+  display:flex; align-items:baseline; gap:.5em; font-family:"IBM Plex Mono",monospace;
+  font-size:.75rem; color:var(--muted); border-bottom:1px solid var(--line); padding-bottom:.7em;
+}
+.n b{font-family:Archivo,sans-serif; font-size:1.8rem; font-weight:800; color:var(--accent); font-variant-numeric:tabular-nums}
+.stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:12px}
+.stat{border:1px solid var(--line); border-radius:8px; padding:14px; display:flex; flex-direction:column; gap:.4em; background:var(--sunk)}
+.stat .big{font-family:Archivo,sans-serif; font-size:2.5rem; font-weight:800; line-height:1; color:var(--accent); font-variant-numeric:tabular-nums}
+.stat .lbl{font-size:.8rem; color:var(--muted); line-height:1.45}
+.stat .base{font-family:"IBM Plex Mono",monospace; font-size:.66rem; color:var(--muted); opacity:.85}
+.frase{
+  background:var(--accent-soft); border:1px solid var(--accent-line); border-radius:8px; padding:14px;
+  display:flex; flex-direction:column; gap:.6em;
+}
+.frase p{font-size:.92rem; line-height:1.55}
+.desglose{display:flex; flex-direction:column; gap:10px}
+.dgrupo b{font-size:.82rem; font-weight:600; display:block; margin-bottom:.4em}
+.barra{display:grid; grid-template-columns:minmax(120px,1.2fr) 2fr auto; gap:9px; align-items:center; font-size:.78rem; margin-bottom:4px}
+.barra span:first-child{color:var(--muted); overflow-wrap:anywhere}
+.bar{height:7px; background:var(--sunk); border:1px solid var(--line); border-radius:99px; overflow:hidden}
+.bar i{display:block; height:100%; background:var(--accent)}
+.barra .pct{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; color:var(--ink); white-space:nowrap}
+.aviso{font-size:.82rem; color:var(--bad); line-height:1.5}
+.vacio{color:var(--muted); font-size:.85rem; text-align:center; padding:26px 10px; border:1px dashed var(--line-strong); border-radius:8px}
+.flash{position:fixed; left:50%; bottom:18px; transform:translateX(-50%); z-index:50; font-size:.82rem; font-weight:500;
+  padding:.7em 1.1em; border-radius:7px; border:1px solid var(--ok); background:var(--ok-bg); color:var(--ok); box-shadow:var(--shadow)}
+footer a{color:var(--muted); text-decoration:underline}
+footer a:hover{color:var(--accent)}
+footer{font-size:.74rem; color:var(--muted); text-align:center}
+.wrap{max-width:960px}
+.card h3{font-size:.9rem; font-variation-settings:"wdth" 106,"wght" 700; margin-top:.4em}
+.archivo{display:flex; flex-wrap:wrap; gap:9px; align-items:center}
+.archivo label.boton{
+  font-family:"IBM Plex Mono",monospace; font-size:.73rem; font-weight:600; letter-spacing:.07em; text-transform:uppercase;
+  border-radius:6px; padding:.75em 1.1em; cursor:pointer; background:var(--accent); color:var(--on-accent); border:1px solid var(--accent)}
+.archivo label.boton:hover{filter:brightness(1.1)}
+.archivo label.boton:focus-within{outline:2px solid var(--accent); outline-offset:2px}
+.archivo input[type=file]{position:absolute; width:1px; height:1px; opacity:0}
+.archivo .nombre{font-size:.8rem; color:var(--muted); overflow-wrap:anywhere}
+details summary{cursor:pointer; font-size:.8rem; color:var(--accent); font-weight:600}
+details[open] summary{margin-bottom:8px}
+.semaforo{display:flex; flex-direction:column; gap:8px}
+.criterio{display:grid; grid-template-columns:auto 1fr; gap:10px; align-items:start; padding:10px 12px; border:1px solid var(--line); border-radius:8px; background:var(--sunk)}
+.criterio .icono{width:1.6em; height:1.6em; border-radius:50%; display:grid; place-items:center; font-weight:700; font-size:.85rem; flex:none}
+.est-si .icono{background:var(--ok-bg); color:var(--ok); border:1px solid var(--ok)}
+.est-no .icono{background:rgba(168,52,42,.1); color:var(--bad); border:1px solid var(--bad)}
+.est-sin-datos .icono{background:var(--panel); color:var(--muted); border:1px dashed var(--line-strong)}
+.criterio p{font-size:.87rem}
+.criterio small{display:block; color:var(--muted); font-size:.78rem; margin-top:.15em}
+.conclusion{font-weight:600; font-size:.92rem}
+.alerta{border:1px solid var(--bad); color:var(--bad); background:rgba(168,52,42,.08); border-radius:8px; padding:10px 12px; font-size:.86rem}
+.stat .big.ok{color:var(--ok)} .stat .big.bad{color:var(--bad)}
+.tabla-wrap{overflow-x:auto}
+table{border-collapse:collapse; width:100%; font-size:.82rem}
+th,td{text-align:left; padding:.5em .6em; border-bottom:1px solid var(--line); vertical-align:top}
+th{font-weight:600; color:var(--muted); font-size:.74rem}
+td.num,th.num{text-align:center; font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums}
+td.diag{background:var(--ok-bg); color:var(--ok); font-weight:700}
+.lista{margin:0; padding-left:1.1em; display:flex; flex-direction:column; gap:.45em; font-size:.85rem}
+.lista li{overflow-wrap:anywhere}
+.lista small{color:var(--muted)}
+.nota-p{font-size:.78rem; color:var(--muted); line-height:1.5}
+
+.ejemplo{border:1px solid var(--accent-line); background:var(--accent-soft); border-radius:9px; padding:12px 14px; display:flex; flex-wrap:wrap; gap:10px 14px; align-items:center; font-size:.86rem}
+.ejemplo b{color:var(--ink)}
+.ejemplo span{flex:1 1 260px}
+.nombre.es-ejemplo{color:var(--accent); font-weight:600}
+</style>
+<div class="wrap">
+  <header>
+    <svg class="rose" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+      <circle cx="32" cy="32" r="29" stroke="currentColor" stroke-width="3"/>
+      <path d="M19 33 L28 42 L45 23" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+    <div>
+      <h1>Análisis de la prueba</h1>
+      <p class="sub">Solo para el equipo VeriTech · Resultados de la prueba del colegio</p>
+    </div>
+  </header>
+
+  <div class="ejemplo" id="aviso-ejemplo"><span><b>Estás viendo datos de ejemplo inventados.</b> Abre tus CSV reales en cada sección y se reemplazan. <span id="quedan"></span></span><button type="button" id="vaciar">Quitar los ejemplos</button></div>
+
+  <div class="card">
+    <h2>Cómo traer los datos</h2>
+    <div class="pasos">
+      <div class="paso"><b>1</b><p>Entra a <strong>app.netlify.com</strong>, abre tu proyecto y ve a <strong>Forms</strong>.</p></div>
+      <div class="paso"><b>2</b><p>En cada formulario (<strong>calibracion</strong>, <strong>opinion-docentes</strong> y <strong>opinion-sobre-la-web</strong>) pulsa <strong>Download CSV</strong>.</p></div>
+      <div class="paso"><b>3</b><p>Abre cada archivo en su sección de abajo. El resumen se arma solo.</p></div>
+    </div>
+  </div>
+
+  <div class="card" id="resumen">
+    <h2>¿Pedimos el piloto?</h2>
+    <p class="nota-p">Criterios del plan post-feedback. Falta uno más que se revisa a mano: que la dirección acepte el piloto gratuito o pida más información.</p>
+    <div class="semaforo" id="criterios"></div>
+    <p class="conclusion" id="conclusion"></p>
+    <p class="alerta" id="alerta" hidden></p>
+    <div class="row"><button type="button" id="copiar">Copiar resumen en texto</button></div>
+  </div>
+
+  <section class="card" data-tipo="calibracion">
+    <h2>1. Calibración (docentes)</h2>
+    <div class="archivo"><label class="boton">Abrir CSV de calibracion<input type="file" accept=".csv,text/csv"></label><span class="nombre"></span></div>
+    <details><summary>O pegar el texto del CSV</summary><textarea spellcheck="false" placeholder="Pega aquí el contenido del archivo…"></textarea><div class="row"><button class="primary" type="button">Analizar</button></div></details>
+    <p class="aviso" role="alert" hidden></p>
+    <div class="salida" aria-live="polite"></div>
+  </section>
+
+  <section class="card" data-tipo="docentes">
+    <h2>2. Opinión docente</h2>
+    <div class="archivo"><label class="boton">Abrir CSV de opinion-docentes<input type="file" accept=".csv,text/csv"></label><span class="nombre"></span></div>
+    <details><summary>O pegar el texto del CSV</summary><textarea spellcheck="false" placeholder="Pega aquí el contenido del archivo…"></textarea><div class="row"><button class="primary" type="button">Analizar</button></div></details>
+    <p class="aviso" role="alert" hidden></p>
+    <div class="salida" aria-live="polite"></div>
+  </section>
+
+  <section class="card" data-tipo="estudiantes">
+    <h2>3. Opinión de estudiantes</h2>
+    <div class="archivo"><label class="boton">Abrir CSV de opinion-sobre-la-web<input type="file" accept=".csv,text/csv"></label><span class="nombre"></span></div>
+    <details><summary>O pegar el texto del CSV</summary><textarea spellcheck="false" placeholder="Pega aquí el contenido del archivo…"></textarea><div class="row"><button class="primary" type="button">Analizar</button></div></details>
+    <p class="aviso" role="alert" hidden></p>
+    <div class="salida" aria-live="polite"></div>
+  </section>
+
+  <footer>Proyecto VeriTech · Los porcentajes se redondean al entero más cercano · Los archivos se leen en tu navegador y no se suben a ningún lado</footer>
+</div>
+<p class="flash" id="flash" role="status" hidden></p>
+
+
+<script>
+/* VeriTech · análisis de la prueba del colegio.
+   Funciones puras (sin DOM): leen los CSV que exporta Netlify Forms y devuelven los números.
+   Las usa js/analisis-ui.js y las prueba veritech-app/test/analisis.test.js. */
+(function(g){
+"use strict";
+
+/* CSV con comillas, comas y saltos de línea dentro de los campos */
+function parseCSV(txt){
+  var filas=[],campo="",fila=[],dentro=false,c,i;
+  txt=String(txt||"").replace(/^﻿/,"").replace(/\r\n/g,"\n").replace(/\r/g,"\n");
+  for(i=0;i<txt.length;i++){
+    c=txt[i];
+    if(dentro){
+      if(c==='"'){ if(txt[i+1]==='"'){campo+='"';i++;} else dentro=false; }
+      else campo+=c;
+    } else if(c==='"'){ dentro=true; }
+    else if(c===","){ fila.push(campo); campo=""; }
+    else if(c==="\n"){ fila.push(campo); filas.push(fila); fila=[]; campo=""; }
+    else campo+=c;
+  }
+  if(campo!==""||fila.length){ fila.push(campo); filas.push(fila); }
+  return filas.filter(function(f){return f.some(function(x){return x.trim()!=="";});});
+}
+/* minúsculas, sin tildes ni espacios sobrantes: para comparar respuestas */
+function norm(s){return String(s==null?"":s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/\s+/g," ").trim();}
+/* clave de columna: «Juicio docente», «juicio_docente» e «imprescindible[]» se reconocen igual */
+function clave(s){return norm(s).replace(/[^a-z0-9]/g,"");}
+
+/* Filas del CSV → objetos con las columnas pedidas. Si falta alguna obligatoria, lo dice. */
+function aObjetos(txt,columnas,obligatorias){
+  var filas=parseCSV(txt);
+  if(filas.length<1)return {error:"El archivo está vacío.",filas:[]};
+  var cab=filas[0].map(clave), idx={}, faltan=[];
+  columnas.forEach(function(k){
+    /* solo coincidencia exacta de la clave: «imprescindible» no debe tomar «imprescindible_otro» */
+    var i=cab.indexOf(clave(k));
+    idx[k]=i;
+    if(i<0&&(obligatorias||[]).indexOf(k)>=0)faltan.push(k);
+  });
+  if(faltan.length)return {error:"No encontré las columnas: "+faltan.join(", ")+". ¿Es el CSV del formulario correcto? Títulos del archivo: "+filas[0].join(" · "),filas:[]};
+  var datos=filas.slice(1).map(function(f){
+    var o={}; columnas.forEach(function(k){o[k]=idx[k]>=0?String(f[idx[k]]==null?"":f[idx[k]]).trim():"";}); return o;
+  });
+  return {error:null,filas:datos};
+}
+
+function contar(filas,campo,orden){
+  var c={}; filas.forEach(function(f){var v=f[campo]; if(v)c[v]=(c[v]||0)+1;});
+  var claves=Object.keys(c);
+  if(orden)claves.sort(function(a,b){
+    var ia=orden.findIndex(function(o){return norm(o)===norm(a);}), ib=orden.findIndex(function(o){return norm(o)===norm(b);});
+    return (ia<0?99:ia)-(ib<0?99:ib)||c[b]-c[a];
+  }); else claves.sort(function(a,b){return c[b]-c[a];});
+  var total=claves.reduce(function(s,k){return s+c[k];},0);
+  return claves.map(function(k){return {valor:k,n:c[k],pct:total?Math.round(c[k]/total*100):0};});
+}
+function promedio(filas,campo){
+  var v=filas.map(function(f){return parseInt(f[campo],10);}).filter(function(x){return x>=1&&x<=5;});
+  return v.length?Math.round(v.reduce(function(a,b){return a+b;},0)/v.length*10)/10:null;
+}
+function textos(filas,campo){return filas.map(function(f){return f[campo];}).filter(Boolean);}
+/* proporción de filas cuyo campo es uno de los valores dados (comparación normalizada) */
+function proporcion(filas,campo,valores){
+  var con=filas.filter(function(f){return f[campo];});
+  if(!con.length)return null;
+  var vs=valores.map(norm);
+  return con.filter(function(f){return vs.indexOf(norm(f[campo]))>=0;}).length/con.length;
+}
+
+/* ---------- calibración ---------- */
+var NIVELES=["confiable","dudosa","no confiable"];
+var RANGO={"confiable":2,"dudosa":1,"no confiable":0};
+function calibracion(txt){
+  var r=aObjetos(txt,["docente","area","url","juicio_docente","puntaje_veritech","nivel_veritech","coincide","senales","version_motor","motivo"],["juicio_docente","nivel_veritech"]);
+  if(r.error)return {error:r.error};
+  var filas=r.filas.filter(function(f){return RANGO[norm(f.juicio_docente)]!==undefined&&RANGO[norm(f.nivel_veritech)]!==undefined;});
+  var n=filas.length;
+  if(!n)return {error:"El archivo no tiene calificaciones todavía."};
+  var matriz=NIVELES.map(function(d){return NIVELES.map(function(v){
+    return filas.filter(function(f){return norm(f.juicio_docente)===d&&norm(f.nivel_veritech)===v;}).length;});});
+  var acuerdo=filas.filter(function(f){return norm(f.juicio_docente)===norm(f.nivel_veritech);}).length;
+  /* graves: uno dijo «confiable» y el otro «no confiable» */
+  var graves=filas.filter(function(f){return Math.abs(RANGO[norm(f.juicio_docente)]-RANGO[norm(f.nivel_veritech)])===2;});
+  /* más estricto: VeriTech puso un nivel peor que el docente → qué señales salieron mal.
+     más permisivo: VeriTech puso un nivel mejor → qué señales salieron bien. */
+  function senales(grupo,estado){
+    var c={};
+    grupo.forEach(function(f){
+      String(f.senales||"").split("|").forEach(function(s){
+        var p=s.trim().split(":"); if(p.length<2)return;
+        if(norm(p[p.length-2])===estado){var nombre=p.slice(0,p.length-2).join(":").trim(); c[nombre]=(c[nombre]||0)+1;}
+      });
+    });
+    return Object.keys(c).map(function(k){return {senal:k,n:c[k],pct:Math.round(c[k]/grupo.length*100)};})
+      .sort(function(a,b){return b.n-a.n;});
+  }
+  var estricto=filas.filter(function(f){return RANGO[norm(f.nivel_veritech)]<RANGO[norm(f.juicio_docente)];});
+  var permisivo=filas.filter(function(f){return RANGO[norm(f.nivel_veritech)]>RANGO[norm(f.juicio_docente)];});
+  var porArea=contar(filas,"area").map(function(a){
+    var g=filas.filter(function(f){return f.area===a.valor;});
+    var ok=g.filter(function(f){return norm(f.juicio_docente)===norm(f.nivel_veritech);}).length;
+    return {area:a.valor,n:g.length,acuerdo:Math.round(ok/g.length*100)};
+  });
+  var docentes={}; filas.forEach(function(f){docentes[norm(f.docente)||"(sin apodo)"]=1;});
+  return {
+    error:null, n:n, acuerdo:Math.round(acuerdo/n*100), acuerdoN:acuerdo,
+    niveles:NIVELES, matriz:matriz,
+    graves:graves.map(function(f){return {url:f.url,docente:f.juicio_docente,veritech:f.nivel_veritech,puntaje:f.puntaje_veritech,motivo:f.motivo};}),
+    estricto:{n:estricto.length,senales:senales(estricto,"bad")},
+    permisivo:{n:permisivo.length,senales:senales(permisivo,"ok")},
+    porArea:porArea, docentes:Object.keys(docentes).length,
+    versiones:contar(filas,"version_motor").map(function(v){return v.valor;})
+  };
+}
+
+/* ---------- opinión docente ---------- */
+var IMPRESCINDIBLE=[
+  ["Ver las fuentes que entrega cada alumno","Ver las fuentes que entrega cada alumno"],
+  ["Informe del curso","Informe del curso"],
+  ["Extension instalada","Que funcione solo en el navegador (extensión)"],
+  ["Mas formatos de cita","Más formatos de cita"],
+  ["Integracion Classroom o Teams","Integración con Classroom o Teams"],
+  ["Capacitacion","Capacitación o guía para docentes"],
+  ["Fuentes peruanas","Que reconozca fuentes peruanas"]];
+function docentes(txt){
+  var r=aObjetos(txt,["area","grado","funciones_probadas","utilidad_semaforo","coincide_criterio","ejemplo_desacuerdo","claridad","usaria_en_clase","imprescindible","imprescindible_otro","cambio_principal","contratar","precio_razonable","preocupaciones","correo_contacto"],["utilidad_semaforo","usaria_en_clase"]);
+  if(r.error)return {error:r.error};
+  var filas=r.filas.filter(function(f){return f.utilidad_semaforo||f.usaria_en_clase;});
+  var n=filas.length;
+  if(!n)return {error:"El archivo no tiene respuestas todavía."};
+  /* casillas múltiples: Netlify las junta en una celda; se busca cada opción conocida */
+  var impr=IMPRESCINDIBLE.map(function(o){
+    var k=filas.filter(function(f){return norm(f.imprescindible).indexOf(norm(o[0]))>=0;}).length;
+    return {valor:o[1],n:k,pct:Math.round(k/n*100)};
+  }).sort(function(a,b){return b.n-a.n;});
+  return {
+    error:null, n:n,
+    utilidad:promedio(filas,"utilidad_semaforo"),
+    coincide:contar(filas,"coincide_criterio",["Casi siempre","A veces","Pocas veces","No lo compare"]),
+    claridad:contar(filas,"claridad",["Si, solos","Con una explicacion breve","No"]),
+    usaria:contar(filas,"usaria_en_clase",["Si, en la proxima tarea","Si, con cambios","No por ahora"]),
+    contratar:contar(filas,"contratar",["Si","Tal vez","No","No me corresponde"]),
+    usariaSi:proporcion(filas,"usaria_en_clase",["Si, en la proxima tarea","Si, con cambios"]),
+    imprescindible:impr,
+    area:contar(filas,"area"),
+    textos:{cambio:textos(filas,"cambio_principal"),ejemplos:textos(filas,"ejemplo_desacuerdo"),otros:textos(filas,"imprescindible_otro"),
+            precio:textos(filas,"precio_razonable"),preocupaciones:textos(filas,"preocupaciones")},
+    correos:textos(filas,"correo_contacto")
+  };
+}
+
+/* ---------- opinión de estudiantes ---------- */
+function estudiantes(txt){
+  var r=aObjetos(txt,["satisfaccion","facilidad","funcionamiento","funcion_mas_util","entendio_semaforo","problemas","mejora_prioritaria","recomendacion","usaria_en_tarea","grado"],["satisfaccion"]);
+  if(r.error)return {error:r.error};
+  var filas=r.filas.filter(function(f){return f.satisfaccion;});
+  var n=filas.length;
+  if(!n)return {error:"El archivo no tiene respuestas todavía."};
+  return {
+    error:null, n:n,
+    satisfaccion:promedio(filas,"satisfaccion"), recomendacion:promedio(filas,"recomendacion"),
+    facilidad:contar(filas,"facilidad",["Muy facil","Facil","Ni facil ni dificil","Dificil","Muy dificil"]),
+    funcionamiento:contar(filas,"funcionamiento",["Si, todo funciono","Funciono con detalles","Tuve problemas","No pude usarla"]),
+    entendio:contar(filas,"entendio_semaforo",["Si, lo entendi","Mas o menos","No lo entendi","No analice ninguna fuente"]),
+    usaria:contar(filas,"usaria_en_tarea",["Si","Tal vez","No"]),
+    usariaSi:proporcion(filas,"usaria_en_tarea",["Si","Tal vez"]),
+    funcion:contar(filas,"funcion_mas_util"),
+    grado:contar(filas,"grado"),
+    textos:{mejora:textos(filas,"mejora_prioritaria"),problemas:textos(filas,"problemas")}
+  };
+}
+
+/* ---------- ¿vale la pena seguir? (criterios de PLAN-post-feedback.md §2) ---------- */
+function senalesSeguir(cal,doc,est){
+  function item(texto,valor,cumple,detalle){return {texto:texto,valor:valor,estado:valor==null?"sin-datos":(cumple?"si":"no"),detalle:detalle};}
+  var lista=[
+    item("El semáforo coincide con los docentes en al menos el 70 % de las fuentes",
+      cal&&!cal.error?cal.acuerdo:null, cal&&!cal.error&&cal.acuerdo>=70,
+      cal&&!cal.error?cal.acuerdo+" % en "+cal.n+" fuentes":"Falta el CSV de calibración"),
+    item("Utilidad del semáforo según los docentes: promedio de 4 o más (de 5)",
+      doc&&!doc.error?doc.utilidad:null, doc&&!doc.error&&doc.utilidad>=4,
+      doc&&!doc.error?(doc.utilidad==null?"sin respuestas":doc.utilidad+" de 5"):"Falta el CSV de opinión docente"),
+    item("La mayoría de los docentes lo usaría en clase («Sí» o «Sí, con cambios»)",
+      doc&&!doc.error?doc.usariaSi:null, doc&&!doc.error&&doc.usariaSi>0.5,
+      doc&&!doc.error?Math.round(doc.usariaSi*100)+" % de "+doc.n+" docentes":"Falta el CSV de opinión docente"),
+    item("La mayoría de los estudiantes lo usaría en su próxima tarea («Sí» o «Tal vez»)",
+      est&&!est.error?est.usariaSi:null, est&&!est.error&&est.usariaSi>0.5,
+      est&&!est.error?Math.round(est.usariaSi*100)+" % de "+est.n+" estudiantes":"Falta el CSV de estudiantes")
+  ];
+  var alerta=cal&&!cal.error&&cal.acuerdo<50?"El acuerdo es menor al 50 %: según el plan, no se propone el piloto hasta corregir el motor y repetir la calibración.":null;
+  return {lista:lista,alerta:alerta,cumplidos:lista.filter(function(i){return i.estado==="si";}).length};
+}
+
+g.VeriTechAnalisis={parseCSV:parseCSV,norm:norm,aObjetos:aObjetos,calibracion:calibracion,docentes:docentes,estudiantes:estudiantes,senalesSeguir:senalesSeguir};
+})(typeof globalThis!=="undefined"?globalThis:this);
+
+</script>
+<script>
+/* Interfaz de analisis-prueba.html. Todo lo que viene de los formularios es público,
+   así que se pinta solo con textContent: nunca con innerHTML. */
+(function(){
+"use strict";
+var A=window.VeriTechAnalisis, $=function(id){return document.getElementById(id);};
+var resultados={calibracion:null,docentes:null,estudiantes:null};
+
+/* Los formularios guardan los valores sin tildes; aquí se muestran bien escritos. */
+var ETIQUETA={
+  "si":"Sí","tal vez":"Tal vez","no":"No","no me corresponde":"No me corresponde opinar",
+  "casi siempre":"Casi siempre","a veces":"A veces","pocas veces":"Pocas veces","no lo compare":"No lo comparé",
+  "si, solos":"Sí, sin ayuda","con una explicacion breve":"Con una explicación breve","no por ahora":"No por ahora",
+  "si, en la proxima tarea":"Sí, en la próxima tarea","si, con cambios":"Sí, con cambios",
+  "muy facil":"Muy fácil","facil":"Fácil","ni facil ni dificil":"Ni fácil ni difícil","dificil":"Difícil","muy dificil":"Muy difícil",
+  "si, todo funciono":"Sí, todo funcionó","funciono con detalles":"Funcionó con detalles","tuve problemas":"Tuvo problemas importantes","no pude usarla":"No pudo completar lo que quería",
+  "si, lo entendi":"Sí, lo entendió","mas o menos":"Más o menos","no lo entendi":"No lo entendió","no analice ninguna fuente":"No analizó ninguna fuente",
+  "confiable":"Confiable","dudosa":"Dudosa","no confiable":"No confiable"};
+function et(v){return ETIQUETA[A.norm(v)]||v;}
+
+/* h("p",{className:"x"},"texto",hijo…): crea nodos; los textos siempre como texto */
+function h(tag,props){
+  var el=document.createElement(tag);
+  if(props)Object.keys(props).forEach(function(k){if(k==="style")Object.assign(el.style,props[k]);else if(k.indexOf("aria-")===0)el.setAttribute(k,props[k]);else el[k]=props[k];});
+  for(var i=2;i<arguments.length;i++){var c=arguments[i]; if(c==null||c===false)continue;
+    if(Array.isArray(c))c.forEach(function(x){if(x!=null)el.appendChild(typeof x==="object"?x:document.createTextNode(String(x)));});
+    else el.appendChild(typeof c==="object"?c:document.createTextNode(String(c)));}
+  return el;
+}
+function stat(valor,etiqueta,base,clase){return h("div",{className:"stat"},h("span",{className:"big"+(clase?" "+clase:"")},valor),h("span",{className:"lbl"},etiqueta),base?h("span",{className:"base"},base):null);}
+function barras(titulo,datos,conEtiqueta){
+  if(!datos||!datos.length)return null;
+  return h("div",{className:"dgrupo"},h("b",null,titulo),datos.map(function(d){
+    return h("div",{className:"barra"},h("span",null,conEtiqueta===false?d.valor:et(d.valor)),
+      h("div",{className:"bar"},h("i",{style:{width:d.pct+"%"}})),h("span",{className:"pct"},d.pct+" % ("+d.n+")"));
+  }));
+}
+function lista(titulo,textos,vacio){
+  return h("div",null,h("h3",null,titulo+" ("+textos.length+")"),
+    textos.length?h("ol",{className:"lista"},textos.map(function(t){return h("li",null,t);})):h("p",{className:"nota-p"},vacio||"Sin respuestas."));
+}
+
+/* ---------- pintar cada sección ---------- */
+function pintarCalibracion(r){
+  var cls=r.acuerdo>=70?"ok":(r.acuerdo<50?"bad":"");
+  var cab=h("tr",null,h("th",null,"Docente dijo ↓ · VeriTech dijo →"),r.niveles.map(function(n){return h("th",{className:"num"},et(n));}));
+  var filas=r.matriz.map(function(f,i){return h("tr",null,h("th",null,et(r.niveles[i])),f.map(function(v,j){return h("td",{className:"num"+(i===j?" diag":"")},v);}));});
+  return [
+    h("div",{className:"stats"},
+      stat(r.acuerdo+" %","de coincidencia entre el semáforo y los docentes (meta: 70 %)",r.acuerdoN+" de "+r.n+" fuentes",cls),
+      stat(r.graves.length,"desacuerdos graves: uno dijo «confiable» y el otro «no confiable»",null,r.graves.length?"bad":"ok"),
+      stat(r.docentes,r.docentes===1?"docente calificó":"docentes calificaron","versión del motor: "+r.versiones.join(", "))),
+    h("h3",null,"Dónde coinciden y dónde no"),
+    h("p",{className:"nota-p"},"La diagonal verde son las coincidencias. Lo que queda fuera de ella son los desacuerdos."),
+    h("div",{className:"tabla-wrap"},h("table",null,h("thead",null,cab),h("tbody",null,filas))),
+    h("h3",null,"Qué señales corregir"),
+    r.estricto.n?barras("VeriTech fue más estricto que el docente en "+r.estricto.n+" fuentes. Señales que salieron mal en esos casos:",
+      r.estricto.senales.map(function(s){return {valor:s.senal,n:s.n,pct:s.pct};}),false):h("p",{className:"nota-p"},"VeriTech nunca fue más estricto que el docente."),
+    r.permisivo.n?barras("VeriTech fue más permisivo que el docente en "+r.permisivo.n+" fuentes. Señales que salieron bien en esos casos:",
+      r.permisivo.senales.map(function(s){return {valor:s.senal,n:s.n,pct:s.pct};}),false):h("p",{className:"nota-p"},"VeriTech nunca fue más permisivo que el docente."),
+    h("p",{className:"nota-p"},"Una señal que aparece en casi todos los desacuerdos es candidata a cambiar de peso en js/motor.js."),
+    r.porArea.length>1?h("div",null,h("h3",null,"Coincidencia por área"),h("div",{className:"tabla-wrap"},h("table",null,
+      h("thead",null,h("tr",null,h("th",null,"Área"),h("th",{className:"num"},"Fuentes"),h("th",{className:"num"},"Coincidencia"))),
+      h("tbody",null,r.porArea.map(function(a){return h("tr",null,h("td",null,a.area),h("td",{className:"num"},a.n),h("td",{className:"num"},a.acuerdo+" %"));}))))):null,
+    h("div",null,h("h3",null,"Desacuerdos graves, uno por uno ("+r.graves.length+")"),
+      r.graves.length?h("ol",{className:"lista"},r.graves.map(function(g){
+        return h("li",null,g.url||"(sin dirección)",h("br"),h("small",null,"Docente: "+et(g.docente)+" · VeriTech: "+et(g.veritech)+(g.puntaje?" ("+g.puntaje+"/100)":"")+(g.motivo?" · «"+g.motivo+"»":"")));
+      })):h("p",{className:"nota-p"},"Ninguno."))
+  ];
+}
+function pintarDocentes(r){
+  return [
+    h("div",{className:"stats"},
+      stat(r.n,r.n===1?"docente respondió":"docentes respondieron"),
+      stat(r.utilidad==null?"—":r.utilidad,"de 5: utilidad del semáforo (meta: 4)",null,r.utilidad>=4?"ok":(r.utilidad!=null&&r.utilidad<3?"bad":"")),
+      stat(Math.round(r.usariaSi*100)+" %","lo usaría en clase («Sí» o «Sí, con cambios»)",null,r.usariaSi>0.5?"ok":"bad")),
+    h("div",{className:"desglose"},
+      barras("¿El color coincidió con su criterio?",r.coincide),
+      barras("¿Los alumnos entenderían solos el color?",r.claridad),
+      barras("¿Lo usaría en una tarea real?",r.usaria),
+      barras("Imprescindible para usarlo de forma habitual (porcentaje de docentes)",r.imprescindible,false),
+      barras("¿El colegio debería contratarlo?",r.contratar)),
+    lista("Lo que cambiarían primero",r.textos.cambio),
+    lista("Casos en que el color no coincidió",r.textos.ejemplos),
+    lista("Otras cosas imprescindibles",r.textos.otros),
+    lista("Monto que les parece razonable",r.textos.precio),
+    lista("Preocupaciones sobre datos o uso",r.textos.preocupaciones),
+    lista("Docentes que aceptan una conversación",r.correos,"Nadie dejó su correo."),
+    h("p",{className:"nota-p"},"Los correos solo pueden usarse para esa conversación y deben borrarse al terminar la prueba (política de privacidad).")
+  ];
+}
+function pintarEstudiantes(r){
+  return [
+    h("div",{className:"stats"},
+      stat(r.n,r.n===1?"estudiante respondió":"estudiantes respondieron"),
+      stat(r.satisfaccion==null?"—":r.satisfaccion,"de 5: satisfacción"),
+      stat(r.recomendacion==null?"—":r.recomendacion,"de 5: lo recomendaría a un compañero"),
+      stat(Math.round(r.usariaSi*100)+" %","lo usaría en su próxima tarea («Sí» o «Tal vez»)",null,r.usariaSi>0.5?"ok":"bad")),
+    h("div",{className:"desglose"},
+      barras("¿Entendió por qué salió ese color?",r.entendio),
+      barras("Facilidad de uso",r.facilidad),
+      barras("¿Funcionó como esperaba?",r.funcionamiento),
+      barras("¿Lo usaría en su próxima tarea?",r.usaria),
+      barras("Función más útil",r.funcion,false),
+      barras("Grado",r.grado,false)),
+    lista("Lo que mejorarían primero",r.textos.mejora),
+    lista("Problemas que encontraron",r.textos.problemas)
+  ];
+}
+var PINTAR={calibracion:pintarCalibracion,docentes:pintarDocentes,estudiantes:pintarEstudiantes};
+
+/* ---------- resumen «¿pedimos el piloto?» ---------- */
+function pintarResumen(){
+  var s=A.senalesSeguir(resultados.calibracion,resultados.docentes,resultados.estudiantes);
+  var ICONO={"si":"✓","no":"✕","sin-datos":"·"};
+  $("criterios").replaceChildren.apply($("criterios"),s.lista.map(function(i){
+    return h("div",{className:"criterio est-"+i.estado},h("span",{className:"icono","aria-hidden":"true"},ICONO[i.estado]),
+      h("p",null,i.texto,h("small",null,(i.estado==="si"?"Cumple · ":i.estado==="no"?"No cumple · ":"")+i.detalle)));
+  }));
+  var conDatos=s.lista.filter(function(i){return i.estado!=="sin-datos";}).length;
+  $("conclusion").textContent=!conDatos?"Abre los CSV de abajo para ver el resultado."
+    :s.cumplidos===4?"Se cumplen los 4 criterios: si la dirección acepta, pidan el piloto."
+    :conDatos<4?"Van "+s.cumplidos+" de "+conDatos+" criterios con datos. Faltan archivos por abrir."
+    :"Se cumplen "+s.cumplidos+" de 4. Antes del piloto, corrijan lo que no cumple.";
+  $("alerta").hidden=!s.alerta; $("alerta").textContent=s.alerta||"";
+  return s;
+}
+function textoResumen(){
+  var s=pintarResumen(), c=resultados.calibracion, d=resultados.docentes, e=resultados.estudiantes, L=[];
+  L.push("RESUMEN DE LA PRUEBA DE VERITECH","");
+  s.lista.forEach(function(i){L.push((i.estado==="si"?"[✓] ":i.estado==="no"?"[✕] ":"[ ] ")+i.texto+" — "+i.detalle);});
+  if(s.alerta)L.push("","ATENCIÓN: "+s.alerta);
+  if(c&&!c.error){L.push("","Calibración: "+c.acuerdo+" % de coincidencia en "+c.n+" fuentes ("+c.docentes+" docentes). Desacuerdos graves: "+c.graves.length+".");
+    if(c.estricto.senales[0])L.push("  Cuando VeriTech fue más estricto, la señal que más falló: "+c.estricto.senales[0].senal+" ("+c.estricto.senales[0].pct+" %).");
+    if(c.permisivo.senales[0])L.push("  Cuando fue más permisivo, la señal que más pesó: "+c.permisivo.senales[0].senal+" ("+c.permisivo.senales[0].pct+" %).");}
+  if(d&&!d.error){L.push("","Docentes ("+d.n+"): utilidad "+(d.utilidad==null?"—":d.utilidad)+"/5; lo usaría en clase: "+Math.round(d.usariaSi*100)+" %.");
+    L.push("  Imprescindible: "+d.imprescindible.filter(function(i){return i.n;}).slice(0,3).map(function(i){return i.valor+" ("+i.pct+" %)";}).join("; ")+".");}
+  if(e&&!e.error)L.push("","Estudiantes ("+e.n+"): satisfacción "+(e.satisfaccion==null?"—":e.satisfaccion)+"/5; lo usaría en su próxima tarea: "+Math.round(e.usariaSi*100)+" %.");
+  return L.join("\n")+"\n";
+}
+
+/* ---------- carga de archivos ---------- */
+var flashT=null;
+function flash(m){var el=$("flash");el.textContent=m;el.hidden=false;clearTimeout(flashT);flashT=setTimeout(function(){el.hidden=true;},2600);}
+var cargadores={};
+[].forEach.call(document.querySelectorAll("section[data-tipo]"),function(sec){
+  var tipo=sec.dataset.tipo, aviso=sec.querySelector(".aviso"), salida=sec.querySelector(".salida");
+  function analizar(txt){
+    var r=A[tipo](txt); resultados[tipo]=r.error?null:r;
+    aviso.hidden=!r.error; aviso.textContent=r.error||"";
+    salida.replaceChildren.apply(salida,r.error?[]:PINTAR[tipo](r));
+    pintarResumen();
+  }
+  sec.querySelector("input[type=file]").addEventListener("change",function(ev){
+    var f=ev.target.files[0]; if(!f)return;
+    sec.querySelector(".nombre").textContent=f.name;
+    var lector=new FileReader();
+    lector.onload=function(){analizar(String(lector.result));};
+    lector.onerror=function(){aviso.hidden=false;aviso.textContent="No se pudo leer el archivo.";};
+    lector.readAsText(f,"utf-8");
+  });
+  sec.querySelector("details button").addEventListener("click",function(){analizar(sec.querySelector("textarea").value);});
+  cargadores[tipo]=function(txt,nombre){sec.querySelector(".nombre").textContent=nombre||"";analizar(txt);};
+});
+/* Para cargar un CSV desde otro script (la versión publicada carga ejemplos al abrir). */
+window.VeriTechCargarCSV=function(tipo,txt,nombre){if(cargadores[tipo])cargadores[tipo](txt,nombre);};
+$("copiar").addEventListener("click",function(){
+  var t=textoResumen();
+  (navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(t):Promise.reject())
+    .then(function(){flash("Resumen copiado.");},function(){flash("Tu navegador bloqueó el portapapeles.");});
+});
+pintarResumen();
+})();
+
+</script>
+<script>
+(function(){
+"use strict";
+var EJ={"calibracion": "created_at,docente,area,url,juicio_docente,puntaje_veritech,nivel_veritech,coincide,senales,version_motor,motivo\n2026-10-02,MR,Comunicación,https://www.minedu.gob.pe/guia-lectura,confiable,82,confiable,si,\"Autoría:ok:+18 | Fecha:ok:+16 | Referencias:ok:+12\",sitio-1.0,\n2026-10-02,MR,Comunicación,https://blog-tareas.wordpress.com/resumen,dudosa,48,dudosa,si,\"Autoría:bad:-14 | Fecha:ok:+16 | Dominio:warn:-6\",sitio-1.0,\n2026-10-02,MR,Comunicación,https://www.bbc.com/mundo/articulo,confiable,58,dudosa,no,\"Autoría:bad:-14 | Fecha:ok:+16 | Referencias:warn:+4\",sitio-1.0,Es un medio serio aunque no firme el autor\n2026-10-02,MR,Ciencia y Tecnología,https://www.senamhi.gob.pe/informe,confiable,35,no confiable,no,\"Autoría:bad:-14 | Fecha:bad:-12 | Referencias:bad:-14\",sitio-1.0,\"Institución oficial, pero la página no muestra autor ni fecha\"\n2026-10-02,Ana,Ciencia y Tecnología,https://datoscuriosos24.net/top-10,no confiable,12,no confiable,si,\"Autoría:bad:-14 | Sensacionalismo:bad:-14 | Escritura de relleno:bad:-16\",sitio-1.0,\n2026-10-02,Ana,Ciencia y Tecnología,https://www.scielo.org.pe/articulo,confiable,88,confiable,si,\"Autoría:ok:+18 | Referencias:ok:+20 | Precisión:ok:+10\",sitio-1.0,\n2026-10-02,Ana,Ciencia y Tecnología,https://salud-natural-hoy.com/curas,no confiable,52,dudosa,no,\"Autoría:ok:+18 | Sensacionalismo:bad:-14 | Dominio:bad:-12\",sitio-1.0,Firma alguien pero vende productos\n2026-10-02,Ana,Comunicación,https://es.wikipedia.org/wiki/Fotosintesis,dudosa,64,dudosa,si,\"Autoría:bad:-14 | Referencias:ok:+20\",sitio-1.0,\n2026-10-02,MR,Comunicación,https://www.rae.es/articulo,confiable,74,confiable,si,\"Autoría:ok:+18 | Fecha:ok:+16\",sitio-1.0,\n2026-10-02,MR,Comunicación,https://foro-estudiantes.net/respuestas,no confiable,22,no confiable,si,\"Autoría:bad:-14 | Referencias:bad:-14\",sitio-1.0,\n", "docentes": "created_at,area,grado,utilidad_semaforo,coincide_criterio,ejemplo_desacuerdo,claridad,usaria_en_clase,imprescindible[],imprescindible_otro,cambio_principal,contratar,precio_razonable,preocupaciones,correo_contacto\n2026-10-03,Comunicación,4.º de secundaria,4,A veces,\"El BBC salió amarillo porque no tenía autor firmado\",Con una explicacion breve,\"Si, con cambios\",\"Ver las fuentes que entrega cada alumno, Informe del curso\",,Que no castigue tanto la falta de autor en medios conocidos,Tal vez,S/ 3 por alumno al mes,,\n2026-10-03,Ciencia y Tecnología,4.º de secundaria,5,Casi siempre,,\"Si, solos\",\"Si, en la proxima tarea\",\"Informe del curso, Fuentes peruanas, Extension instalada\",,Reconocer páginas del Estado peruano,Si,,Que no se guarde lo que navegan,\n2026-10-03,Comunicación,5.º de secundaria,3,Pocas veces,\"SENAMHI salió rojo y es una fuente oficial\",\"Con una explicacion breve\",\"Si, con cambios\",\"Ver las fuentes que entrega cada alumno, Mas formatos de cita\",Poder corregir el título a mano,Aceptar libros y revistas en la bibliografía,Tal vez,S/ 400 al año por curso,,\n", "estudiantes": "created_at,satisfaccion,facilidad,funcionamiento,funcion_mas_util,entendio_semaforo,problemas,mejora_prioritaria,recomendacion,usaria_en_tarea,grado\n2026-10-04,5 - Muy satisfecho,Muy facil,\"Si, todo funciono\",Analizar la calidad de una fuente,\"Si, lo entendi\",,Que funcione sin copiar y pegar,5 - Muy probable,Si,4.º de secundaria\n2026-10-04,4,Facil,Funciono con detalles,Crear la bibliografía,\"Si, lo entendi\",La bibliografía puso mal un título,Poder editar la bibliografía,4,Si,4.º de secundaria\n2026-10-04,4,Facil,\"Si, todo funciono\",Analizar la calidad de una fuente,Mas o menos,,Explicar mejor los colores,4,Tal vez,4.º de secundaria\n2026-10-04,3,Ni facil ni dificil,Funciono con detalles,Verificar si una cita respalda una afirmación,Mas o menos,En el celular se veía chico,Que sea más rápido,3,Tal vez,5.º de secundaria\n2026-10-04,2,Dificil,Tuve problemas,Ninguna todavía,No lo entendi,No sabía qué texto copiar,Un video de cómo se usa,2,No,5.º de secundaria\n"};
+var NOMBRE={calibracion:"calibracion",docentes:"opinion-docentes",estudiantes:"opinion-sobre-la-web"};
+var ejemplo={calibracion:true,docentes:true,estudiantes:true};
+function actualizar(){
+  var q=Object.keys(ejemplo).filter(function(k){return ejemplo[k];});
+  document.getElementById("aviso-ejemplo").hidden=!q.length;
+  document.getElementById("quedan").textContent=q.length<3?"Siguen de ejemplo: "+q.map(function(k){return NOMBRE[k];}).join(", ")+".":"";
+}
+Object.keys(EJ).forEach(function(t){
+  window.VeriTechCargarCSV(t,EJ[t],"Ejemplo inventado (no son datos reales)");
+  var sec=document.querySelector('section[data-tipo="'+t+'"]');
+  sec.querySelector(".nombre").classList.add("es-ejemplo");
+  function real(){ejemplo[t]=false; sec.querySelector(".nombre").classList.remove("es-ejemplo"); actualizar();}
+  sec.querySelector("input[type=file]").addEventListener("change",real);
+  sec.querySelector("details button").addEventListener("click",real);
+});
+document.getElementById("vaciar").addEventListener("click",function(){
+  Object.keys(ejemplo).forEach(function(t){
+    if(!ejemplo[t])return;
+    var sec=document.querySelector('section[data-tipo="'+t+'"]');
+    window.VeriTechCargarCSV(t,"","");
+    sec.querySelector(".aviso").hidden=true;
+    sec.querySelector(".nombre").classList.remove("es-ejemplo");
+    ejemplo[t]=false;
+  });
+  actualizar();
+});
+actualizar();
+})();
+</script>

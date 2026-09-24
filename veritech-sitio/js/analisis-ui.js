@@ -141,6 +141,7 @@ function textoResumen(){
 /* ---------- carga de archivos ---------- */
 var flashT=null;
 function flash(m){var el=$("flash");el.textContent=m;el.hidden=false;clearTimeout(flashT);flashT=setTimeout(function(){el.hidden=true;},2600);}
+var cargadores={};
 [].forEach.call(document.querySelectorAll("section[data-tipo]"),function(sec){
   var tipo=sec.dataset.tipo, aviso=sec.querySelector(".aviso"), salida=sec.querySelector(".salida");
   function analizar(txt){
@@ -158,7 +159,10 @@ function flash(m){var el=$("flash");el.textContent=m;el.hidden=false;clearTimeou
     lector.readAsText(f,"utf-8");
   });
   sec.querySelector("details button").addEventListener("click",function(){analizar(sec.querySelector("textarea").value);});
+  cargadores[tipo]=function(txt,nombre){sec.querySelector(".nombre").textContent=nombre||"";analizar(txt);};
 });
+/* Para cargar un CSV desde otro script (la versión publicada carga ejemplos al abrir). */
+window.VeriTechCargarCSV=function(tipo,txt,nombre){if(cargadores[tipo])cargadores[tipo](txt,nombre);};
 $("copiar").addEventListener("click",function(){
   var t=textoResumen();
   (navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(t):Promise.reject())
