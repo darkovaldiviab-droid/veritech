@@ -3,7 +3,7 @@
    La prueba veritech-app/test/paridad.test.js lee el bloque MOTORES…RENDER de este archivo. */
 var YEAR=new Date().getFullYear();
 /* Cambiar al modificar reglas o pesos: la calibración guarda con qué versión se calculó cada puntaje. */
-var MOTOR_VERSION="sitio-1.0";
+var MOTOR_VERSION="sitio-1.1";
 
 /* ==================== MOTORES ==================== */
 var FILLER=["en el mundo actual","en la era digital","es importante destacar","es importante mencionar",
@@ -45,31 +45,46 @@ function findYear(text){
   }
   return best;
 }
-function analyzeSource(url,text){
+/* opts (opcional): {fragmento, autor, anio, textoCompleto}.
+   fragmento: el alumno pegó o subió solo la parte que va a usar (un párrafo de un PDF, una captura).
+   autor / anio: escritos a mano por el alumno; mandan sobre lo que se detecte.
+   textoCompleto: el documento entero (p. ej. todo el PDF); de ahí salen autoría, fecha y referencias.
+   Sin opts el resultado es el mismo que en sitio-1.0. */
+var FALTA_EN_FRAGMENTO="No aparece en el fragmento: búscalo en la portada o en la página y escríbelo arriba.";
+function analyzeSource(url,text,opts){
+  opts=opts||{};
   var checks=[],score=50,low=text.toLowerCase();
   var words=text.trim()?text.trim().split(/\s+/).length:0;
+  var frag=!!opts.fragmento, full=opts.textoCompleto||text, conCompleto=!!opts.textoCompleto;
   function add(label,status,detail,pts){checks.push({label:label,status:status,detail:detail,pts:pts});score+=pts;}
 
   /* 1 autoría */
-  var author=findAuthor(text);
-  if(author)add("Autoría","ok","Firmado por "+author+". Se puede rastrear quién responde por lo que dice.",18);
+  var autorManual=String(opts.autor||"").trim();
+  var author=autorManual||findAuthor(full);
+  if(autorManual)add("Autoría","ok","Firmado por "+author+" (indicado por ti). Se puede rastrear quién responde por lo que dice.",18);
+  else if(author)add("Autoría","ok","Firmado por "+author+". Se puede rastrear quién responde por lo que dice.",18);
+  else if(frag)add("Autoría","warn",FALTA_EN_FRAGMENTO,0);
   else add("Autoría","bad","Nadie firma este texto. Si no hay un responsable, no hay a quién pedirle cuentas.",-14);
 
   /* 2 fecha */
-  var y=findYear(text);
-  if(y===null)add("Fecha","bad","No aparece ninguna fecha. No sabes si esto se escribió ayer o hace quince años.",-12);
-  else if(y>=YEAR-2)add("Fecha","ok","Publicado en "+y+". Información reciente.",16);
-  else if(y>=YEAR-6)add("Fecha","warn","Publicado en "+y+". Tiene "+(YEAR-y)+" años: útil, pero comprueba si hay algo más nuevo.",7);
-  else add("Fecha","bad","Publicado en "+y+" — hace "+(YEAR-y)+" años. En ciencia y tecnología eso suele estar obsoleto.",-6);
+  var anioManual=parseInt(opts.anio,10);
+  if(!(anioManual>=1900&&anioManual<=YEAR))anioManual=null;
+  var y=anioManual||findYear(full), tuyo=anioManual?" (indicado por ti)":"";
+  if(y===null&&frag)add("Fecha","warn",FALTA_EN_FRAGMENTO,0);
+  else if(y===null)add("Fecha","bad","No aparece ninguna fecha. No sabes si esto se escribió ayer o hace quince años.",-12);
+  else if(y>=YEAR-2)add("Fecha","ok","Publicado en "+y+tuyo+". Información reciente.",16);
+  else if(y>=YEAR-6)add("Fecha","warn","Publicado en "+y+tuyo+". Tiene "+(YEAR-y)+" años: útil, pero comprueba si hay algo más nuevo.",7);
+  else add("Fecha","bad","Publicado en "+y+tuyo+" — hace "+(YEAR-y)+" años. En ciencia y tecnología eso suele estar obsoleto.",-6);
 
-  /* 3 referencias */
-  var links=(text.match(/https?:\/\//g)||[]).length;
-  var acad=(text.match(/\([12]\d{3}\)/g)||[]).length+(text.match(/et al\.?/gi)||[]).length+(text.match(/\[\d{1,3}\]/g)||[]).length;
-  var refs=links+acad;
-  if(refs>=8)add("Referencias","ok",refs+" referencias o enlaces. Puedes ir a comprobar cada afirmación en su origen.",20);
-  else if(refs>=3)add("Referencias","ok",refs+" referencias. Apoya lo que dice en fuentes rastreables.",12);
-  else if(refs>=1)add("Referencias","warn","Solo "+refs+" referencia"+(refs>1?"s":"")+". Casi todo lo afirma sin respaldo.",4);
-  else add("Referencias","bad","Cero referencias. Todo lo que afirma hay que creerlo porque sí.",-14);
+  /* 3 referencias (en el documento completo, si lo hay) */
+  var links=(full.match(/https?:\/\//g)||[]).length;
+  var acad=(full.match(/\([12]\d{3}\)/g)||[]).length+(full.match(/et al\.?/gi)||[]).length+(full.match(/\[\d{1,3}\]/g)||[]).length;
+  var refs=links+acad, enDoc=conCompleto?" en el documento completo":"";
+  if(refs>=8)add("Referencias","ok",refs+" referencias o enlaces"+enDoc+". Puedes ir a comprobar cada afirmación en su origen.",20);
+  else if(refs>=3)add("Referencias","ok",refs+" referencias"+enDoc+". Apoya lo que dice en fuentes rastreables.",12);
+  else if(refs>=1)add("Referencias","warn","Solo "+refs+" referencia"+(refs>1?"s":"")+enDoc+". Casi todo lo afirma sin respaldo.",4);
+  else if(frag&&!conCompleto)add("Referencias","warn","El fragmento no trae referencias. Revisa si el documento completo tiene bibliografía al final.",0);
+  else add("Referencias","bad","Cero referencias"+enDoc+". Todo lo que afirma hay que creerlo porque sí.",-14);
 
   /* 4 dominio */
   if(url&&/^https?:\/\//i.test(url)){
@@ -112,17 +127,25 @@ function analyzeSource(url,text){
   var n=countPhrases(low,NUANCE);
   if(n.n>=4)add("Precisión","ok","Atribuye lo que dice («"+n.found.slice(0,3).join("», «")+"»…). Señal de alguien que sabe distinguir dato de opinión.",10);
   else if(n.n>=2)add("Precisión","warn","Algo de atribución, pero poca.",4);
+  else if(frag)add("Precisión","warn","En este fragmento no atribuye la información a nadie. Mira si el resto del documento lo hace.",0);
   else add("Precisión","bad","Nunca dice de dónde viene la información. Todo suena a verdad revelada.",-6);
 
-  /* 9 profundidad */
-  if(words<120)add("Profundidad","bad","Solo "+words+" palabras. Demasiado breve para tratar el tema en serio.",-8);
+  /* 9 profundidad (no se evalúa en un fragmento: que sea corto es lo esperable) */
+  if(frag)add("Profundidad","na","Es un fragmento: la extensión no se evalúa.",0);
+  else if(words<120)add("Profundidad","bad","Solo "+words+" palabras. Demasiado breve para tratar el tema en serio.",-8);
   else if(words<400)add("Profundidad","warn",words+" palabras. Sirve para una idea general, no para un trabajo a fondo.",0);
   else if(words<1200)add("Profundidad","ok",words+" palabras. Extensión suficiente para desarrollar el tema.",5);
   else add("Profundidad","ok",words+" palabras. Tratamiento extenso del tema.",8);
 
   score=Math.max(0,Math.min(100,Math.round(score)));
+  /* Un fragmento sin autor o sin fecha no puede salir en verde: el modo fragmento
+     no penaliza lo que falta, pero tampoco lo da por bueno. */
+  var incompleto=frag&&(!author||y===null);
+  if(incompleto)score=Math.min(score,69);
   var level=score>=70?"ok":(score>=40?"warn":"bad");
-  return {score:score,level:level,checks:checks,author:author,year:y,words:words};
+  var res={score:score,level:level,checks:checks,author:author,year:y,words:words};
+  if(frag){res.fragmento=true;res.incompleto=incompleto;}   /* solo en modo fragmento: sin opts, el objeto es el de sitio-1.0 */
+  return res;
 }
 
 var STOP=("de la que el en y a los del se las por un para con no una su al lo como más pero sus le ya o "+

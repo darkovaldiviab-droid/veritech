@@ -28,16 +28,29 @@ warn:["Revísala con cuidado","Sirve para orientarte, pero busca una fuente mejo
 bad:["No la cites","Demasiadas señales de alarma. Busca otra antes de usarla en tu trabajo."]};
 var last=null;
 
+/* Autor y año: lo que escribe el alumno manda. Si el campo lo rellenó VeriTech
+   (data-auto), no cuenta como «indicado por ti» y se vuelve a calcular. */
+function manual(el){return el.dataset.auto?"":el.value.trim();}
+function autollenar(el,val){
+  if(el.value.trim()&&!el.dataset.auto)return;
+  el.value=val||""; if(val)el.dataset.auto="1"; else delete el.dataset.auto;
+}
+function completo(){return window.VeriTechArchivos?window.VeriTechArchivos.textoCompleto():null;}
 function renderSource(){
   var url=$("u").value.trim(), text=$("t").value;
   if(!text.trim()){
-    $("verdict").innerHTML='<div class="empty">Pega el texto de una página y pulsa Analizar.</div>';
-    $("checks").innerHTML=""; last=null; return;
+    $("verdict").innerHTML='<div class="empty">Pega el texto de una página, o sube un archivo, y pulsa Analizar.</div>';
+    $("checks").innerHTML=""; $("frag-sug").hidden=true; last=null; return;
   }
-  var r=analyzeSource(url,text); last=r; last.url=url; last.text=text;
+  var full=completo();
+  var r=analyzeSource(url,text,{fragmento:$("frag").checked,autor:manual($("autor")),anio:manual($("anio")),textoCompleto:full});
+  last=r; last.url=url; last.text=text; last.full=full;
+  autollenar($("autor"),r.author); autollenar($("anio"),r.year);
+  $("frag-sug").hidden=r.fragmento||r.words>=400;
   var t=TITLES[r.level];
+  var cuerpo=r.incompleto?"Es un fragmento: para un veredicto final, escribe arriba el autor y el año (búscalos en la portada o en la página).":t[1];
   $("verdict").innerHTML='<div class="verdict v-'+r.level+'">'+dial(r.score,r.level)+
-    '<div><div class="v-title">'+t[0]+'</div><p class="v-body">'+t[1]+'</p></div></div>';
+    '<div><div class="v-title">'+t[0]+'</div><p class="v-body">'+cuerpo+'</p></div></div>';
   $("checks").innerHTML=r.checks.map(function(c){
     return '<div class="chk"><span class="lamp l-'+c.status+'"></span><div><b>'+esc(c.label)+'</b><span>'+esc(c.detail)+'</span></div></div>';
   }).join("");
@@ -181,13 +194,31 @@ function runAI(btn,box,txt,prompt){
 })();
 $("go").addEventListener("click",renderSource);
 $("u").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();renderSource();}});
-$("clr").addEventListener("click",function(){$("u").value="";$("t").value="";renderSource();});
+$("clr").addEventListener("click",function(){
+  $("u").value="";$("t").value="";$("autor").value="";$("anio").value="";$("frag").checked=false;
+  delete $("autor").dataset.auto; delete $("anio").dataset.auto;
+  if(window.VeriTechArchivos)window.VeriTechArchivos.quitar();
+  renderSource();
+});
+["autor","anio"].forEach(function(id){
+  $(id).addEventListener("input",function(){delete this.dataset.auto;});
+  $(id).addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();renderSource();}});
+});
+$("frag").addEventListener("change",function(){if(last)renderSource();});
+/* Un texto nuevo (pegado o sacado de un archivo) trae su propio autor y año */
+$("t").addEventListener("input",function(){
+  ["autor","anio"].forEach(function(id){if($(id).dataset.auto){$(id).value="";delete $(id).dataset.auto;}});
+});
+document.addEventListener("veritech:archivo",function(){
+  ["autor","anio"].forEach(function(id){if($(id).dataset.auto){$(id).value="";delete $(id).dataset.auto;}});
+  renderSource();
+});
 $("go2").addEventListener("click",renderClaim);
 $("clr2").addEventListener("click",function(){$("claim").value="";$("srctext").value="";renderClaim();});
 $("save").addEventListener("click",function(){
   renderSource();                        /* reanaliza por si editaste el texto */
   if(!last){flash("Primero pega el texto de una página.","bad");return;}
-  var ttl=title(last.text), k=(last.url||"")+"|"+ttl;
+  var ttl=title(last.full||last.text), k=(last.url||"")+"|"+ttl;
   if(work.some(function(e){return (e.url||"")+"|"+e.title===k;})){flash("Esa fuente ya está en tu trabajo.","warn");return;}
   work.push({title:ttl,url:last.url,author:last.author,year:last.year,score:last.score,level:last.level});
   save(); flash("Fuente guardada.","ok"); $("tab-work").click();

@@ -67,3 +67,31 @@ Paquete para Netlify: `veritech-prueba-colegio.zip` (se regenera con `bash herra
 - **`veritech-app/test`**: las pruebas de paridad y de bibliografía leen ahora `js/motor.js` y `js/index.js`.
 - **Botón «← Volver a la guía de la prueba»** (`js/volver.js`, `css/volver.css`): aparece fijo arriba en la herramienta, los formularios, la calibración, las páginas legales y la vista previa del panel, pero solo si la persona entró por la guía en esa pestaña. Quien usa la herramienta sin la guía no lo ve.
 - **`analisis-prueba.html`** (solo para el equipo, sin enlace público y con `noindex`): abre los CSV de calibración, opinión docente y opinión de estudiantes, y calcula la coincidencia del semáforo, la matriz de desacuerdos, las señales que más fallan, los promedios, lo imprescindible y si se cumplen los criterios para pedir el piloto. Las respuestas se muestran siempre como texto, nunca como código. La lógica está en `js/analisis.js`, con pruebas en `veritech-app/test/analisis.test.js`.
+
+# VeriTech — cambios del 24/09/2026 (feedback de la prueba: fragmentos y PDF)
+
+**El problema que nos contaron:** un alumno que hace una monografía no cita un PDF entero, sino solo el párrafo que va a usar. Al pegar ese fragmento (unas 100 palabras), el semáforo lo ponía en rojo: la profundidad era poca, y el autor y la fecha no aparecían porque están en la portada. Una fuente buena salía con 28/100. Además, no había forma de analizar un PDF largo, una infografía o una captura.
+
+## Nuevo
+- **Subir archivo** en «Analizar fuente». Acepta PDF, PNG, JPG y WEBP, de hasta 20 MB, con botón o arrastrando el archivo. Todo se lee en el navegador y nada se sube a un servidor.
+  - **PDF con texto:** se leen todas las páginas (hasta 400) y el alumno elige cuáles va a usar. El autor, la fecha y las referencias se buscan en el PDF entero; el resto de señales, en las páginas elegidas.
+  - **Infografía, captura o PDF escaneado:** el texto se saca con OCR en español (hasta 5 páginas a la vez en un PDF escaneado). Aparece en la caja de texto para que el alumno lo revise y lo corrija.
+- **Casilla «Es un fragmento de una fuente más larga».** Se marca sola con una imagen o con un rango de páginas parcial. Si el texto pegado tiene menos de 400 palabras, la herramienta la sugiere. Con la casilla marcada:
+  - La **profundidad** no se evalúa.
+  - Si falta el **autor** o la **fecha**, sale en amarillo y pide buscarlos en la portada, sin restar puntos.
+  - La falta de **referencias** o de **precisión** en el fragmento sale en amarillo y no resta.
+  - Un fragmento **sin autor o sin fecha no puede salir en verde** (tope de 69). Así la casilla no sirve para aprobar cualquier texto.
+- **Campos Autor y Año** (opcionales). Se rellenan con lo que se detecta, y lo que escribe el alumno tiene prioridad y se marca como «indicado por ti». También se usan en la bibliografía de «Mi trabajo».
+
+## Cambiado
+- **Motor `sitio-1.1`:** `analyzeSource(url, text, opts)`. Sin `opts` da exactamente el mismo resultado que `sitio-1.0` (lo comprobamos en 16 casos), así que la calibración no cambia.
+- **CSP:** se añadieron `'wasm-unsafe-eval'` (el lector de imágenes es WebAssembly) y `worker-src 'self'`. No hay dominios nuevos ni `'unsafe-inline'` en los scripts.
+- **Librerías alojadas en el sitio** (`js/vendor/`, unos 9 MB, que se cargan solo al subir un archivo): pdf.js 3.11.174 (Apache 2.0) y Tesseract.js 5 con el idioma español (Apache 2.0).
+- **Textos:** privacidad, pie de la herramienta y guía de la prueba (nueva tarea: comparar un PDF subido con el párrafo pegado).
+
+## Ejemplo (fragmento de unas 100 palabras de una buena fuente sobre plantas C4)
+| Cómo se analiza | Puntaje |
+|---|---|
+| Pegado, sin marcar «fragmento» (igual que antes) | 28, rojo |
+| Marcado como fragmento, sin autor ni año | 69, amarillo («completa autor y año») |
+| Marcado como fragmento, con autor y año escritos | 100, verde |

@@ -5,9 +5,14 @@
 # página no se ejecuta.
 # 'unsafe-inline' sigue solo en style-src porque las páginas usan atributos
 # style="…"; un estilo inyectado no puede ejecutar código.
+# Para leer PDF e imágenes en el navegador (js/archivos.js):
+# - 'wasm-unsafe-eval' permite compilar WebAssembly (el lector de imágenes
+#   Tesseract es wasm). No habilita eval() ni new Function() de JavaScript.
+# - worker-src 'self': pdf.js y Tesseract trabajan en un worker propio, servido
+#   desde /js/vendor/ (sin blob: ni dominios externos).
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'

@@ -130,6 +130,29 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.65}
 .chk{display:grid; grid-template-columns:auto minmax(0,1fr); gap:11px; padding:10px 12px; background:var(--panel); align-items:start}
 .chk .lamp{width:9px; height:9px; border-radius:50%; margin-top:.42em; flex:none}
 .l-ok{background:var(--ok)} .l-warn{background:var(--warn)} .l-bad{background:var(--bad)}
+.l-na{background:transparent; border:1.5px solid var(--line-strong)}
+
+/* ---------- entrada: pegar o subir ---------- */
+.modo{display:flex; gap:3px; background:var(--sunk); border:1px solid var(--line); border-radius:6px; padding:3px}
+.modo button{flex:1 1 0; font-family:"IBM Plex Mono",monospace; font-size:.68rem; font-weight:600; letter-spacing:.07em; text-transform:uppercase; background:transparent; color:var(--muted); border:0; border-radius:4px; padding:.65em .5em; cursor:pointer}
+.modo button:hover{color:var(--ink)}
+.modo button[aria-pressed="true"]{background:var(--panel); color:var(--accent); box-shadow:0 1px 3px rgba(11,23,38,.14)}
+.modo button:focus-visible{outline:2px solid var(--accent); outline-offset:-2px}
+#subir{display:flex; flex-direction:column; gap:10px}
+.zona{position:relative; align-items:center; text-align:center; gap:.3em; border:1.5px dashed var(--line-strong); border-radius:7px; padding:22px 14px; background:var(--sunk); cursor:pointer; color:var(--muted)}
+.zona b{color:var(--ink); font-size:.86rem}
+.zona span{font-weight:400; font-size:.74rem}
+.zona:hover,.zona.encima{border-color:var(--accent); background:var(--accent-soft)}
+.zona input{position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%}
+.zona:focus-within{outline:2px solid var(--accent); outline-offset:2px}
+.archivo{display:flex; align-items:center; justify-content:space-between; gap:8px; font-family:"IBM Plex Mono",monospace; font-size:.74rem; border:1px solid var(--line); border-radius:5px; padding:.5em .7em; overflow-wrap:anywhere}
+.progreso{font-size:.78rem; color:var(--accent); font-weight:500}
+.progreso.error{color:var(--bad)}
+.paginas{display:flex; flex-direction:column; gap:8px; font-size:.78rem}
+.paginas label,.meta-campos label{flex:1 1 120px; min-width:0}
+.check{flex-direction:row; align-items:flex-start; gap:.6em; font-size:.82rem; color:var(--ink); font-weight:500; cursor:pointer}
+.check input{width:auto; margin:.2em 0 0; accent-color:var(--accent); flex:none}
+.sugerencia{color:var(--warn)}
 .chk b{font-size:.82rem; font-weight:600; display:block}
 .chk span{font-size:.765rem; color:var(--muted); line-height:1.45; display:block; margin-top:.1em; overflow-wrap:anywhere}
 .chk .pts{font-family:"IBM Plex Mono",monospace; font-size:.7rem; font-variant-numeric:tabular-nums; color:var(--muted); white-space:nowrap; padding-top:.15em}
@@ -212,14 +235,60 @@ footer .legal a:hover{color:var(--accent)}
         <label for="u"><span>Dirección de la página <span style="font-weight:400">(opcional, mejora el análisis)</span></span>
           <input id="u" type="url" placeholder="https://...">
         </label>
-        <label for="t">Pega aquí el texto de la página
+        <div class="modo" role="group" aria-label="Cómo quieres traer la fuente">
+          <button type="button" id="m-pegar" aria-pressed="true">Pegar texto</button>
+          <button type="button" id="m-subir" aria-pressed="false">Subir archivo</button>
+        </div>
+
+        <div id="subir" hidden>
+          <label class="zona" id="zona" for="f">
+            <input id="f" type="file" accept=".pdf,application/pdf,image/png,image/jpeg,image/webp">
+            <b>Elige un PDF, una infografía o una captura</b>
+            <span>o arrástralo aquí · PDF, PNG, JPG o WEBP · hasta 20 MB</span>
+          </label>
+          <div class="archivo" id="archivo" hidden>
+            <span id="archivo-nombre"></span>
+            <button class="x" id="archivo-quitar" type="button" title="Quitar archivo" aria-label="Quitar archivo">✕</button>
+          </div>
+          <p class="progreso" id="progreso" role="status" aria-live="polite" hidden></p>
+          <div class="paginas" id="paginas" hidden>
+            <span id="pag-total"></span>
+            <div class="row">
+              <label for="pag-desde">¿Qué páginas vas a usar? Desde
+                <input id="pag-desde" type="number" min="1" inputmode="numeric">
+              </label>
+              <label for="pag-hasta">Hasta
+                <input id="pag-hasta" type="number" min="1" inputmode="numeric">
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <label for="t"><span id="t-label">Pega aquí el texto de la página</span>
           <textarea id="t" spellcheck="false" placeholder="Pega aquí el texto que quieres revisar…"></textarea>
         </label>
+
+        <label class="check" for="frag">
+          <input id="frag" type="checkbox">
+          <span>Es un fragmento de una fuente más larga <span class="hint">(solo la parte que vas a usar)</span></span>
+        </label>
+        <p class="hint sugerencia" id="frag-sug" hidden>Es un texto corto. Si es solo una parte de un documento más largo, marca «fragmento»: así no te penaliza por la extensión.</p>
+
+        <div class="row meta-campos">
+          <label for="autor"><span>Autor <span style="font-weight:400">(opcional)</span></span>
+            <input id="autor" type="text" autocomplete="off" placeholder="Quién firma">
+          </label>
+          <label for="anio"><span>Año <span style="font-weight:400">(opcional)</span></span>
+            <input id="anio" type="number" inputmode="numeric" min="1900" placeholder="Ej. 2024">
+          </label>
+        </div>
+
         <div class="row">
           <button class="btn primary" id="go" type="button">Analizar</button>
           <button class="btn" id="clr" type="button">Limpiar</button>
         </div>
-        <p class="hint">Para sacar el texto de una página: selecciona todo con <span class="mono">Ctrl+A</span> (o <span class="mono">Cmd+A</span>), copia y pega aquí. Estamos construyendo una extensión que lo hará sola, sin copiar nada.</p>
+        <p class="hint" id="ayuda-pegar">Para sacar el texto de una página: selecciona todo con <span class="mono">Ctrl+A</span> (o <span class="mono">Cmd+A</span>), copia y pega aquí. ¿Tu fuente es un PDF largo o una infografía? Súbela con «Subir archivo» y elige la parte que vas a usar.</p>
+        <p class="hint" id="ayuda-subir" hidden>El archivo se lee en tu navegador: no se sube a ningún servidor ni se guarda. El texto sacado de una imagen puede traer errores; revísalo antes de analizar. Si el autor o el año no salen, búscalos en la portada o en la página y escríbelos arriba.</p>
       </div>
 
       <div class="card">
@@ -297,11 +366,12 @@ footer .legal a:hover{color:var(--accent)}
   <footer>
     <p>VeriTech evalúa señales verificables de una fuente. No determina si un contenido es verdadero — esa sigue siendo tu responsabilidad, y ese es el punto.</p>
     <p class="legal"><a href="/privacidad.html">Privacidad</a> · <a href="/terminos.html">Términos y condiciones</a> · <a href="/cookies.html">Cookies y almacenamiento</a> · <a href="/encuesta.html">Encuesta</a> · <a href="/guia-prueba.html">Guía de la prueba</a></p>
-    <p class="legal">Lo que pegas aquí se analiza en tu navegador y no se envía a ningún servidor. Proyecto escolar · 2026</p>
+    <p class="legal">Lo que pegas o subes aquí se analiza en tu navegador y no se envía a ningún servidor. Proyecto escolar · 2026</p>
   </footer>
 </div>
 
 <script src="/js/motor.js"></script>
+<script src="/js/archivos.js"></script>
 <script src="/js/index.js"></script>
 
 <script src="/js/volver.js"></script>
