@@ -13,13 +13,13 @@ Entre el [fecha de inicio] y el [fecha de cierre], los estudiantes de [grado o s
 **Qué harán los estudiantes**
 
 - Usarán VeriTech en una tarea o ejercicio con fuentes, dentro de las actividades normales de [curso o área].
-- Al final podrán responder, si quieren, un formulario **anónimo** de unos 3 minutos con su opinión sobre la herramienta.
+- Al final podrán responder, si quieren, un formulario **sin nombre ni correo** de unos 3 minutos con su opinión sobre la herramienta.
 
 **Qué datos se usan**
 
 - **No se crean cuentas** y no se piden nombres, correos ni ningún dato que identifique a los estudiantes.
 - Lo que el estudiante pega en la herramienta se analiza en su propio navegador y **no se envía a ningún servidor**.
-- Las respuestas del formulario de opinión son anónimas, se guardan en el servicio de formularios de Netlify (Estados Unidos) y se borran a más tardar el [fecha límite de borrado].
+- El formulario de opinión no pide nombre ni correo. Las respuestas se guardan en el servicio de formularios de Netlify (Estados Unidos), que registra también la dirección IP y el tipo de navegador de cada envío. No usamos esos datos para identificar a nadie, y todo se borra a más tardar el [fecha límite de borrado].
 - Los detalles están en la política de privacidad: [dirección del sitio]/privacidad.html
 
 **Si su hijo o hija tiene menos de 14 años**

@@ -15,7 +15,7 @@ VeriTech es una herramienta web que ayuda a los estudiantes a juzgar sus fuentes
 **Qué le pedimos.** Una prueba de una a dos semanas, del [fecha de inicio] al [fecha de cierre]:
 
 - **Docentes** ([número, idealmente 2 a 4], de preferencia de Comunicación y de Ciencia y Tecnología): unos 45 minutos en total para probar la herramienta, calificar de 10 a 20 fuentes reales y responder un formulario.
-- **Alumnos** de [grado o sección]: usarla en una tarea o ejercicio con fuentes y responder un formulario anónimo de 3 minutos.
+- **Alumnos** de [grado o sección]: usarla en una tarea o ejercicio con fuentes y responder un formulario de 3 minutos, sin nombre ni correo.
 
 Todo está explicado en una página: [enlace a /guia-prueba.html]
 
