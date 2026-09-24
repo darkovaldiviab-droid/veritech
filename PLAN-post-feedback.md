@@ -1,6 +1,6 @@
 # VeriTech: qué hacemos con el feedback del colegio
 
-*Plan de una página · 24 de septiembre de 2026 · Complementa [PLAN-VeriTech-Aleph.md](PLAN-VeriTech-Aleph.md)*
+*Plan de trabajo · 24 de septiembre de 2026 · Complementa [PLAN-VeriTech-Aleph.md](PLAN-VeriTech-Aleph.md)*
 
 ## 1. Qué datos vamos a recibir
 
