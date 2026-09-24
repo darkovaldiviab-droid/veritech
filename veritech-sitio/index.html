@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=ai-legible&utm_source=comment&utm_medium=referral&utm_id=da9d342c-deb9-4d0c-a1bf-69cb5f79f450
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+<meta name="hosting-provider" content="Netlify">
+<meta name="netlify-deploy" content="https://netlify.new/?utm_campaign=ai-legible&amp;utm_source=meta&amp;utm_medium=referral&amp;utm_id=da9d342c-deb9-4d0c-a1bf-69cb5f79f450">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="VeriTech evalúa la calidad de las fuentes que citas, comprueba si una cita respalda lo que afirmas y arma tu bibliografía en APA o MLA.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='29' fill='none' stroke='%230F4C9C' stroke-width='5'/%3E%3Cpath d='M19 33 L28 42 L45 23' stroke='%230F4C9C' stroke-width='6' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
+<style>html{color-scheme:light dark}body{margin:0;font-family:system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>VeriTech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#E4EAF1; --panel:#FDFEFF; --sunk:#EDF1F6; --ink:#0B1726; --muted:#556678;
+  --accent:#0F4C9C; --on-accent:#FFFFFF; --accent-soft:rgba(15,76,156,.10); --accent-line:rgba(15,76,156,.30);
+  --line:rgba(11,23,38,.13); --line-strong:rgba(11,23,38,.28);
+  --ok:#1D6349; --ok-bg:rgba(29,99,73,.11);
+  --warn:#8C5A0B; --warn-bg:rgba(150,96,13,.13);
+  --bad:#A8342A; --bad-bg:rgba(168,52,42,.10);
+  --grid:rgba(11,23,38,.05);
+  --shadow:0 1px 2px rgba(11,23,38,.05),0 14px 36px -18px rgba(11,23,38,.35);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#060D16; --panel:#0D1A28; --sunk:#08111C; --ink:#E7EDF4; --muted:#8FA3B8;
+    --accent:#6BA5F2; --on-accent:#04101F; --accent-soft:rgba(107,165,242,.13); --accent-line:rgba(107,165,242,.38);
+    --line:rgba(231,237,244,.13); --line-strong:rgba(231,237,244,.30);
+    --ok:#5DBE94; --ok-bg:rgba(93,190,148,.13);
+    --warn:#E2A945; --warn-bg:rgba(226,169,69,.13);
+    --bad:#EE8574; --bad-bg:rgba(238,133,116,.12);
+    --grid:rgba(231,237,244,.045);
+    --shadow:0 1px 2px rgba(0,0,0,.5),0 18px 44px -20px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#060D16; --panel:#0D1A28; --sunk:#08111C; --ink:#E7EDF4; --muted:#8FA3B8;
+  --accent:#6BA5F2; --on-accent:#04101F; --accent-soft:rgba(107,165,242,.13); --accent-line:rgba(107,165,242,.38);
+  --line:rgba(231,237,244,.13); --line-strong:rgba(231,237,244,.30);
+  --ok:#5DBE94; --ok-bg:rgba(93,190,148,.13);
+  --warn:#E2A945; --warn-bg:rgba(226,169,69,.13);
+  --bad:#EE8574; --bad-bg:rgba(238,133,116,.12);
+  --grid:rgba(231,237,244,.045);
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 18px 44px -20px rgba(0,0,0,.8);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px; line-height:1.55;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:40px 40px;
+  padding-block:20px; padding-left:16px; padding-right:16px;
+}
+.wrap{max-width:1160px; margin-inline:auto; display:flex; flex-direction:column; gap:18px}
+h1,h2,h3{font-family:Archivo,"Helvetica Neue",sans-serif; margin:0; text-wrap:balance; letter-spacing:-.015em}
+p{margin:0}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+.eyebrow{font-family:"IBM Plex Mono",monospace; font-size:.66rem; font-weight:600; letter-spacing:.17em; text-transform:uppercase; color:var(--accent)}
+
+/* ---------- header ---------- */
+header{display:flex; align-items:center; gap:14px; flex-wrap:wrap}
+.feedback-link{margin-left:auto; font-family:"IBM Plex Mono",monospace; font-size:.69rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--accent); text-decoration:none; border:1px solid var(--accent-line); border-radius:5px; padding:.65em .85em; background:var(--accent-soft)}
+.feedback-link:hover{border-color:var(--accent)}
+.feedback-link:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.rose{width:40px; height:40px; color:var(--accent); flex:none}
+.brand{font-family:Archivo,sans-serif; font-variation-settings:"wdth" 118,"wght" 800; font-size:1.7rem; line-height:1; letter-spacing:-.03em}
+.sub{font-size:.84rem; color:var(--muted); line-height:1.3}
+.lede{
+  border-left:3px solid var(--accent); padding:.1em 0 .1em .9em;
+  font-size:.9rem; color:var(--muted); max-width:70ch;
+}
+.lede b{color:var(--ink); font-weight:600}
+
+/* ---------- tabs ---------- */
+.tabs{display:flex; gap:3px; background:var(--sunk); border:1px solid var(--line); border-radius:7px; padding:3px; flex-wrap:wrap}
+.tabs button{
+  flex:1 1 150px; font-family:"IBM Plex Mono",monospace; font-size:.7rem; font-weight:600;
+  letter-spacing:.07em; text-transform:uppercase; background:transparent; color:var(--muted);
+  border:0; border-radius:5px; padding:.72em .6em; cursor:pointer; white-space:nowrap;
+}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--panel); color:var(--accent); box-shadow:0 1px 3px rgba(11,23,38,.14)}
+.tabs button:focus-visible{outline:2px solid var(--accent); outline-offset:-2px}
+
+/* ---------- panels ---------- */
+.grid{display:grid; gap:16px; grid-template-columns:minmax(0,1fr) minmax(0,1.05fr); align-items:start}
+.card{background:var(--panel); border:1px solid var(--line); border-radius:8px; box-shadow:var(--shadow); padding:18px; display:flex; flex-direction:column; gap:13px; min-width:0}
+.card h2{font-size:1rem; font-variation-settings:"wdth" 108,"wght" 700}
+label{display:flex; flex-direction:column; gap:.4em; font-size:.76rem; font-weight:600; color:var(--muted)}
+input,textarea,select{
+  font-family:inherit; font-size:.88rem; color:var(--ink); background:var(--sunk);
+  border:1px solid var(--line); border-radius:5px; padding:.62em .7em; width:100%; font-weight:400;
+}
+textarea{resize:vertical; min-height:150px; line-height:1.55}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--accent); outline-offset:-1px; border-color:transparent}
+input::placeholder,textarea::placeholder{color:var(--muted); opacity:.65}
+.row{display:flex; gap:9px; flex-wrap:wrap}
+.btn{
+  font-family:"IBM Plex Mono",monospace; font-size:.71rem; font-weight:600; letter-spacing:.07em;
+  text-transform:uppercase; border-radius:5px; padding:.68em 1.05em; cursor:pointer;
+  background:var(--panel); color:var(--ink); border:1px solid var(--line-strong);
+}
+.btn:hover{border-color:var(--accent); color:var(--accent)}
+.btn:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.btn.primary{background:var(--accent); border-color:var(--accent); color:var(--on-accent)}
+.btn.primary:hover{filter:brightness(1.12); color:var(--on-accent)}
+.btn[disabled]{opacity:.5; cursor:not-allowed}
+.hint{font-size:.74rem; color:var(--muted); line-height:1.45}
+
+/* ---------- verdict ---------- */
+.verdict{display:grid; grid-template-columns:auto minmax(0,1fr); gap:16px; align-items:center; border-radius:7px; padding:15px; border:1px solid var(--line)}
+.v-ok{background:var(--ok-bg); border-color:var(--ok)}
+.v-warn{background:var(--warn-bg); border-color:var(--warn)}
+.v-bad{background:var(--bad-bg); border-color:var(--bad)}
+.dial{width:104px; height:104px; flex:none}
+.dial text.score{font-family:Archivo,sans-serif; font-size:30px; font-weight:800; text-anchor:middle; font-variant-numeric:tabular-nums}
+.dial text.cap{font-family:"IBM Plex Mono",monospace; font-size:8px; text-anchor:middle; letter-spacing:.14em}
+.v-title{font-family:Archivo,sans-serif; font-variation-settings:"wdth" 112,"wght" 800; font-size:1.45rem; line-height:1.05}
+.v-ok .v-title{color:var(--ok)} .v-warn .v-title{color:var(--warn)} .v-bad .v-title{color:var(--bad)}
+.v-body{font-size:.85rem; color:var(--ink); margin-top:.35em; line-height:1.45}
+
+/* ---------- checks ---------- */
+.checks{display:flex; flex-direction:column; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:6px; overflow:hidden}
+.chk{display:grid; grid-template-columns:auto minmax(0,1fr); gap:11px; padding:10px 12px; background:var(--panel); align-items:start}
+.chk .lamp{width:9px; height:9px; border-radius:50%; margin-top:.42em; flex:none}
+.l-ok{background:var(--ok)} .l-warn{background:var(--warn)} .l-bad{background:var(--bad)}
+.chk b{font-size:.82rem; font-weight:600; display:block}
+.chk span{font-size:.765rem; color:var(--muted); line-height:1.45; display:block; margin-top:.1em; overflow-wrap:anywhere}
+.chk .pts{font-family:"IBM Plex Mono",monospace; font-size:.7rem; font-variant-numeric:tabular-nums; color:var(--muted); white-space:nowrap; padding-top:.15em}
+.pts.pos{color:var(--ok)} .pts.neg{color:var(--bad)}
+
+/* ---------- ai box ---------- */
+.ai{border:1px dashed var(--accent-line); border-radius:6px; padding:13px; background:var(--accent-soft); display:flex; flex-direction:column; gap:.6em}
+.ai h3{font-size:.85rem; font-variation-settings:"wdth" 106,"wght" 700; color:var(--accent)}
+.ai p{font-size:.82rem; line-height:1.55; white-space:pre-wrap}
+
+/* ---------- work list ---------- */
+.snips{display:flex; flex-direction:column; gap:10px}
+.snip{border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:5px; padding:11px 13px; display:flex; flex-direction:column; gap:.45em}
+.snip q{font-size:.85rem; line-height:1.5; quotes:"«" "»"}
+.snip .meta{font-family:"IBM Plex Mono",monospace; font-size:.68rem; color:var(--muted); display:flex; gap:.6em; flex-wrap:wrap; align-items:center; overflow-wrap:anywhere}
+.snip.lv-warn{border-left-color:var(--warn)} .snip.lv-bad{border-left-color:var(--bad)} .snip.lv-ok{border-left-color:var(--ok)}
+.tag{border:1px solid currentColor; border-radius:99px; padding:.12em .55em; font-size:.92em}
+.t-ok{color:var(--ok)} .t-warn{color:var(--warn)} .t-bad{color:var(--bad)}
+.x{background:none; border:0; color:var(--muted); cursor:pointer; font-size:.9rem; padding:0 .3em; line-height:1}
+.x:hover{color:var(--bad)}
+.bib{background:var(--sunk); border:1px solid var(--line); border-radius:6px; padding:14px; font-family:"IBM Plex Mono",monospace; font-size:.76rem; line-height:1.65; overflow-wrap:anywhere}
+.bib div{text-indent:-1.6em; padding-left:1.6em; margin-bottom:.7em}
+.bib div:last-child{margin-bottom:0}
+.bib i{font-style:italic}
+.empty{color:var(--muted); font-size:.82rem; text-align:center; padding:26px 10px; border:1px dashed var(--line-strong); border-radius:6px}
+
+/* ---------- claim check ---------- */
+.overlap{display:flex; flex-wrap:wrap; gap:5px}
+.term{font-family:"IBM Plex Mono",monospace; font-size:.7rem; border-radius:4px; padding:.25em .55em; border:1px solid}
+.term.hit{color:var(--ok); border-color:var(--ok); background:var(--ok-bg)}
+.term.miss{color:var(--bad); border-color:var(--bad); background:var(--bad-bg)}
+.bar{height:7px; border-radius:99px; background:var(--sunk); border:1px solid var(--line); overflow:hidden}
+.bar i{display:block; height:100%; transition:width .4s ease}
+
+.flash{
+  position:fixed; left:50%; bottom:18px; transform:translateX(-50%); z-index:50;
+  font-size:.82rem; font-weight:500; padding:.7em 1.1em; border-radius:6px;
+  border:1px solid; box-shadow:var(--shadow); max-width:min(92vw,460px); text-align:center;
+}
+.f-ok{background:var(--ok-bg); border-color:var(--ok); color:var(--ok)}
+.f-warn{background:var(--warn-bg); border-color:var(--warn); color:var(--warn)}
+.f-bad{background:var(--bad-bg); border-color:var(--bad); color:var(--bad)}
+footer{font-size:.74rem; color:var(--muted); text-align:center; line-height:1.6; padding-top:4px; display:flex; flex-direction:column; gap:6px}
+footer p{margin:0}
+footer .legal a{color:var(--muted); text-decoration:underline}
+footer .legal a:hover{color:var(--accent)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:820px){ .grid{grid-template-columns:1fr} .verdict{grid-template-columns:1fr; justify-items:start} }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <svg class="rose" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+      <circle cx="32" cy="32" r="29" stroke="currentColor" stroke-width="2.5"/>
+      
+      <path d="M19 33 L28 42 L45 23" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    <div>
+      <div class="brand">VeriTech</div>
+      <p class="sub">Verify Your Sources</p>
+    </div>
+    <a class='feedback-link' href='/feedback.html'>Dar mi opinión</a>
+  </header>
+
+  <div class="tabs" role="tablist" aria-label="Funciones de VeriTech">
+    <button role="tab" id="tab-src" aria-selected="true" aria-controls="p-src" type="button">1 · Analizar fuente</button>
+    <button role="tab" id="tab-cite" aria-selected="false" aria-controls="p-cite" type="button">2 · Verificar una cita</button>
+    <button role="tab" id="tab-work" aria-selected="false" aria-controls="p-work" type="button">3 · Mi trabajo</button>
+  </div>
+
+  <!-- ============ PANEL 1 ============ -->
+  <div id="p-src" role="tabpanel" aria-labelledby="tab-src">
+    <div class="grid">
+      <div class="card">
+        <h2>La página que quieres citar</h2>
+        <label for="u">Dirección de la página <span style="font-weight:400">(opcional, mejora el análisis)</span>
+          <input id="u" type="url" placeholder="https://...">
+        </label>
+        <label for="t">Pega aquí el texto de la página
+          <textarea id="t" spellcheck="false" placeholder="Pega aquí el texto que quieres revisar…"></textarea>
+        </label>
+        <div class="row">
+          <button class="btn primary" id="go" type="button">Analizar</button>
+          <button class="btn" id="clr" type="button">Limpiar</button>
+        </div>
+        <p class="hint">Para sacar el texto de una página: selecciona todo con <span class="mono">Ctrl+A</span> (o <span class="mono">Cmd+A</span>), copia y pega aquí. En la extensión real esto ocurre solo, sin copiar nada.</p>
+      </div>
+
+      <div class="card">
+        <h2>Veredicto</h2>
+        <div id="verdict" aria-live="polite"></div>
+        <div class="checks" id="checks"></div>
+        <div class="row">
+          <button class="btn" id="save" type="button">Guardar en mi trabajo →</button>
+          <button class="btn" id="ai1" type="button" hidden>Análisis profundo con IA</button>
+        </div>
+        <div class="ai" id="aibox1" hidden><h3>Lectura profunda</h3><p id="aitext1"></p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ PANEL 2 ============ -->
+  <div id="p-cite" role="tabpanel" aria-labelledby="tab-cite" hidden>
+    <div class="grid">
+      <div class="card">
+        <h2>¿La fuente dice realmente eso?</h2>
+        <p class="hint">Un error frecuente: citar una fuente que no respalda lo que afirmas. Ocurre sobre todo cuando una IA sugiere referencias que nadie llegó a comprobar. Pega la afirmación y el texto de la fuente.</p>
+        <label for="claim">La afirmación de tu trabajo
+          <textarea id="claim" style="min-height:76px" spellcheck="false">Las plantas C4 desarrollaron una adaptación al clima cálido que reduce la fotorrespiración.</textarea>
+        </label>
+        <label for="srctext">El texto de la fuente que citas
+          <textarea id="srctext" spellcheck="false">El ciclo de Calvin ocurre en el estroma del cloroplasto, donde la enzima RuBisCO fija el dióxido de carbono atmosférico. Este proceso requiere ATP y NADPH producidos durante la fase luminosa de la fotosíntesis. La eficiencia de la fijación depende de la temperatura y de la concentración de CO2 disponible en el tejido foliar.</textarea>
+        </label>
+        <div class="row">
+          <button class="btn primary" id="go2" type="button">Verificar</button>
+          <button class="btn" id="clr2" type="button">Limpiar</button>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Resultado</h2>
+        <div id="verdict2" aria-live="polite"></div>
+        <div id="detail2"></div>
+        <div class="row">
+          <button class="btn" id="ai2" type="button" hidden>Revisar con IA</button>
+        </div>
+        <div class="ai" id="aibox2" hidden><h3>Lectura profunda</h3><p id="aitext2"></p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ PANEL 3 ============ -->
+  <div id="p-work" role="tabpanel" aria-labelledby="tab-work" hidden>
+    <div class="grid">
+      <div class="card">
+        <h2>Fuentes que estoy usando</h2>
+        <p class="hint">Cada fuente que analizas y guardas aparece aquí, con su color. Se queda guardada en este navegador aunque cierres la página.</p>
+        <div class="snips" id="snips"></div>
+      </div>
+      <div class="card">
+        <h2>Tu bibliografía</h2>
+        <div class="row">
+          <label for="fmt" style="flex:1; min-width:120px">Formato
+            <select id="fmt"><option value="apa">APA 7</option><option value="mla">MLA 9</option></select>
+          </label>
+        </div>
+        <div class="bib" id="bib"></div>
+        <div class="row">
+          <button class="btn primary" id="copy" type="button">Copiar</button>
+          <button class="btn" id="dl" type="button">Descargar</button>
+          <button class="btn" id="wipe" type="button">Borrar todo</button>
+        </div>
+        <p class="hint" id="warnbib"></p>
+      </div>
+    </div>
+  </div>
+
+  <p class="flash" id="flash" role="status" hidden></p>
+
+  <footer>
+    <p>VeriTech evalúa señales verificables de una fuente. No determina si un contenido es verdadero — esa sigue siendo tu responsabilidad, y ese es el punto.</p>
+    <p class="legal"><a href="/privacidad.html">Privacidad</a> · <a href="/terminos.html">Términos y condiciones</a> · <a href="/cookies.html">Cookies y almacenamiento</a> · <a href="/encuesta.html">Encuesta</a></p>
+    <p class="legal">Lo que pegas aquí se analiza en tu navegador y no se envía a ningún servidor. Proyecto escolar · 2026</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id);};
+var flashTimer=null;
+function flash(msg,kind){
+  var el=$("flash"); el.textContent=msg; el.className="flash f-"+(kind||"ok"); el.hidden=false;
+  clearTimeout(flashTimer); flashTimer=setTimeout(function(){el.hidden=true;},3600);
+}
+var YEAR=new Date().getFullYear();
+/* Todo lo que viene del usuario (texto pegado, URL, lo guardado en el navegador)
+   se escapa antes de pintarlo, para que nunca se interprete como HTML. */
+function esc(v){return String(v==null?"":v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
+function same(v){return v;}
+
+/* ==================== MOTORES ==================== */
+var FILLER=["en el mundo actual","en la era digital","es importante destacar","es importante mencionar",
+"cabe destacar","cabe mencionar","juega un papel fundamental","juega un papel crucial","desempeña un papel fundamental",
+"en última instancia","sin lugar a dudas","abre un mundo de posibilidades","vale la pena señalar",
+"en el mundo de hoy","revoluciona la forma","sumérgete","desbloquea el potencial","en definitiva"];
+var CLICKBAIT=["no vas a creer","los científicos no quieren","increíble","impactante","lo que pasó después",
+"nunca imaginarás","el secreto que","esto te sorprenderá","verdades ocultas","el truco que","te dejará sin palabras",
+"nadie te ha dicho","lo que nadie sabe"];
+var ABSOLUTE=["está comprobado que","está demostrado que","todos los expertos coinciden","los expertos coinciden",
+"es un hecho indiscutible","es un hecho que","nunca falla","siempre funciona","sin excepción alguna","es indudable que"];
+var NUANCE=["según","de acuerdo con","de acuerdo a","sugiere que","podría","los datos indican","el estudio",
+"la investigación","et al","fuente:","citado en","se estima","los resultados muestran","evidencia","publicado en"];
+var MONTHS=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","setiembre","octubre","noviembre","diciembre"];
+
+function countPhrases(low,list){var n=0,found=[];for(var i=0;i<list.length;i++){if(low.indexOf(list[i])>=0){n++;found.push(list[i]);}}return{n:n,found:found};}
+
+function findAuthor(text){
+  var N="[A-ZÁÉÍÓÚÑ][A-Za-zÁÉÍÓÚÑáéíóúñ]+";
+  var TIT="(?:Dr[ao]?|Dra|Prof|Lic|Mtr[ao]?|Ing|Mg)\\.[ \\t]*";
+  var pats=[
+    new RegExp("(?:^|\\n)[ \\t]*(?:[Pp]or|[Aa]utor(?:a|es)?|[Ee]scrito por|[Rr]edactado por|[Tt]exto de)[ \\t]*:?[ \\t]+((?:"+TIT+")?"+N+"(?:[ \\t]+"+N+"){1,3})"),
+    new RegExp("(?:^|\\n|[ \\t])((?:"+TIT+")"+N+"(?:[ \\t]+"+N+"){1,3})"),
+    /\bBy[ \t]+([A-Z][a-z]+(?:[ \t]+[A-Z][a-z]+){1,3})/
+  ];
+  for(var i=0;i<pats.length;i++){var m=text.match(pats[i]);if(m)return m[1].trim();}
+  return null;
+}
+function findYear(text){
+  var low=text.toLowerCase(),m,best=null;
+  var mm=low.match(new RegExp("\\b\\d{1,2}\\s+de\\s+("+MONTHS.join("|")+")\\s+(?:de\\s+)?(\\d{4})"));
+  if(mm)best=parseInt(mm[2],10);
+  if(!best&&(m=text.match(/\b(20\d{2}|19\d{2})-(\d{2})-(\d{2})\b/)))best=parseInt(m[1],10);
+  if(!best&&(m=text.match(/\b\d{1,2}\/\d{1,2}\/(20\d{2}|19\d{2})\b/)))best=parseInt(m[1],10);
+  if(!best&&(m=low.match(/(?:publicado|actualizado|fecha|última revisión)[^\d]{0,24}(20\d{2}|19\d{2})/)))best=parseInt(m[1],10);
+  if(!best){
+    var all=text.match(/\b(19[5-9]\d|20[0-4]\d)\b/g);
+    if(all){var ys=all.map(Number).filter(function(y){return y<=YEAR;});if(ys.length)best=Math.max.apply(null,ys);}
+  }
+  return best;
+}
+function analyzeSource(url,text){
+  var checks=[],score=50,low=text.toLowerCase();
+  var words=text.trim()?text.trim().split(/\s+/).length:0;
+  function add(label,status,detail,pts){checks.push({label:label,status:status,detail:detail,pts:pts});score+=pts;}
+
+  /* 1 autoría */
+  var author=findAuthor(text);
+  if(author)add("Autoría","ok","Firmado por "+author+". Se puede rastrear quién responde por lo que dice.",18);
+  else add("Autoría","bad","Nadie firma este texto. Si no hay un responsable, no hay a quién pedirle cuentas.",-14);
+
+  /* 2 fecha */
+  var y=findYear(text);
+  if(y===null)add("Fecha","bad","No aparece ninguna fecha. No sabes si esto se escribió ayer o hace quince años.",-12);
+  else if(y>=YEAR-2)add("Fecha","ok","Publicado en "+y+". Información reciente.",16);
+  else if(y>=YEAR-6)add("Fecha","warn","Publicado en "+y+". Tiene "+(YEAR-y)+" años: útil, pero comprueba si hay algo más nuevo.",7);
+  else add("Fecha","bad","Publicado en "+y+" — hace "+(YEAR-y)+" años. En ciencia y tecnología eso suele estar obsoleto.",-6);
+
+  /* 3 referencias */
+  var links=(text.match(/https?:\/\//g)||[]).length;
+  var acad=(text.match(/\([12]\d{3}\)/g)||[]).length+(text.match(/et al\.?/gi)||[]).length+(text.match(/\[\d{1,3}\]/g)||[]).length;
+  var refs=links+acad;
+  if(refs>=8)add("Referencias","ok",refs+" referencias o enlaces. Puedes ir a comprobar cada afirmación en su origen.",20);
+  else if(refs>=3)add("Referencias","ok",refs+" referencias. Apoya lo que dice en fuentes rastreables.",12);
+  else if(refs>=1)add("Referencias","warn","Solo "+refs+" referencia"+(refs>1?"s":"")+". Casi todo lo afirma sin respaldo.",4);
+  else add("Referencias","bad","Cero referencias. Todo lo que afirma hay que creerlo porque sí.",-14);
+
+  /* 4 dominio */
+  if(url&&/^https?:\/\//i.test(url)){
+    var host="";try{host=new URL(url).hostname.toLowerCase().replace(/^www\./,"");}catch(e){host="";}
+    if(host){
+      if(/\.(edu|gov|gob|mil)(\.[a-z]{2})?$/.test(host)||/\.ac\.[a-z]{2}$/.test(host))
+        add("Dominio","ok",host+" es un dominio universitario o de gobierno. No se entregan a cualquiera.",14);
+      else if(/(blogspot|wordpress\.com|wixsite|blogger|medium\.com|tumblr)/.test(host))
+        add("Dominio","warn",host+" es una plataforma de blogs: cualquiera publica sin revisión previa.",-6);
+      else if(/\.(info|biz|xyz|click|online|site|top)$/.test(host)||/\d{2,}/.test(host)||(host.match(/-/g)||[]).length>=2)
+        add("Dominio","bad",host+" tiene las marcas típicas de un sitio hecho para atraer clics, no para informar.",-12);
+      else if(/\.org(\.[a-z]{2})?$/.test(host))
+        add("Dominio","warn",host+" es una organización. Mira qué defiende antes de darlo por neutral.",4);
+      else add("Dominio","warn",host+" es un dominio comercial común. El dominio solo no dice nada: mira el resto.",0);
+    }else add("Dominio","warn","No se pudo leer la dirección.",0);
+  } else add("Dominio","warn","No pegaste la dirección. Añádela arriba y el análisis mejora.",0);
+
+  /* 5 relleno / IA */
+  var f=countPhrases(low,FILLER);
+  if(f.n>=4)add("Escritura de relleno","bad",f.n+" frases de relleno («"+f.found.slice(0,3).join("», «")+"»…). Así escribe el texto generado en masa para posicionar en buscadores.",-16);
+  else if(f.n>=2)add("Escritura de relleno","warn",f.n+" frases de relleno («"+f.found.join("», «")+"»). Puede ser texto automático o simplemente flojo.",-7);
+  else add("Escritura de relleno","ok","Sin muletillas de relleno. El texto parece escrito por alguien que tenía algo que decir.",6);
+
+  /* 6 sensacionalismo */
+  var c=countPhrases(low,CLICKBAIT);
+  var bangs=(text.match(/!/g)||[]).length;
+  var caps=(text.match(/\b[A-ZÁÉÍÓÚÑ]{4,}\b/g)||[]).length;
+  var sens=c.n+(bangs>=3?1:0)+(caps>=3?1:0);
+  if(sens>=3)add("Sensacionalismo","bad","Lenguaje de carnada: «"+(c.found[0]||"mayúsculas y signos de exclamación")+"». Busca tu clic, no tu comprensión.",-14);
+  else if(sens>=1)add("Sensacionalismo","warn","Algo de lenguaje exagerado. Ojo con el tono.",-6);
+  else add("Sensacionalismo","ok","Tono sobrio, sin exageraciones ni carnada.",6);
+
+  /* 7 certeza absoluta */
+  var a=countPhrases(low,ABSOLUTE);
+  if(a.n>=2)add("Certezas sin respaldo","bad","Afirma en absoluto («"+a.found.slice(0,2).join("», «")+"») sin mostrar de dónde lo saca. La ciencia rara vez habla así.",-9);
+  else if(a.n===1)add("Certezas sin respaldo","warn","Usa «"+a.found[0]+"» sin citar quién lo demostró.",-4);
+  else add("Certezas sin respaldo","ok","No presenta opiniones disfrazadas de hechos indiscutibles.",4);
+
+  /* 8 matiz */
+  var n=countPhrases(low,NUANCE);
+  if(n.n>=4)add("Precisión","ok","Atribuye lo que dice («"+n.found.slice(0,3).join("», «")+"»…). Señal de alguien que sabe distinguir dato de opinión.",10);
+  else if(n.n>=2)add("Precisión","warn","Algo de atribución, pero poca.",4);
+  else add("Precisión","bad","Nunca dice de dónde viene la información. Todo suena a verdad revelada.",-6);
+
+  /* 9 profundidad */
+  if(words<120)add("Profundidad","bad","Solo "+words+" palabras. Demasiado breve para tratar el tema en serio.",-8);
+  else if(words<400)add("Profundidad","warn",words+" palabras. Sirve para una idea general, no para un trabajo a fondo.",0);
+  else if(words<1200)add("Profundidad","ok",words+" palabras. Extensión suficiente para desarrollar el tema.",5);
+  else add("Profundidad","ok",words+" palabras. Tratamiento extenso del tema.",8);
+
+  score=Math.max(0,Math.min(100,Math.round(score)));
+  var level=score>=70?"ok":(score>=40?"warn":"bad");
+  return {score:score,level:level,checks:checks,author:author,year:y,words:words};
+}
+
+var STOP=("de la que el en y a los del se las por un para con no una su al lo como más pero sus le ya o "+
+"este sí porque esta entre cuando muy sin sobre también me hasta hay donde quien desde todo nos durante todos "+
+"uno les ni contra otros ese eso ante ellos e esto mí antes algunos qué unos yo otro otras otra él tanto esa "+
+"estos mucho quienes nada muchos cual poco ella estar estas algunas algo nosotros es son fue ser han ha haber "+
+"su sus dos tres cada toda todas the of and to in a is that it for on").split(/\s+/);
+function terms(s){
+  return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9ñ\s]/g," ")
+    .split(/\s+/).filter(function(w){return w.length>3&&STOP.indexOf(w)<0;});
+}
+function stem(w){return w.replace(/(ciones|cion|mente|idades|idad|ancia|encia|ando|iendo|ados|adas|ado|ada|es|as|os|s)$/,"");}
+function checkClaim(claim,src){
+  var ct=terms(claim),st=terms(src).map(stem);
+  /* se compara sin tildes, pero se muestra la palabra tal como la escribiste */
+  var shown={};
+  claim.toLowerCase().replace(/[^a-z0-9áéíóúüñ\s]/g," ").split(/\s+/).forEach(function(w){
+    var f=w.normalize("NFD").replace(/[\u0300-\u036f]/g,""); if(f&&!shown[f])shown[f]=w;
+  });
+  var uniq=[],seen={};
+  ct.forEach(function(w){var k=stem(w); if(!seen[k]){seen[k]=1;uniq.push({word:shown[w]||w,key:k});}});
+  var hits=uniq.filter(function(o){return st.indexOf(o.key)>=0;});
+  var misses=uniq.filter(function(o){return st.indexOf(o.key)<0;});
+  var pct=uniq.length?Math.round(hits.length/uniq.length*100):0;
+  var level=pct>=65?"ok":(pct>=35?"warn":"bad");
+  return {pct:pct,level:level,hits:hits,misses:misses,total:uniq.length};
+}
+
+/* ==================== RENDER ==================== */
+function dial(score,level){
+  var col=level==="ok"?"var(--ok)":level==="warn"?"var(--warn)":"var(--bad)";
+  var C=2*Math.PI*44, frac=score/100, arc=C*0.75;
+  return '<svg class="dial" viewBox="0 0 110 110" role="img" aria-label="Puntaje '+score+' de 100">'+
+    '<circle cx="55" cy="55" r="44" fill="none" stroke="var(--line-strong)" stroke-width="7" stroke-linecap="round" '+
+    'stroke-dasharray="'+arc+' '+C+'" transform="rotate(135 55 55)"/>'+
+    '<circle cx="55" cy="55" r="44" fill="none" stroke="'+col+'" stroke-width="7" stroke-linecap="round" '+
+    'stroke-dasharray="'+(arc*frac)+' '+C+'" transform="rotate(135 55 55)"/>'+
+    '<text class="score" x="55" y="58" fill="'+col+'">'+score+'</text>'+
+    '<text class="cap" x="55" y="73" fill="var(--muted)">DE 100</text></svg>';
+}
+var TITLES={ok:["Fuente sólida","Puedes citarla. Revisa igual que responda a tu pregunta."],
+warn:["Revísala con cuidado","Sirve para orientarte, pero busca una fuente mejor para lo importante."],
+bad:["No la cites","Demasiadas señales de alarma. Busca otra antes de usarla en tu trabajo."]};
+var last=null;
+
+function renderSource(){
+  var url=$("u").value.trim(), text=$("t").value;
+  if(!text.trim()){
+    $("verdict").innerHTML='<div class="empty">Pega el texto de una página y pulsa Analizar.</div>';
+    $("checks").innerHTML=""; last=null; return;
+  }
+  var r=analyzeSource(url,text); last=r; last.url=url; last.text=text;
+  var t=TITLES[r.level];
+  $("verdict").innerHTML='<div class="verdict v-'+r.level+'">'+dial(r.score,r.level)+
+    '<div><div class="v-title">'+t[0]+'</div><p class="v-body">'+t[1]+'</p></div></div>';
+  $("checks").innerHTML=r.checks.map(function(c){
+    return '<div class="chk"><span class="lamp l-'+c.status+'"></span><div><b>'+esc(c.label)+'</b><span>'+esc(c.detail)+'</span></div></div>';
+  }).join("");
+  $("aibox1").hidden=true;
+}
+
+function renderClaim(){
+  var claim=$("claim").value.trim(), src=$("srctext").value.trim();
+  if(!claim||!src){$("verdict2").innerHTML='<div class="empty">Pega la afirmación y el texto de la fuente.</div>';$("detail2").innerHTML="";return;}
+  var r=checkClaim(claim,src);
+  var col=r.level==="ok"?"var(--ok)":r.level==="warn"?"var(--warn)":"var(--bad)";
+  var head=r.level==="ok"?["La fuente respalda tu afirmación","Los conceptos clave de tu frase aparecen en el texto que citas."]:
+           r.level==="warn"?["Respaldo parcial","Parte de tu afirmación está en la fuente y parte no. Revisa si estás atribuyéndole algo que no dice."]:
+           ["La fuente no dice eso","Los conceptos centrales de tu afirmación no aparecen en el texto. Esta cita no sostiene lo que escribiste."];
+  $("verdict2").innerHTML='<div class="verdict v-'+r.level+'"><div style="min-width:78px">'+
+    '<div style="font-family:Archivo,sans-serif;font-weight:800;font-size:2.4rem;line-height:1;color:'+col+';font-variant-numeric:tabular-nums">'+r.pct+'%</div>'+
+    '<div class="mono" style="font-size:.6rem;letter-spacing:.12em;color:var(--muted)">COINCIDENCIA</div></div>'+
+    '<div><div class="v-title">'+head[0]+'</div><p class="v-body">'+head[1]+'</p></div></div>';
+  $("detail2").innerHTML='<div class="bar" style="margin-bottom:12px"><i style="width:'+r.pct+'%;background:'+col+'"></i></div>'+
+    '<p style="font-size:.78rem;color:var(--muted);margin-bottom:.5em">De los '+r.total+' conceptos clave de tu afirmación:</p>'+
+    '<div class="overlap">'+
+      r.hits.map(function(o){return '<span class="term hit">'+esc(o.word)+'</span>';}).join("")+
+      r.misses.map(function(o){return '<span class="term miss">'+esc(o.word)+' ✕</span>';}).join("")+
+    '</div>'+
+    (r.misses.length?'<p style="font-size:.78rem;color:var(--muted);margin-top:.9em">Los marcados en rojo no aparecen en la fuente. Si son el centro de tu afirmación, estás citando algo que la fuente no dice.</p>':'');
+  $("aibox2").hidden=true;
+}
+
+/* ==================== MI TRABAJO ==================== */
+var work=[];
+function load(){try{var s=localStorage.getItem("veritech.work");work=s?JSON.parse(s):[];}catch(e){work=[];}}
+function save(){try{localStorage.setItem("veritech.work",JSON.stringify(work));}catch(e){}}
+function host(u){try{return new URL(u).hostname.replace(/^www\./,"");}catch(e){return u||"fuente sin dirección";}}
+function title(t){
+  var l=t.split("\n").map(function(s){return s.trim();}).filter(Boolean);
+  for(var i=0;i<l.length;i++){if(l[i].length>12&&l[i].length<130)return l[i];}
+  return l[0]||"Documento sin título";
+}
+/* En español el primer nombre suele ser el de pila y lo demás apellidos:
+   «Laura Restrepo Marín» -> «Restrepo Marín, L.» */
+function bare(a){return (a||"").replace(/^(?:Dr[ao]?|Dra|Prof|Lic|Mtr[ao]?|Ing|Mg)\.\s*/,"").trim();}
+function invert(a){
+  var p=bare(a).split(/\s+/).filter(Boolean);
+  if(p.length<2)return {sur:p[0]||"",ini:""};
+  return {sur:p.slice(1).join(" "),ini:p[0].charAt(0).toUpperCase()+"."};
+}
+function apa(e,h){
+  h=h||same;
+  var url=e.url?" "+h(e.url):"";
+  if(!e.author)return h(host(e.url))+" ("+h(e.year||"s.f.")+"). <i>"+h(e.title)+"</i>."+url;
+  var v=invert(e.author);
+  return h(v.sur)+", "+h(v.ini)+" ("+h(e.year||"s.f.")+"). <i>"+h(e.title)+"</i>. "+h(host(e.url))+"."+url;
+}
+function mla(e,h){
+  h=h||same;
+  var who=e.author?(function(){var v=invert(e.author);return h(v.sur)+", "+h(bare(e.author).split(/\s+/)[0])+". ";})():"";
+  return who+'"'+h(e.title)+'." <i>'+h(host(e.url))+'</i>, '+h(e.year||"s.f.")+(e.url?", "+h(e.url):"")+".";
+}
+function renderWork(){
+  var box=$("snips");
+  if(!work.length){
+    box.innerHTML='<div class="empty">Todavía no has guardado ninguna fuente.<br>Analiza una en la pestaña 1 y pulsa «Guardar en mi trabajo».</div>';
+    $("bib").innerHTML='<span style="color:var(--muted)">Tu bibliografía aparecerá aquí, ya formateada.</span>';
+    $("warnbib").textContent=""; return;
+  }
+  box.innerHTML=work.map(function(e,i){
+    var lbl=e.level==="ok"?"sólida":e.level==="warn"?"revisar":"débil";
+    return '<div class="snip lv-'+esc(e.level)+'"><q>'+esc(e.title)+'</q><div class="meta">'+
+      '<span class="tag t-'+esc(e.level)+'">'+esc(e.score)+'/100 · '+lbl+'</span><span>'+esc(host(e.url))+'</span>'+
+      '<span>'+esc(e.author||"sin autor")+'</span><span>'+esc(e.year||"sin fecha")+'</span>'+
+      '<button class="x" type="button" data-i="'+i+'" title="Quitar">✕</button></div></div>';
+  }).join("");
+  var fmt=$("fmt").value;
+  $("bib").innerHTML=ordered().map(function(e){return "<div>"+(fmt==="apa"?apa(e,esc):mla(e,esc))+"</div>";}).join("");
+  var weak=work.filter(function(e){return e.level!=="ok";}).length, tot=work.length;
+  var msg;
+  if(!weak)msg=tot===1?"✓ Tu única fuente pasó el semáforo en verde.":"✓ Las "+tot+" fuentes de tu trabajo pasaron el semáforo en verde.";
+  else if(tot===1)msg="⚠ Tu única fuente no llegó a verde. Busca otra antes de entregar.";
+  else if(weak===1)msg="⚠ 1 de tus "+tot+" fuentes no llegó a verde. Cámbiala antes de entregar si puedes.";
+  else msg="⚠ "+weak+" de tus "+tot+" fuentes no llegaron a verde. Cámbialas antes de entregar si puedes.";
+  $("warnbib").innerHTML=msg;
+}
+/* Tanto APA como MLA ordenan alfabéticamente por apellido */
+function sortKey(e){return (e.author?invert(e.author).sur:host(e.url)).toLowerCase();}
+function ordered(){
+  return work.slice().sort(function(a,b){
+    return sortKey(a).localeCompare(sortKey(b),"es",{sensitivity:"base"});
+  });
+}
+function bibText(){
+  var fmt=$("fmt").value;
+  return (fmt==="apa"?"Referencias\n\n":"Obras citadas\n\n")+
+    ordered().map(function(e){return (fmt==="apa"?apa(e):mla(e)).replace(/<\/?i>/g,"");}).join("\n\n")+"\n";
+}
+
+/* ==================== IA (opcional) ==================== */
+var sampler=null;
+if(window.claude&&window.claude.use){
+  window.claude.use("sample").then(function(s){
+    if(!s)return; sampler=s; $("ai1").hidden=false; $("ai2").hidden=false;
+  }).catch(function(){});
+}
+function runAI(btn,box,txt,prompt){
+  if(!sampler)return;
+  btn.disabled=true; var old=btn.textContent; btn.textContent="Leyendo…";
+  box.hidden=false; txt.textContent="Pensando…";
+  sampler(prompt,{modelTier:"default",onText:function(e){txt.textContent=e.text;}})
+    .then(function(r){txt.textContent=r.text;})
+    .catch(function(err){txt.textContent="No se pudo completar el análisis con IA ("+(err&&err.code||"error")+"). El análisis de señales de arriba sigue siendo válido.";})
+    .then(function(){btn.disabled=false; btn.textContent=old;});
+}
+
+/* ==================== EVENTOS ==================== */
+(function(){
+  var TABS=["tab-src","tab-cite","tab-work"];
+  function activar(id,foco){
+    TABS.forEach(function(o){
+      var sel=o===id;
+      $(o).setAttribute("aria-selected",sel);
+      $(o).tabIndex=sel?0:-1;                     /* roving tabindex */
+      $($(o).getAttribute("aria-controls")).hidden=!sel;
+    });
+    if(foco)$(id).focus();
+    if(id==="tab-work")renderWork();
+  }
+  TABS.forEach(function(id,n){
+    $(id).tabIndex=(n===0?0:-1);
+    $(id).addEventListener("click",function(){activar(id,false);});
+    /* flechas, Inicio y Fin: patron de pestanas de la WAI */
+    $(id).addEventListener("keydown",function(e){
+      var d=e.key==="ArrowRight"?1:e.key==="ArrowLeft"?-1:0;
+      if(d){e.preventDefault();activar(TABS[(n+d+TABS.length)%TABS.length],true);return;}
+      if(e.key==="Home"){e.preventDefault();activar(TABS[0],true);}
+      if(e.key==="End"){e.preventDefault();activar(TABS[TABS.length-1],true);}
+    });
+  });
+})();
+$("go").addEventListener("click",renderSource);
+$("u").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();renderSource();}});
+$("clr").addEventListener("click",function(){$("u").value="";$("t").value="";renderSource();});
+$("go2").addEventListener("click",renderClaim);
+$("clr2").addEventListener("click",function(){$("claim").value="";$("srctext").value="";renderClaim();});
+$("save").addEventListener("click",function(){
+  renderSource();                        /* reanaliza por si editaste el texto */
+  if(!last){flash("Primero pega el texto de una página.","bad");return;}
+  var ttl=title(last.text), k=(last.url||"")+"|"+ttl;
+  if(work.some(function(e){return (e.url||"")+"|"+e.title===k;})){flash("Esa fuente ya está en tu trabajo.","warn");return;}
+  work.push({title:ttl,url:last.url,author:last.author,year:last.year,score:last.score,level:last.level});
+  save(); flash("Fuente guardada.","ok"); $("tab-work").click();
+});
+$("snips").addEventListener("click",function(e){
+  var b=e.target.closest("button[data-i]"); if(!b)return;
+  work.splice(parseInt(b.dataset.i,10),1); save(); renderWork();
+});
+$("fmt").addEventListener("change",renderWork);
+var armed=false, armTimer=null;
+$("wipe").addEventListener("click",function(){
+  if(!work.length){flash("No hay nada que borrar.","warn");return;}
+  if(!armed){
+    armed=true; $("wipe").textContent="¿Seguro? Pulsa otra vez";
+    clearTimeout(armTimer);
+    armTimer=setTimeout(function(){armed=false;$("wipe").textContent="Borrar todo";},4000);
+    return;
+  }
+  clearTimeout(armTimer); armed=false; $("wipe").textContent="Borrar todo";
+  work=[]; save(); renderWork(); flash("Trabajo vaciado.","ok");
+});
+function legacyCopy(txt){
+  try{
+    var ta=document.createElement("textarea");
+    ta.value=txt; ta.setAttribute("readonly","");
+    ta.style.cssText="position:fixed;top:0;left:0;opacity:0";
+    document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0,txt.length);
+    var ok=document.execCommand("copy"); document.body.removeChild(ta); return ok;
+  }catch(e){return false;}
+}
+function copyBib(){
+  if(!work.length){flash("Todavía no has guardado ninguna fuente.","warn");return;}
+  var txt=bibText();
+  var done=function(){flash("Bibliografía copiada. Pégala en tu trabajo.","ok");};
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(done).catch(function(){
+      if(legacyCopy(txt))done(); else flash("Tu navegador bloqueó el portapapeles. Selecciona el texto de arriba y cópialo a mano.","bad");
+    });
+  } else if(legacyCopy(txt)) done();
+  else flash("Tu navegador bloqueó el portapapeles. Selecciona el texto de arriba y cópialo a mano.","bad");
+}
+$("copy").addEventListener("click",copyBib);
+/* Descarga normal del navegador: funciona en cualquier sitio donde se aloje
+   la página. Dentro de claude.ai el marco la bloquea, y ahí se usa su propia
+   capacidad de descarga. */
+function blobDownload(txt){
+  try{
+    var blob=new Blob([txt],{type:"text/plain;charset=utf-8"});
+    var a=document.createElement("a");
+    a.href=URL.createObjectURL(blob); a.download="bibliografia.txt";
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){URL.revokeObjectURL(a.href); a.remove();},1000);
+    return true;
+  }catch(e){return false;}
+}
+$("dl").addEventListener("click",function(){
+  if(!work.length){flash("Todavía no has guardado ninguna fuente.","warn");return;}
+  if(window.claude&&window.claude.use){
+    window.claude.use("downloads").then(function(d){
+      if(!d){ if(!blobDownload(bibText()))copyBib(); else flash("Archivo descargado.","ok"); return; }
+      return d.save({filename:"bibliografia.txt",data:bibText()})
+        .then(function(){flash("Archivo descargado.","ok");})
+        .catch(function(){flash("Descarga cancelada. Usa «Copiar» si prefieres.","warn");});
+    }).catch(function(){ if(!blobDownload(bibText()))copyBib(); });
+  } else if(blobDownload(bibText())){
+    flash("Archivo descargado.","ok");
+  } else copyBib();
+});
+$("ai1").addEventListener("click",function(){
+  if(!last)return;
+  runAI($("ai1"),$("aibox1"),$("aitext1"),
+    "Eres un bibliotecario escolar que enseña a estudiantes de secundaria a evaluar fuentes. En español, máximo 110 palabras, sin listas ni markdown. Analiza el texto de abajo y di: (1) si parece escrito por una persona experta o generado automáticamente para posicionar en buscadores, y en qué lo notas; (2) una sola pregunta concreta que el estudiante debería hacerse antes de citarlo. No digas si el contenido es verdadero o falso; habla solo de la calidad de la fuente.\n\nTEXTO:\n"+last.text.slice(0,3500));
+});
+$("ai2").addEventListener("click",function(){
+  runAI($("ai2"),$("aibox2"),$("aitext2"),
+    "En español, máximo 100 palabras, sin listas ni markdown. Un estudiante escribió esta AFIRMACIÓN en su trabajo y dice que la respalda con esta FUENTE. Di claramente si la fuente sostiene la afirmación, la sostiene solo en parte, o no la sostiene, y explica exactamente qué parte queda sin respaldo. Sé directo.\n\nAFIRMACIÓN:\n"+$("claim").value.slice(0,1200)+"\n\nFUENTE:\n"+$("srctext").value.slice(0,3500));
+});
+
+/* ==================== ARRANQUE ==================== */
+load(); renderSource(); renderClaim(); renderWork();
+})();
+</script>
+
+</body>
+</html>

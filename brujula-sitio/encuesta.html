@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Encuesta anonima de 7 preguntas sobre como los estudiantes buscan y citan informacion en sus trabajos.">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='29' fill='none' stroke='%231550C8' stroke-width='5'/%3E%3Cpath d='M19 33 L28 42 L45 23' stroke='%231550C8' stroke-width='6' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
+<title>Encuesta de VeriTech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Paleta clara FIJA: nada de prefers-color-scheme. El teléfono de quien
+   responde suele estar en modo oscuro y eso apagaba la encuesta entera. */
+:root{
+  color-scheme:light;
+  --bg:#EDF2FB; --bg2:#DDE8FA; --card:#FFFFFF;
+  --ink:#0B1726; --muted:#5F7186;
+  --brand:#1550C8; --brand-soft:#E4EDFF; --brand-line:#B9D0FF;
+  --energy:#FF6B35; --energy-soft:#FFE8DE;
+  --ok:#0E8A5F; --ok-soft:#DFF5EC;
+  --line:#DCE4EF;
+  --sombra:0 1px 2px rgba(11,23,38,.04), 0 10px 30px -12px rgba(21,80,200,.22);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{background:var(--bg)}
+body{
+  margin:0; min-height:100dvh; color:var(--ink); background:var(--bg);
+  background-image:radial-gradient(90rem 40rem at 50% -12rem, var(--bg2) 0%, var(--bg) 62%);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:16px; line-height:1.5;
+  display:flex; flex-direction:column; align-items:center;
+  padding-block:18px 24px; padding-left:16px; padding-right:16px; gap:16px;
+}
+h1,h2{font-family:Archivo,"Helvetica Neue",sans-serif; margin:0; letter-spacing:-.025em; text-wrap:balance}
+p{margin:0}
+
+/* ---------- cabecera ---------- */
+.top{width:100%; max-width:540px; display:flex; align-items:center; gap:11px}
+.rose{width:30px; height:30px; color:var(--brand); flex:none}
+.marca{font-family:Archivo,sans-serif; font-variation-settings:"wdth" 116,"wght" 800; font-size:1.2rem; line-height:1}
+.sub{font-size:.76rem; color:var(--muted); line-height:1.25}
+
+/* ---------- barra de avance ---------- */
+.avance{width:100%; max-width:540px; display:flex; flex-direction:column; gap:7px}
+.riel{height:6px; background:#fff; border:1px solid var(--line); border-radius:99px; overflow:hidden}
+.riel i{display:block; height:100%; width:0; border-radius:99px;
+  background:linear-gradient(90deg,var(--brand),var(--energy)); transition:width .35s cubic-bezier(.4,0,.2,1)}
+.paso{display:flex; justify-content:space-between; font-size:.72rem; color:var(--muted); font-weight:500}
+.paso b{color:var(--brand); font-weight:600}
+
+/* ---------- tarjeta ---------- */
+.carta{
+  width:100%; max-width:540px; background:var(--card); border:1px solid var(--line);
+  border-radius:16px; box-shadow:var(--sombra); padding:26px 22px;
+  display:flex; flex-direction:column; gap:18px;
+}
+.entra{animation:entrar .32s cubic-bezier(.22,1,.36,1) both}
+@keyframes entrar{from{opacity:0; transform:translateY(14px)}to{opacity:1; transform:none}}
+
+.preg{font-family:Archivo,sans-serif; font-variation-settings:"wdth" 104,"wght" 700;
+  font-size:1.34rem; line-height:1.22}
+.pista{font-size:.85rem; color:var(--muted); margin-top:-8px}
+
+.ops{display:flex; flex-direction:column; gap:10px}
+.op{
+  position:relative; display:flex; align-items:center; gap:13px; cursor:pointer;
+  border:2px solid var(--line); border-radius:12px; padding:15px 16px;
+  background:#fff; font-size:1rem; line-height:1.3; font-weight:500;
+  transition:border-color .14s, background .14s, transform .08s;
+}
+.op:active{transform:scale(.985)}
+@media (hover:hover){.op:hover{border-color:var(--brand-line); background:var(--brand-soft)}}
+.op input{position:absolute; opacity:0; width:0; height:0}
+.bolita{width:22px; height:22px; border-radius:50%; border:2px solid #C6D2E2; flex:none;
+  display:grid; place-items:center; transition:border-color .14s}
+.bolita::after{content:""; width:11px; height:11px; border-radius:50%; background:var(--brand);
+  transform:scale(0); transition:transform .16s cubic-bezier(.34,1.56,.64,1)}
+/* .sel lo pone el JS: no dependemos de :has(), que falla en móviles viejos */
+.op.sel{border-color:var(--brand); background:var(--brand-soft)}
+.op.sel .bolita{border-color:var(--brand)}
+.op.sel .bolita::after{transform:scale(1)}
+.op.foco{outline:3px solid var(--brand-line); outline-offset:2px}
+
+/* ---------- botones ---------- */
+.btn{
+  font-family:Archivo,sans-serif; font-variation-settings:"wdth" 108,"wght" 700;
+  font-size:1rem; letter-spacing:.01em; border-radius:12px; padding:16px;
+  cursor:pointer; width:100%; border:2px solid var(--brand);
+  background:var(--brand); color:#fff; transition:filter .14s, transform .08s;
+}
+.btn:active{transform:scale(.99)}
+.btn:hover{filter:brightness(1.08)}
+.btn.fantasma{background:#fff; color:var(--brand)}
+.btn:focus-visible{outline:3px solid var(--energy); outline-offset:2px}
+.atras{
+  align-self:flex-start; background:none; border:0; color:var(--muted); cursor:pointer;
+  font-family:inherit; font-size:.82rem; padding:.4em 0; text-decoration:underline;
+}
+.atras:hover{color:var(--ink)}
+
+/* ---------- intro ---------- */
+.intro h1{font-variation-settings:"wdth" 112,"wght" 800; font-size:1.75rem; line-height:1.1}
+.chips{display:flex; flex-wrap:wrap; gap:8px}
+.chip{background:var(--brand-soft); color:var(--brand); border-radius:99px;
+  padding:.4em .85em; font-size:.8rem; font-weight:600}
+.chip.naranja{background:var(--energy-soft); color:#C2410C}
+
+/* ---------- final ---------- */
+.tick{width:54px; height:54px; border-radius:50%; background:var(--ok-soft); color:var(--ok);
+  display:grid; place-items:center; font-size:1.7rem; font-weight:700}
+.final h2{font-variation-settings:"wdth" 112,"wght" 800; font-size:1.6rem; color:var(--ok)}
+.eco{display:flex; flex-direction:column; gap:9px}
+.fila{
+  display:grid; grid-template-columns:auto 1fr; gap:11px; align-items:start;
+  background:#F7FAFF; border:1px solid var(--line); border-radius:11px; padding:12px 13px;
+}
+.fila .p{font-size:.74rem; color:var(--muted); line-height:1.35}
+.fila .r{font-size:.92rem; font-weight:600; line-height:1.3; margin-top:.15em}
+.fila .eco-txt{font-size:.8rem; color:var(--brand); line-height:1.4; margin-top:.3em}
+.fila .n{width:26px; height:26px; border-radius:8px; background:var(--brand-soft); color:var(--brand);
+  display:grid; place-items:center; font-size:.76rem; font-weight:700; flex:none}
+.cta{
+  display:block; text-align:center; text-decoration:none; background:var(--energy); color:#fff;
+  border:2px solid var(--energy); border-radius:12px; padding:16px;
+  font-family:Archivo,sans-serif; font-variation-settings:"wdth" 108,"wght" 700; font-size:1rem;
+}
+.cta:hover{filter:brightness(1.07)}
+.otra{background:none; border:0; color:var(--muted); font-family:inherit; font-size:.78rem;
+  text-decoration:underline; cursor:pointer; padding:.4em}
+.otra:hover{color:var(--ink)}
+.err{font-size:.86rem; color:#B3261E; text-align:center}
+.pie{font-size:.72rem; color:var(--muted); text-align:center; max-width:540px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+@media (max-width:380px){.carta{padding:20px 16px} .preg{font-size:1.2rem}}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <svg class="rose" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+    <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="4"/>
+    <path d="M19 33 L28 42 L45 23" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </svg>
+  <div>
+    <div class="marca">VeriTech</div>
+    <p class="sub">Encuesta para nuestro proyecto de colegio</p>
+  </div>
+</div>
+
+<div class="avance" id="avance" hidden>
+  <div class="riel"><i id="relleno"></i></div>
+  <div class="paso"><span id="paso"></span><span id="queda"></span></div>
+</div>
+
+<form id="f" name="encuesta-veritech" method="POST" data-netlify="true" netlify-honeypot="trampa" style="width:100%;max-width:540px">
+  <input type="hidden" name="form-name" value="encuesta-veritech">
+  <!-- Marca el origen: las pruebas se envian con otro valor y la pagina de
+       resultados las descarta, para que nunca contaminen los datos reales. -->
+  <input type="hidden" name="origen" value="web">
+  <input type="hidden" name="q1"><input type="hidden" name="q2"><input type="hidden" name="q3">
+  <input type="hidden" name="q4"><input type="hidden" name="q5"><input type="hidden" name="q6">
+  <input type="hidden" name="q7">
+  <p hidden><label>No llenar <input name="trampa"></label></p>
+  <div id="zona"></div>
+  <noscript>
+    <div class="carta">
+      <p class="preg">Necesitas activar JavaScript</p>
+      <p style="color:var(--muted)">Esta encuesta no puede funcionar sin él. Activa JavaScript en tu navegador y recarga la página.</p>
+    </div>
+  </noscript>
+</form>
+
+<p class="pie" id="pie">Anónima · No pedimos tu nombre ni tu correo</p>
+
+<script>
+(function(){
+"use strict";
+var $=function(i){return document.getElementById(i);};
+var f=$("f"), zona=$("zona");
+var GUARDADO="veritech.borrador", ENVIADA="veritech.enviada";
+function leer(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+function poner(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+function quitar(k){try{localStorage.removeItem(k);}catch(e){}}
+
+/* Cada opción lleva su devolución: lo que verá la persona al terminar. */
+var PREGUNTAS=[
+ {id:"q1", t:"Cuando haces un trabajo, ¿revisas quién escribió la página que estás citando?",
+  o:[["Siempre","Eres de los pocos. La mayoría no lo hace."],
+     ["A veces","Cuando no lo haces es justo cuando más riesgo corres."],
+     ["Casi nunca","VeriTech te lo dice en dos segundos, sin que lo busques."],
+     ["Nunca","Entonces nunca sabes si te lo escribió un experto o un robot."]]},
+ {id:"q2", t:"¿Cuántos minutos tardas armando la bibliografía?",
+  o:[["Menos de 10","Rápido. Con VeriTech serían cero."],
+     ["Entre 10 y 30","Media hora al mes que podrías no gastar."],
+     ["Más de 30","Eso es una tarde entera al trimestre en dar formato."],
+     ["No la hago","Y por eso es probable que te hayan bajado nota alguna vez."]]},
+ {id:"q3", t:"¿Has usado IA para un trabajo y te dio una fuente que después no pudiste encontrar?",
+  o:[["Sí, me ha pasado","No fue tu culpa: la IA se la inventó. Pasa muchísimo."],
+     ["No, nunca","Ojo, puede pasar sin que te des cuenta."],
+     ["No he usado IA","Cuando la uses, comprueba siempre que la fuente exista."]]},
+ {id:"q4", t:"¿Sabrías explicar por qué una página de internet es confiable y otra no?",
+  o:[["Sí, con seguridad","Entonces te va a gustar ver en qué se fija VeriTech."],
+     ["Más o menos","VeriTech te enseña las señales mientras trabajas."],
+     ["No sabría","Nadie nos lo enseñó. Ese es exactamente el problema."]]},
+ {id:"q5", t:"¿De dónde sacas normalmente la información para un trabajo?",
+  o:[["Los primeros resultados de Google","Google ordena por popularidad, no por veracidad."],
+     ["Le pregunto a una IA","Rápido, pero hay que comprobar cada fuente que te dé."],
+     ["Libros o la biblioteca","La opción más segura y la que casi nadie elige ya."],
+     ["Lo que mande el profesor","Seguro, aunque te deja corto cuando hay que investigar."]]},
+ {id:"q6", t:"¿Alguna vez te bajaron nota por las fuentes o por la bibliografía?",
+  o:[["Sí","Te costó puntos algo que se puede evitar."],
+     ["No","Todavía. A la mayoría le pasa tarde o temprano."],
+     ["No estoy seguro","Casi nadie recibe explicación de por qué le bajaron."]]},
+ {id:"q7", t:"¿Instalarías una extensión que revise tus fuentes y arme la bibliografía sola?",
+  o:[["Sí, ya mismo","Gracias. Este dato es el que le presentamos al jurado."],
+     ["Tal vez, si es fácil","Lo es: se instala una vez y trabaja sola."],
+     ["No","Nos sirve igual saberlo. Gracias por la sinceridad."]]}
+];
+var TOTAL=PREGUNTAS.length;
+var resp={}, i=-1;
+
+function guardar(){ poner(GUARDADO,JSON.stringify({r:resp,i:i})); }
+function cargar(){
+  try{var d=JSON.parse(leer(GUARDADO)||"null"); if(d&&d.r){resp=d.r; i=typeof d.i==="number"?d.i:-1;}}catch(e){}
+}
+
+function avance(){
+  var hechas=PREGUNTAS.filter(function(p){return resp[p.id];}).length;
+  $("avance").hidden = i<0;
+  $("relleno").style.width=(hechas/TOTAL*100)+"%";
+  $("paso").innerHTML="Pregunta <b>"+Math.min(i+1,TOTAL)+"</b> de "+TOTAL;
+  var faltan=TOTAL-hechas;
+  $("queda").textContent = faltan? (faltan===1?"falta 1":"faltan "+faltan) : "¡completa!";
+}
+
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");}
+
+function pintarIntro(){
+  zona.innerHTML=
+   '<div class="carta entra intro">'+
+     '<h1>¿Cómo buscas información para tus trabajos?</h1>'+
+     '<p style="color:var(--muted)">Es para un proyecto que estamos presentando en el colegio. '+
+     'Queremos saber cómo lo hacemos de verdad los estudiantes.</p>'+
+     '<div class="chips"><span class="chip">7 preguntas</span><span class="chip">Solo toca, no escribas nada</span><span class="chip naranja">Menos de 1 minuto</span></div>'+
+     '<button type="button" class="btn" id="empezar">Empezar →</button>'+
+   '</div>';
+  $("empezar").onclick=function(){ i=0; pintar(); };
+  $("avance").hidden=true;
+}
+
+function pintar(){
+  if(i<0)return pintarIntro();
+  if(i>=TOTAL)return enviar();
+  var p=PREGUNTAS[i];
+  zona.innerHTML=
+   '<div class="carta entra">'+
+     (i>0?'<button type="button" class="atras" id="atras">← Anterior</button>':'')+
+     '<p class="preg">'+esc(p.t)+'</p>'+
+     '<div class="ops">'+p.o.map(function(o,n){
+        var sel = resp[p.id]===o[0];
+        return '<label class="op'+(sel?' sel':'')+'" data-n="'+n+'">'+
+               '<input type="radio" name="'+p.id+'" value="'+esc(o[0])+'"'+(sel?' checked':'')+'>'+
+               '<span class="bolita"></span>'+esc(o[0])+'</label>';
+      }).join("")+'</div>'+
+   '</div>';
+
+  [].forEach.call(zona.querySelectorAll(".op"),function(l){
+    var r=l.querySelector("input");
+    r.addEventListener("focus",function(){l.classList.add("foco");});
+    r.addEventListener("blur",function(){l.classList.remove("foco");});
+    r.addEventListener("change",function(){
+      [].forEach.call(zona.querySelectorAll(".op"),function(o){o.classList.remove("sel");});
+      l.classList.add("sel");
+      resp[p.id]=r.value; guardar(); avance();
+      /* avanza sola: es lo que hace que se sienta ágil */
+      setTimeout(function(){ i++; pintar(); }, 260);
+    });
+  });
+  if($("atras"))$("atras").onclick=function(){ i--; pintar(); };
+  avance();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function filaEco(p,n){
+  var val=resp[p.id], eco="";
+  for(var j=0;j<p.o.length;j++) if(p.o[j][0]===val) eco=p.o[j][1];
+  return '<div class="fila"><span class="n">'+(n+1)+'</span><div>'+
+         '<p class="p">'+esc(p.t)+'</p>'+
+         '<p class="r">'+esc(val||"—")+'</p>'+
+         (eco?'<p class="eco-txt">'+esc(eco)+'</p>':'')+
+         '</div></div>';
+}
+
+function pintarFinal(){
+  $("avance").hidden=true;
+  $("pie").textContent="Gracias por responder · Proyecto VeriTech";
+  zona.innerHTML=
+   '<div class="carta entra final" style="align-items:stretch">'+
+     '<div style="display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center">'+
+       '<div class="tick">✓</div><h2>¡Listo, gracias!</h2>'+
+       '<p style="color:var(--muted);max-width:34ch">Tu respuesta ya quedó guardada. Esto es lo que contestaste:</p>'+
+     '</div>'+
+     '<div class="eco">'+PREGUNTAS.map(filaEco).join("")+'</div>'+
+     '<a class="cta" href="/">Ahora pruébala: analiza una página →</a>'+
+     '<button type="button" class="otra" id="otra">No fui yo quien respondió · responder de nuevo</button>'+
+   '</div>';
+  $("otra").onclick=function(){ quitar(ENVIADA); quitar(GUARDADO); resp={}; i=-1; location.reload(); };
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function enviar(){
+  zona.innerHTML='<div class="carta entra" style="text-align:center"><p class="preg" style="font-size:1.1rem">Enviando tu respuesta…</p></div>';
+  var d=new URLSearchParams();
+  d.append("form-name","encuesta-veritech");
+  d.append("origen","web");
+  PREGUNTAS.forEach(function(p){ d.append(p.id, resp[p.id]||""); });
+  fetch("/",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:d.toString()})
+    .then(function(r){ if(!r.ok)throw new Error(r.status);
+      poner(ENVIADA,String(Date.now())); quitar(GUARDADO); pintarFinal(); })
+    .catch(function(){
+      zona.innerHTML='<div class="carta entra">'+
+        '<p class="preg" style="font-size:1.1rem">No se pudo enviar</p>'+
+        '<p class="err">Revisa tu conexión. Tus respuestas no se han perdido.</p>'+
+        '<button type="button" class="btn" id="reintentar">Reintentar</button></div>';
+      $("reintentar").onclick=enviar;
+    });
+}
+
+cargar();
+if(leer(ENVIADA)) pintarFinal();
+else { if(i>=TOTAL)i=TOTAL-1; pintar(); }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=ai-legible&utm_source=comment&utm_medium=referral&utm_id=da9d342c-deb9-4d0c-a1bf-69cb5f79f450
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+<meta name="hosting-provider" content="Netlify">
+<meta name="netlify-deploy" content="https://netlify.new/?utm_campaign=ai-legible&amp;utm_source=meta&amp;utm_medium=referral&amp;utm_id=da9d342c-deb9-4d0c-a1bf-69cb5f79f450">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Comparte tu opinión sobre el funcionamiento de VeriTech y ayúdanos a mejorar la web.">
+<meta name="color-scheme" content="light dark">
+<title>Tu opinión sobre VeriTech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#e4eaf1;--panel:#fdfeff;--sunk:#edf1f6;--ink:#0b1726;--muted:#556678;--accent:#0f4c9c;--on-accent:#ffffff;--soft:rgba(15,76,156,.09);--aline:rgba(15,76,156,.32);--line:rgba(11,23,38,.14);--strong:rgba(11,23,38,.28);--ok:#1d6349;--okbg:rgba(29,99,73,.11);--grid:rgba(11,23,38,.05);--shadow:0 1px 2px rgba(11,23,38,.05),0 18px 45px -24px rgba(11,23,38,.45)}
+@media(prefers-color-scheme:dark){:root{--bg:#060d16;--panel:#0d1a28;--sunk:#08111c;--ink:#e7edf4;--muted:#8fa3b8;--accent:#6ba5f2;--on-accent:#04101f;--soft:rgba(107,165,242,.12);--aline:rgba(107,165,242,.4);--line:rgba(231,237,244,.13);--strong:rgba(231,237,244,.3);--ok:#5dbe94;--okbg:rgba(93,190,148,.13);--grid:rgba(231,237,244,.045);--shadow:0 18px 44px -20px rgba(0,0,0,.8)}}
+*{box-sizing:border-box}body{margin:0;background-color:var(--bg);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px;color:var(--ink);font:16px/1.55 "IBM Plex Sans",sans-serif;padding:22px 16px 44px}.wrap{max-width:680px;margin:auto}.top{display:flex;align-items:center;gap:12px;margin-bottom:18px}.rose{width:38px;color:var(--accent)}.brand{font:800 1.5rem/1 Archivo,sans-serif;font-variation-settings:"wdth" 116}.top p{margin:.2em 0 0;color:var(--muted);font-size:.82rem}.back{margin-left:auto;color:var(--accent);font:600 .69rem "IBM Plex Mono",monospace;text-decoration:none;text-transform:uppercase;letter-spacing:.07em}.hero{border-left:4px solid var(--accent);padding:5px 0 5px 17px;margin:24px 0 18px}.hero h1{font:800 clamp(2rem,8vw,3.6rem)/.96 Archivo,sans-serif;font-variation-settings:"wdth" 112;letter-spacing:-.04em;margin:0}.hero p{color:var(--muted);max-width:52ch;margin:.8em 0 0}.meta{font:600 .67rem "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-top:12px}.form{display:grid;gap:14px}.q{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:20px;box-shadow:var(--shadow)}fieldset{margin:0}.q legend{padding:0;width:100%}.num{font:600 .65rem "IBM Plex Mono",monospace;letter-spacing:.15em;text-transform:uppercase;color:var(--accent)}.question{display:block;font:700 1.08rem/1.3 Archivo,sans-serif;font-variation-settings:"wdth" 106;margin:.35em 0 .9em}.required{color:var(--accent)}.choices{display:grid;gap:8px}.choice{display:flex;gap:11px;align-items:center;padding:11px 13px;border:1px solid var(--line);border-radius:6px;background:var(--sunk);cursor:pointer}.choice:hover{border-color:var(--aline)}.choice:has(input:checked){border-color:var(--accent);background:var(--soft)}.choice input{accent-color:var(--accent);width:18px;height:18px;flex:none}.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.scale label{display:grid;place-items:center;gap:6px;padding:10px 3px;border:1px solid var(--line);border-radius:6px;background:var(--sunk);cursor:pointer;font:600 .78rem "IBM Plex Mono",monospace}.scale label:has(input:checked){border-color:var(--accent);background:var(--soft);color:var(--accent)}.scale input{accent-color:var(--accent)}.ends{display:flex;justify-content:space-between;color:var(--muted);font-size:.74rem;margin-top:7px}textarea,input[type=text],select{width:100%;border:1px solid var(--line);border-radius:6px;background:var(--sunk);color:var(--ink);font:inherit;padding:12px 13px}textarea{min-height:110px;resize:vertical}textarea:focus,input:focus,select:focus{outline:2px solid var(--accent);outline-offset:-1px}.help{color:var(--muted);font-size:.78rem;margin:.7em 0 0}.consent{display:flex;gap:10px;align-items:flex-start;font-size:.85rem;line-height:1.45;color:var(--ink);background:var(--soft);border:1px solid var(--aline);border-radius:9px;padding:13px 14px;cursor:pointer;margin-bottom:14px}
+.consent input{width:20px;height:20px;flex:none;margin:1px 0 0;accent-color:var(--accent);cursor:pointer}
+.consent a{color:var(--accent)}
+.pie{font-size:.74rem;color:var(--muted);text-align:center;line-height:1.9;padding:22px 0 4px}
+.pie a{color:var(--muted);text-decoration:underline}
+.pie a:hover{color:var(--accent)}
+.send{position:sticky;bottom:12px;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:14px;box-shadow:var(--shadow)}button{width:100%;border:1px solid var(--accent);border-radius:7px;background:var(--accent);color:var(--on-accent);padding:14px;font:600 .78rem "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}button:hover{filter:brightness(1.1)}button:disabled{opacity:.55;cursor:wait}.error{color:#a8342a;text-align:center;font-size:.82rem;margin:8px 0 0}.thanks{background:var(--panel);border:1px solid var(--ok);border-radius:10px;padding:36px 24px;text-align:center;box-shadow:var(--shadow)}.thanks svg{width:50px;color:var(--ok)}.thanks h2{font:800 1.8rem Archivo,sans-serif;color:var(--ok);margin:.5em 0}.thanks p{color:var(--muted);margin:auto;max-width:42ch}[hidden]{display:none!important}@media(max-width:480px){.scale{gap:4px}.q{padding:17px}.back{font-size:.62rem}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="top">
+    <svg class="rose" viewBox="0 0 64 64" fill="none" aria-hidden="true"><circle cx="32" cy="32" r="29" stroke="currentColor" stroke-width="3"/><path d="M32 8 37 29 32 56 27 29Z" fill="currentColor"/><path d="M8 32 29 27 56 32 29 37Z" fill="currentColor" opacity=".35"/></svg>
+    <div><div class="brand">VeriTech</div><p>Evaluación de la experiencia web</p></div>
+    <a class="back" href="/">Volver a la web</a>
+  </header>
+  <section class="hero">
+    <h1>Queremos<br>leerte.</h1>
+    <p>Cuéntanos qué tan bien funciona VeriTech, qué resulta confuso y qué deberíamos mejorar. Tus respuestas nos ayudan a decidir qué cambiar primero.</p>
+    <div class="meta">7 preguntas · 2 minutos · Anónima</div>
+  </section>
+
+  <form class='form' id='feedback' method='POST' name='opinion-sobre-la-web' data-netlify='true' netlify-honeypot='trampa'>
+    <input type="hidden" name="form-name" value="opinion-sobre-la-web">
+    <p hidden><label>No completar: <input name="trampa"></label></p>
+
+    <fieldset class="q"><legend><span class="num">01 · Impresión general</span><span class="question">En general, ¿qué tan satisfecho/a estás con VeriTech? <span class="required" aria-label="obligatorio">*</span></span></legend>
+      <div class="scale">
+        <label><input type="radio" name="satisfaccion" value="1 - Muy insatisfecho" required>1</label><label><input type="radio" name="satisfaccion" value="2">2</label><label><input type="radio" name="satisfaccion" value="3">3</label><label><input type="radio" name="satisfaccion" value="4">4</label><label><input type="radio" name="satisfaccion" value="5 - Muy satisfecho">5</label>
+      </div><div class="ends"><span>Muy insatisfecho/a</span><span>Muy satisfecho/a</span></div>
+    </fieldset>
+
+    <fieldset class="q"><legend><span class="num">02 · Facilidad de uso</span><span class="question">¿Qué tan fácil fue entender cómo usar la web? <span class="required" aria-label="obligatorio">*</span></span></legend>
+      <div class="choices"><label class="choice"><input type="radio" name="facilidad" value="Muy facil" required>Muy fácil</label><label class="choice"><input type="radio" name="facilidad" value="Facil">Fácil</label><label class="choice"><input type="radio" name="facilidad" value="Ni facil ni dificil">Ni fácil ni difícil</label><label class="choice"><input type="radio" name="facilidad" value="Dificil">Difícil</label><label class="choice"><input type="radio" name="facilidad" value="Muy dificil">Muy difícil</label></div>
+    </fieldset>
+
+    <fieldset class="q"><legend><span class="num">03 · Funcionamiento</span><span class="question">¿La web funcionó como esperabas? <span class="required" aria-label="obligatorio">*</span></span></legend>
+      <div class="choices"><label class="choice"><input type="radio" name="funcionamiento" value="Si, todo funciono" required>Sí, todo funcionó bien</label><label class="choice"><input type="radio" name="funcionamiento" value="Funciono con detalles">Funcionó, pero encontré algunos detalles</label><label class="choice"><input type="radio" name="funcionamiento" value="Tuve problemas">Tuve problemas importantes</label><label class="choice"><input type="radio" name="funcionamiento" value="No pude usarla">No pude completar lo que quería hacer</label></div>
+    </fieldset>
+
+    <label class="q"><span class="num">04 · Lo más útil</span><span class="question">¿Qué función te resultó más útil? <span class="required" aria-label="obligatorio">*</span></span><select name="funcion_mas_util" required><option value="">Selecciona una opción</option><option>Analizar la calidad de una fuente</option><option>Verificar si una cita respalda una afirmación</option><option>Guardar fuentes en “Mi trabajo”</option><option>Crear la bibliografía</option><option>Ninguna todavía</option></select></label>
+
+    <label class="q"><span class="num">05 · Problemas</span><span class="question">¿Hubo algo confuso, lento o que no funcionó?</span><textarea name="problemas" maxlength="1000" placeholder="Cuéntanos qué estabas intentando hacer y qué ocurrió..."></textarea><span class="help">Opcional. No incluyas información personal.</span></label>
+
+    <label class="q"><span class="num">06 · Mejoras</span><span class="question">Si pudieras mejorar una sola cosa, ¿cuál sería? <span class="required" aria-label="obligatorio">*</span></span><textarea name="mejora_prioritaria" maxlength="1000" required placeholder="La mejora más importante para ti..."></textarea></label>
+
+    <fieldset class="q"><legend><span class="num">07 · Recomendación</span><span class="question">¿Recomendarías VeriTech a un compañero/a? <span class="required" aria-label="obligatorio">*</span></span></legend>
+      <div class="scale"><label><input type="radio" name="recomendacion" value="1 - Nada probable" required>1</label><label><input type="radio" name="recomendacion" value="2">2</label><label><input type="radio" name="recomendacion" value="3">3</label><label><input type="radio" name="recomendacion" value="4">4</label><label><input type="radio" name="recomendacion" value="5 - Muy probable">5</label></div><div class="ends"><span>Nada probable</span><span>Muy probable</span></div>
+    </fieldset>
+
+    <label class="q"><span class="num">Opcional · Contexto</span><span class="question">¿Cuál describe mejor tu relación con VeriTech?</span><select name="tipo_usuario"><option value="">Prefiero no decirlo</option><option>Estudiante</option><option>Docente</option><option>Familiar de un estudiante</option><option>Otra</option></select></label>
+
+    <label class="consent" for="acepto"><input type="checkbox" id="acepto" name="consentimiento" value="Sí, acepto" required><span>Acepto que mis respuestas se usen para mejorar este proyecto escolar. No escribas datos personales en los campos de texto. <a href="/privacidad.html" target="_blank" rel="noopener">Cómo tratamos los datos</a></span></label>
+    <div class="send"><button id="send" type="submit">Enviar mi opinión</button><p class="error" id="error" role="alert" hidden></p></div>
+  </form>
+
+  <section class="thanks" id="thanks" tabindex="-1" hidden><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="24" r="21" stroke="currentColor" stroke-width="2"/><path d="m14 24 7 7 14-15" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><h2>Gracias por ayudarnos.</h2><p>Tu opinión quedó registrada. La usaremos para priorizar las próximas mejoras de VeriTech.</p></section>
+  <footer class="pie">
+    <a href="/">Herramienta</a> · <a href="/encuesta.html">Encuesta</a> · <a href="/privacidad.html">Privacidad</a> · <a href="/terminos.html">Términos</a> · <a href="/cookies.html">Cookies y almacenamiento</a>
+  </footer>
+</main>
+<script>
+(function(){var form=document.getElementById('feedback'),button=document.getElementById('send'),error=document.getElementById('error'),thanks=document.getElementById('thanks');form.addEventListener('submit',function(event){event.preventDefault();if(!form.reportValidity())return;button.disabled=true;button.textContent='Enviando…';error.hidden=true;fetch('/feedback.html',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(form)).toString()}).then(function(response){if(!response.ok)throw new Error('submit');form.hidden=true;thanks.hidden=false;thanks.focus();window.scrollTo({top:0,behavior:'smooth'});}).catch(function(){error.textContent='No se pudo enviar. Revisa tu conexión e inténtalo de nuevo.';error.hidden=false;button.disabled=false;button.textContent='Enviar mi opinión';});});})();
+</script>
+</body>
+</html>

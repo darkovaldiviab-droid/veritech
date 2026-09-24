@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=ai-legible&utm_source=comment&utm_medium=referral&utm_id=da9d342c-deb9-4d0c-a1bf-69cb5f79f450
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+<meta name="hosting-provider" content="Netlify">
+<meta name="netlify-deploy" content="https://netlify.new/?utm_campaign=ai-legible&amp;utm_source=meta&amp;utm_medium=referral&amp;utm_id=da9d342c-deb9-4d0c-a1bf-69cb5f79f450">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Presentacion del proyecto VeriTech: una extension que ayuda a los estudiantes a evaluar sus fuentes de informacion.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='29' fill='none' stroke='%230F4C9C' stroke-width='5'/%3E%3Cpath d='M19 33 L28 42 L45 23' stroke='%230F4C9C' stroke-width='6' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
+<style>html{color-scheme:light dark}body{margin:0;font-family:system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Pitch de VeriTech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#E7ECF2; --stage:#FDFEFF; --ink:#0B1726; --muted:#586A7E;
+  --accent:#0F4C9C; --accent-soft:rgba(15,76,156,.10);
+  --line:rgba(11,23,38,.13); --line-strong:rgba(11,23,38,.30);
+  --ok-ink:#1D6349; --warn-ink:#8C5A0B; --bad-ink:#A8342A;
+  --ok-bg:rgba(37,112,81,.12); --warn-bg:rgba(154,99,16,.13); --bad-bg:rgba(168,52,42,.11);
+  --grid:rgba(11,23,38,.055);
+  --ph:rgba(15,76,156,.13); --ph-ink:#0F4C9C;
+  --shadow:0 1px 2px rgba(11,23,38,.06),0 12px 34px -14px rgba(11,23,38,.30);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#070F19; --stage:#0E1B29; --ink:#E7EDF4; --muted:#93A6BA;
+    --accent:#6BA5F2; --accent-soft:rgba(107,165,242,.14);
+    --line:rgba(231,237,244,.14); --line-strong:rgba(231,237,244,.32);
+    --ok-ink:#5DBE94; --warn-ink:#E2A945; --bad-ink:#EE8574;
+    --ok-bg:rgba(93,190,148,.14); --warn-bg:rgba(226,169,69,.14); --bad-bg:rgba(238,133,116,.13);
+    --grid:rgba(231,237,244,.05);
+    --ph:rgba(107,165,242,.18); --ph-ink:#9CC4F7;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 16px 40px -16px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#070F19; --stage:#0E1B29; --ink:#E7EDF4; --muted:#93A6BA;
+  --accent:#6BA5F2; --accent-soft:rgba(107,165,242,.14);
+  --line:rgba(231,237,244,.14); --line-strong:rgba(231,237,244,.32);
+  --ok-ink:#5DBE94; --warn-ink:#E2A945; --bad-ink:#EE8574;
+  --ok-bg:rgba(93,190,148,.14); --warn-bg:rgba(226,169,69,.14); --bad-bg:rgba(238,133,116,.13);
+  --grid:rgba(231,237,244,.05);
+  --ph:rgba(107,165,242,.18); --ph-ink:#9CC4F7;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 16px 40px -16px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:44px 44px;
+  min-height:100vh; display:flex; flex-direction:column;
+  padding-block:18px; padding-left:16px; padding-right:16px; gap:14px;
+}
+h1,h2,h3{font-family:Archivo,"Helvetica Neue",sans-serif; text-wrap:balance; margin:0; letter-spacing:-.02em}
+p{margin:0}
+.eyebrow{
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.66rem; font-weight:600;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--accent);
+}
+.ph{background:var(--ph); color:var(--ph-ink); border-radius:3px; padding:.05em .38em; font-weight:600; white-space:nowrap}
+/* Un hueco ya rellenado deja de verse como hueco */
+.ph.listo{background:transparent; color:inherit; padding:0; font-weight:inherit}
+.stat.ph.listo{color:var(--accent); font-weight:800}
+body.edit .ph{outline:2px dashed var(--accent); outline-offset:3px; border-radius:3px; cursor:text; min-width:1.5em}
+body.edit .ph:focus{outline:2px solid var(--accent); background:var(--ph)}
+body.edit .slide{cursor:default}
+#editar[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:#fff}
+.ayuda{
+  max-width:1120px; margin-inline:auto; width:100%; background:var(--stage);
+  border:1px solid var(--accent); border-left:3px solid var(--accent); border-radius:5px;
+  padding:13px 16px; font-size:.85rem; line-height:1.6; color:var(--muted);
+}
+.ayuda b{color:var(--ink); font-weight:600}
+.ayuda .faltan{font-family:"IBM Plex Mono",monospace; font-size:.78rem; color:var(--accent); font-weight:600}
+
+/* ---- stage ---- */
+.deck{width:100%; max-width:1120px; margin-inline:auto; flex:1; display:flex; flex-direction:column; gap:12px}
+.stage{
+  position:relative; background:var(--stage); border:1px solid var(--line);
+  border-radius:6px; box-shadow:var(--shadow); overflow:hidden;
+  aspect-ratio:16/9; container-type:inline-size;
+}
+.slide{position:absolute; inset:0; padding:clamp(20px,4.2cqw,54px); display:flex; flex-direction:column; overflow:auto}
+.slide::-webkit-scrollbar{width:6px}
+.slide::-webkit-scrollbar-thumb{background:var(--line-strong); border-radius:3px}
+.num{
+  position:absolute; right:clamp(14px,2.6cqw,28px); bottom:clamp(10px,2cqw,20px);
+  font-family:"IBM Plex Mono",monospace; font-size:.66rem; color:var(--muted); font-variant-numeric:tabular-nums;
+}
+.big{font-size:clamp(1.5rem,4.6cqw,3.1rem); font-weight:800; line-height:1.04}
+.mid{font-size:clamp(1.15rem,2.9cqw,1.95rem); font-weight:700; line-height:1.12}
+.lead{font-size:clamp(.82rem,1.55cqw,1.06rem); line-height:1.55; color:var(--muted); max-width:62ch}
+.lead strong{color:var(--ink); font-weight:600}
+.head{display:flex; flex-direction:column; gap:.5em; margin-bottom:clamp(14px,2.4cqw,26px)}
+
+/* ---- cover ---- */
+.cover{justify-content:center; gap:clamp(16px,2.6cqw,30px)}
+.rose{width:clamp(44px,7cqw,82px); height:clamp(44px,7cqw,82px); color:var(--accent)}
+.cover-name{font-size:clamp(2.6rem,10cqw,7rem); font-weight:800; line-height:.92; letter-spacing:-.045em}
+.tag{font-size:clamp(.9rem,2.1cqw,1.5rem); font-weight:500; color:var(--ink); max-width:24ch; line-height:1.25}
+.crew{display:flex; flex-wrap:wrap; gap:6px 10px; font-family:"IBM Plex Mono",monospace; font-size:.68rem; color:var(--muted)}
+.crew span{border:1px solid var(--line); border-radius:99px; padding:.3em .8em}
+
+/* ---- generic blocks ---- */
+.cols{display:grid; gap:clamp(12px,2.2cqw,22px); flex:1; min-height:0}
+.c2{grid-template-columns:1fr 1fr}
+.c3{grid-template-columns:repeat(3,1fr); align-items:start; align-content:center}
+.panel{border:1px solid var(--line); border-radius:5px; padding:clamp(12px,1.9cqw,20px); display:flex; flex-direction:column; gap:.55em; min-width:0}
+.panel h3{font-size:clamp(.9rem,1.8cqw,1.18rem); font-weight:700}
+.panel p{font-size:clamp(.74rem,1.32cqw,.92rem); line-height:1.5; color:var(--muted)}
+.stat{font-family:Archivo,sans-serif; font-size:clamp(1.6rem,4.4cqw,3rem); font-weight:800; line-height:1; color:var(--accent); font-variant-numeric:tabular-nums}
+.rule{height:1px; background:var(--line); border:0; margin:0}
+
+/* numbered steps — real sequence only */
+.steps{display:flex; flex-direction:column; gap:.9em}
+.step{display:grid; grid-template-columns:auto 1fr; gap:.9em; align-items:start}
+.step b{
+  font-family:"IBM Plex Mono",monospace; font-size:.7rem; color:var(--accent);
+  border:1px solid var(--accent); border-radius:99px; width:1.9em; height:1.9em;
+  display:grid; place-items:center; flex:none;
+}
+.step p{font-size:clamp(.76rem,1.35cqw,.95rem); line-height:1.5; color:var(--muted)}
+.step strong{color:var(--ink)}
+
+/* ---- browser mock ---- */
+.mock{border:1px solid var(--line-strong); border-radius:5px; overflow:hidden; background:var(--stage); display:flex; flex-direction:column; min-height:0}
+.mock-bar{display:flex; align-items:center; gap:8px; padding:7px 10px; border-bottom:1px solid var(--line); background:var(--accent-soft)}
+.dot{width:7px; height:7px; border-radius:50%; background:var(--line-strong); flex:none}
+.url{
+  flex:1; font-family:"IBM Plex Mono",monospace; font-size:.62rem; color:var(--muted);
+  background:var(--stage); border:1px solid var(--line); border-radius:99px; padding:.32em .8em;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.mock-body{padding:clamp(9px,1.4cqw,15px); display:flex; flex-direction:column; gap:.55em; flex:1; min-height:0}
+.fakeline{height:5px; border-radius:99px; background:var(--line); }
+.score{display:flex; align-items:center; gap:.7em; border-radius:4px; padding:.6em .8em; border:1px solid var(--line)}
+.score .lamp{width:13px; height:13px; border-radius:50%; flex:none}
+.score .txt{font-size:clamp(.68rem,1.2cqw,.86rem); font-weight:600; line-height:1.3}
+.score small{display:block; font-weight:400; color:var(--muted); font-size:.88em; margin-top:.15em}
+.s-ok{background:var(--ok-bg); color:var(--ok-ink)} .s-ok .lamp{background:var(--ok-ink)}
+.s-warn{background:var(--warn-bg); color:var(--warn-ink)} .s-warn .lamp{background:var(--warn-ink)}
+.s-bad{background:var(--bad-bg); color:var(--bad-ink)} .s-bad .lamp{background:var(--bad-ink)}
+.checks{display:flex; flex-direction:column; gap:.3em; font-family:"IBM Plex Mono",monospace; font-size:.63rem; color:var(--muted)}
+.checks div{display:flex; gap:.5em; align-items:baseline}
+.checks b{font-weight:600; width:1em; flex:none}
+
+/* ---- bib ---- */
+.mono-url{font-family:"IBM Plex Mono",monospace; font-size:clamp(.8rem,1.9cqw,1.25rem); font-weight:600; color:var(--accent); word-break:break-all; line-height:1.3}
+.bib{font-family:"IBM Plex Mono",monospace; font-size:clamp(.6rem,1.05cqw,.74rem); line-height:1.55; color:var(--muted)}
+.bib li{margin-bottom:.55em; text-indent:-1.4em; padding-left:1.4em; list-style:none}
+.bib b{color:var(--ink); font-weight:600}
+.snip{border-left:2px solid var(--accent); padding:.25em 0 .25em .7em; font-size:clamp(.7rem,1.25cqw,.9rem); line-height:1.45}
+.snip cite{display:block; font-family:"IBM Plex Mono",monospace; font-size:.68em; color:var(--muted); font-style:normal; margin-top:.35em}
+
+/* ---- table ---- */
+.tbl-wrap{overflow-x:auto; flex:1; min-height:0}
+table{border-collapse:collapse; width:100%; font-size:clamp(.68rem,1.2cqw,.88rem)}
+th,td{text-align:left; padding:.62em .7em; border-bottom:1px solid var(--line); vertical-align:top}
+th{font-family:"IBM Plex Mono",monospace; font-size:.62rem; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); font-weight:600; white-space:nowrap}
+td b{font-weight:600}
+tr.us td{background:var(--accent-soft)}
+tr.us td b{color:var(--accent)}
+
+/* ---- controls ---- */
+.bar{display:flex; align-items:center; gap:10px; max-width:1120px; margin-inline:auto; width:100%; flex-wrap:wrap}
+.rail{flex:1; height:2px; background:var(--line); border-radius:2px; overflow:hidden; min-width:80px}
+.rail i{display:block; height:100%; background:var(--accent); transition:width .25s ease}
+button{
+  font-family:"IBM Plex Mono",monospace; font-size:.68rem; font-weight:600; letter-spacing:.06em;
+  background:var(--stage); color:var(--ink); border:1px solid var(--line-strong);
+  border-radius:4px; padding:.5em .85em; cursor:pointer; text-transform:uppercase;
+}
+button:hover{border-color:var(--accent); color:var(--accent)}
+button:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+button[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:#fff}
+.count{font-family:"IBM Plex Mono",monospace; font-size:.68rem; color:var(--muted); font-variant-numeric:tabular-nums}
+.notes{
+  max-width:1120px; margin-inline:auto; width:100%; background:var(--stage);
+  border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:5px;
+  padding:14px 16px; display:flex; flex-direction:column; gap:.5em;
+}
+.notes .who{font-family:"IBM Plex Mono",monospace; font-size:.64rem; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); font-weight:600}
+.notes p{font-size:.85rem; line-height:1.6; color:var(--muted)}
+.notes p strong{color:var(--ink); font-weight:600}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:760px){
+  .stage{aspect-ratio:auto; min-height:76vh}
+  .c2,.c3{grid-template-columns:1fr}
+  .cols{overflow:visible}
+}
+</style>
+</head>
+<body>
+
+<div class="deck">
+  <div class="stage" id="stage">
+
+    <!-- 1 -->
+    <section class="slide cover" data-who="Persona 1 — abre" data-note="<strong>No leas la portada.</strong> Empieza con la pregunta directa al jurado: «¿Cuántos de ustedes, haciendo una tarea, copiaron algo de internet sin saber quién lo escribió?» Espera. Deja que levanten la mano o se rían. Ahí tienes su atención. Recién entonces: «Nosotros somos VeriTech.» Máximo 40 segundos.">
+      <svg class="rose" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+        <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-width="3"/>
+        <path d="M19 33 L28 42 L45 23" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+      <div>
+        <h1 class="cover-name">VeriTech</h1>
+        <p class="tag">Verify Your Sources</p>
+      </div>
+      <hr class="rule">
+      <div class="crew">
+        <span class="ph">Nombre 1</span><span class="ph">Nombre 2</span>
+        <span class="ph">Nombre 3</span><span class="ph">Nombre 4</span>
+        <span class="ph">Colegio · Curso · 2026</span>
+      </div>
+      <div class="num">01</div>
+    </section>
+
+    <!-- 2 -->
+    <section class="slide" data-who="Persona 1 — el problema" data-note="Cuenta una historia real de ustedes, no una abstracción. «La semana pasada hice un trabajo de biología. Busqué en Google, abrí los primeros tres resultados y copié.» Luego la pregunta incómoda: «¿Quién escribió esas páginas? No tengo idea.» El jurado tiene que sentir que esto les pasa a ellos también.">
+      <div class="head">
+        <span class="eyebrow">El problema</span>
+        <h2 class="big">Los estudiantes no eligen fuentes. Eligen los primeros tres resultados.</h2>
+      </div>
+      <div class="cols c3">
+        <div class="panel">
+          <h3>Nadie enseña a mirar la fuente</h3>
+          <p>Se enseña a buscar, no a juzgar. Un blog anónimo y un artículo revisado por pares se ven exactamente igual en una lista de resultados.</p>
+        </div>
+        <div class="panel">
+          <h3>La IA multiplicó el ruido</h3>
+          <p>Páginas generadas en masa, sin autor y sin fecha, escritas para posicionar en buscadores — no para ser ciertas.</p>
+        </div>
+        <div class="panel">
+          <h3>El profesor no puede revisar todo</h3>
+          <p>Treinta trabajos, cada uno con diez enlaces. Verificar uno por uno es imposible, así que casi nunca se verifica.</p>
+        </div>
+      </div>
+      <div class="num">02</div>
+    </section>
+
+    <!-- 3 -->
+    <section class="slide" data-who="Persona 1 — los datos" data-note="ESTA ES LA DIAPOSITIVA QUE GANA O PIERDE. Reemplacen los tres recuadros azules con los resultados de SU PROPIA encuesta. Digan la frase completa: «Encuestamos a N compañeros de nuestro colegio esta semana». Datos propios y locales valen diez veces más que una cifra sacada de internet — y si el jurado pregunta de dónde salieron, tienen la respuesta.">
+      <div class="head">
+        <span class="eyebrow">Lo medimos nosotros</span>
+        <h2 class="mid">Encuestamos a <span class="ph">N</span> compañeros de nuestro colegio.</h2>
+      </div>
+      <div class="cols c3">
+        <div class="panel">
+          <div class="stat ph">00%</div>
+          <p>nunca revisa quién escribió la página que cita.</p>
+        </div>
+        <div class="panel">
+          <div class="stat ph">00 min</div>
+          <p>es lo que tardan, en promedio, armando la bibliografía de un trabajo.</p>
+        </div>
+        <div class="panel">
+          <div class="stat ph">00%</div>
+          <p>usó IA y recibió una fuente que después no pudo encontrar.</p>
+        </div>
+      </div>
+      <p class="lead" style="margin-top:1.2em">Manda el formulario hoy en la noche. Mañana tienes los números — y una respuesta sólida si el jurado pregunta de dónde salieron.</p>
+      <div class="num">03</div>
+    </section>
+
+    <!-- 4 -->
+    <section class="slide" data-who="Persona 2 — toma la palabra" data-note="Diapositiva valiente: dice lo que NO hacen. Desarma de antemano la crítica más obvia del jurado («¿y quién decide qué es verdad?»). Dilo despacio y con seguridad: «Podríamos haber hecho un detector de mentiras. Decidimos no hacerlo, y por eso funciona.»">
+      <div class="head">
+        <span class="eyebrow">Nuestra decisión</span>
+        <h2 class="big">Lo que VeriTech <em>no</em> hace.</h2>
+      </div>
+      <div class="cols c2">
+        <div class="panel" style="border-color:var(--bad-ink)">
+          <h3 style="color:var(--bad-ink)">No decide qué es verdad</h3>
+          <p>Ninguna tecnología del mundo sabe hacerlo de forma confiable. Una marca verde que diga «esto es cierto» crea confianza falsa: el estudiante deja de pensar porque la extensión pensó por él. Eso es peor que no tener nada.</p>
+        </div>
+        <div class="panel" style="border-color:var(--accent)">
+          <h3 style="color:var(--accent)">Sí evalúa de dónde viene</h3>
+          <p>¿Tiene autor con nombre? ¿Tiene fecha? ¿Cita fuentes que se puedan abrir? ¿Es un dominio académico o una granja de contenido? Todo eso sí es verificable — y es exactamente el criterio que un buen profesor enseña.</p>
+        </div>
+      </div>
+      <div class="num">04</div>
+    </section>
+
+    <!-- 5 -->
+    <section class="slide" data-who="Persona 2 — la solución" data-note="Frase clave: «Es una extensión del navegador. Se instala una vez y trabaja sola mientras el alumno hace la tarea — no hay que abrir otra app ni acordarse de usarla.» Menciona que son DOS funciones y que la segunda es la que los alumnos van a amar.">
+      <div class="head">
+        <span class="eyebrow">La solución</span>
+        <h2 class="big">Una extensión del navegador. Dos funciones.</h2>
+        <p class="lead">Se instala una sola vez y trabaja mientras el alumno investiga. No hay una app más que abrir, ni un paso más que recordar.</p>
+      </div>
+      <div class="cols c2">
+        <div class="panel">
+          <span class="eyebrow">Función 1</span>
+          <h3>Semáforo de fuente</h3>
+          <p>Cada página que abre recibe un color y una razón. Verde, amarillo o rojo — y debajo, <strong>por qué</strong>. El color llama la atención; la explicación enseña el criterio.</p>
+        </div>
+        <div class="panel">
+          <span class="eyebrow">Función 2</span>
+          <h3>Bibliografía automática</h3>
+          <p>Cada vez que copia un párrafo, VeriTech guarda de dónde salió. Al terminar, la bibliografía en formato APA ya está escrita.</p>
+        </div>
+      </div>
+      <div class="num">05</div>
+    </section>
+
+    <!-- 6 -->
+    <section class="slide" data-who="Persona 2 — demo 1" data-note="Señala la pantalla con la mano mientras hablas. «Misma búsqueda, tres resultados, tres veredictos.» Lee EN VOZ ALTA los motivos del rojo — «sin autor, sin fecha, sin fuentes» — porque ahí se entiende que no estamos adivinando: son señales concretas y comprobables.">
+      <div class="head">
+        <span class="eyebrow">Función 1 · Semáforo</span>
+        <h2 class="mid">Misma búsqueda. Tres resultados. Tres veredictos.</h2>
+      </div>
+      <div class="cols c3">
+        <div class="mock">
+          <div class="mock-bar"><span class="dot"></span><span class="url">revista-cientifica.edu.co</span></div>
+          <div class="mock-body">
+            <div class="score s-ok"><span class="lamp"></span><span class="txt">Fuente sólida<small>Puntaje 91 / 100</small></span></div>
+            <div class="checks">
+              <div><b>✓</b><span>Autora: Dra. L. Restrepo</span></div>
+              <div><b>✓</b><span>Publicado 04/2026</span></div>
+              <div><b>✓</b><span>31 referencias abiertas</span></div>
+              <div><b>✓</b><span>Dominio universitario</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="mock">
+          <div class="mock-bar"><span class="dot"></span><span class="url">noticiasdiarias-hoy.com</span></div>
+          <div class="mock-body">
+            <div class="score s-warn"><span class="lamp"></span><span class="txt">Revísalo bien<small>Puntaje 54 / 100</small></span></div>
+            <div class="checks">
+              <div><b>✓</b><span>Medio identificable</span></div>
+              <div><b>!</b><span>Sin autor firmado</span></div>
+              <div><b>!</b><span>Publicado 2019 — 7 años</span></div>
+              <div><b>!</b><span>Cita, pero sin enlaces</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="mock">
+          <div class="mock-bar"><span class="dot"></span><span class="url">datoscuriosos24.net/top-10</span></div>
+          <div class="mock-body">
+            <div class="score s-bad"><span class="lamp"></span><span class="txt">No lo cites<small>Puntaje 12 / 100</small></span></div>
+            <div class="checks">
+              <div><b>✕</b><span>Sin autor</span></div>
+              <div><b>✕</b><span>Sin fecha</span></div>
+              <div><b>✕</b><span>Cero fuentes</span></div>
+              <div><b>✕</b><span>Texto con marcas de IA</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="num">06</div>
+    </section>
+
+    <!-- 7 -->
+    <section class="slide" data-who="Persona 2 — demo 2" data-note="Aquí viene el momento en que los alumnos del jurado se enderezan. «Copiaste cuatro párrafos durante la tarde. VeriTech guardó de dónde salió cada uno. Esto es lo que aparece cuando terminas — no lo escribiste tú.» Si hay profesores en el jurado, mírales a ellos al decir la última línea.">
+      <div class="head">
+        <span class="eyebrow">Función 2 · Bibliografía</span>
+        <h2 class="mid">Copiaste durante toda la tarde. La bibliografía ya está escrita.</h2>
+      </div>
+      <div class="cols c2">
+        <div class="panel">
+          <span class="eyebrow">Lo que copiaste</span>
+          <div class="snip">«La fotosíntesis convierte la energía lumínica en energía química almacenada…»<cite>revista-cientifica.edu.co · 14:02</cite></div>
+          <div class="snip">«El ciclo de Calvin ocurre en el estroma del cloroplasto…»<cite>biologia.unal.edu.co · 14:19</cite></div>
+          <div class="snip">«Las plantas C4 desarrollaron una adaptación al clima cálido…»<cite>noticiasdiarias-hoy.com · 14:41</cite></div>
+        </div>
+        <div class="panel">
+          <span class="eyebrow">Lo que VeriTech entrega</span>
+          <ul class="bib">
+            <li>Restrepo, L. (2026). <b>Mecanismos de la fotosíntesis en plantas superiores</b>. Revista Científica, 18(2), 44–61.</li>
+            <li>Universidad Nacional. (2025). <b>El ciclo de Calvin</b>. Departamento de Biología.</li>
+            <li>Noticias Diarias. (2019). <b>Plantas C4 y clima cálido</b>. <span style="color:var(--warn-ink)">⚠ Fuente amarilla — considera reemplazarla.</span></li>
+          </ul>
+          <hr class="rule">
+          <p style="font-size:.8rem">Formato APA, MLA o el que pida el colegio. Y una advertencia si una fuente débil se coló en el trabajo.</p>
+        </div>
+      </div>
+      <div class="num">07</div>
+    </section>
+
+    <!-- 8 -->
+    <section class="slide" data-who="Persona 2 — demo en vivo" data-note="EL MOMENTO MÁS IMPORTANTE DE LOS 10 MINUTOS. Ten el link YA ABIERTO en otra pestaña antes de empezar — nunca busques nada en vivo. Guion de 60 segundos: (1) «Esta página la encontramos en Google» y pegas el texto, (2) pulsas Analizar, (3) LEE EN VOZ ALTA dos de los motivos rojos, (4) pulsas Ejemplo sólido y muestras el contraste verde. Cuando el jurado vea que el número cambia de verdad, ganaste.">
+      <div class="head">
+        <span class="eyebrow">Demostración</span>
+        <h2 class="big">No es una maqueta. Funciona.</h2>
+        <p class="lead">VeriTech está en línea ahora mismo. Cualquiera en esta sala puede abrirla desde su celular y analizar una página mientras hablamos.</p>
+      </div>
+      <div class="panel" style="border-color:var(--accent); background:var(--accent-soft); gap:.3em">
+        <span class="eyebrow">Pruébenla ustedes</span>
+        <p class="mono-url">veritech-aleph.netlify.app</p>
+      </div>
+      <div class="steps" style="margin-top:.9em">
+        <div class="step"><b>1</b><p><strong>Pegamos el texto de una página real</strong> encontrada en Google.</p></div>
+        <div class="step"><b>2</b><p><strong>VeriTech revisa nueve señales</strong> y devuelve un puntaje con sus motivos.</p></div>
+        <div class="step"><b>3</b><p><strong>Comparamos</strong> con una fuente académica. El número cambia delante de ustedes.</p></div>
+      </div>
+      <div class="num">08</div>
+    </section>
+
+    <!-- 9 -->
+    <section class="slide" data-who="Persona 3 — toma la palabra" data-note="Esta diapositiva demuestra madurez y casi ningún otro grupo la va a tener. La frase: «El que usa VeriTech no es el que decide instalarla. Esa tensión es real y la resolvimos a propósito.» Si el jurado hace una pregunta difícil en toda la presentación, probablemente sea sobre esto — y ustedes ya la respondieron.">
+      <div class="head">
+        <span class="eyebrow">Usuario ≠ quien decide</span>
+        <h2 class="mid">El que la usa no es el que decide instalarla.</h2>
+      </div>
+      <div class="cols c2">
+        <div class="panel">
+          <span class="eyebrow">El estudiante — la usa</span>
+          <h3>Quiere terminar antes</h3>
+          <p>La adopta porque le quita de encima la parte más odiosa del trabajo. Si la sintiera como vigilancia, la desinstalaría el primer día y el colegio habría instalado algo que nadie abre.</p>
+        </div>
+        <div class="panel">
+          <span class="eyebrow">El colegio — la aprueba</span>
+          <h3>Quiere que aprendan a investigar</h3>
+          <p>Recibe un informe <strong>del curso, no del alumno</strong>: qué tipo de fuentes se están usando, dónde falla el criterio, qué conviene reforzar en clase.</p>
+        </div>
+      </div>
+      <p class="lead" style="margin-top:1em"><strong>La regla que nos pusimos:</strong> ningún profesor ve el historial de navegación de ningún estudiante. Nunca. Es lo que hace que VeriTech sobreviva al primer mes en vez de convertirse en algo que todos esquivan.</p>
+      <div class="num">09</div>
+    </section>
+
+    <!-- 10 -->
+    <section class="slide" data-who="Persona 3 — el plan" data-note="Aquí demuestran que no es una idea bonita sino algo que empieza el lunes. Enfatiza la fase 1: «No pedimos que el colegio confíe en nosotros. Pedimos un curso y dos semanas, y traemos los números.» Esa frase convierte una propuesta escolar en un proyecto serio. Si el jurado pregunta cuánto cuesta, respondan: todavía no es una empresa, es una herramienta para nuestro colegio.">
+      <div class="head">
+        <span class="eyebrow">Implementación</span>
+        <h2 class="mid">Cómo empieza esto en nuestro colegio.</h2>
+      </div>
+      <div class="steps" style="gap:1.05em">
+        <div class="step"><b>1</b><p><strong>Dos semanas · Un curso piloto — el nuestro.</strong> Medimos la calidad de las fuentes de un trabajo antes de usar VeriTech y después. Ese número es toda la evidencia que necesitamos.</p></div>
+        <div class="step"><b>2</b><p><strong>Mes 1 · Los profesores.</strong> Presentamos los resultados a los docentes de lenguaje y ciencias, que son quienes reciben los trabajos y ven el problema todos los días.</p></div>
+        <div class="step"><b>3</b><p><strong>Mes 2 · Todo el colegio.</strong> Instalación en las salas de cómputo con el área de sistemas y una guía de diez minutos por curso. Nada más que aprender.</p></div>
+        <div class="step"><b>4</b><p><strong>Fin de año · El informe.</strong> Qué fuentes usa el colegio, en qué materias falla más el criterio, y qué mejoró respecto al inicio.</p></div>
+      </div>
+      <p class="lead" style="margin-top:auto"><strong>No pedimos presupuesto.</strong> Pedimos un curso y dos semanas para traer los números.</p>
+      <div class="num">10</div>
+    </section>
+
+    <!-- 11 -->
+    <section class="slide" data-who="Persona 3 — competencia" data-note="Nombren a los competidores USTEDES primero. Si el jurado los saca antes que ustedes, parecen mal preparados; si los sacan ustedes, parecen expertos. Cierren con: «Existen piezas sueltas. Ninguna está en español, dentro del navegador, y pensada para un trabajo de colegio.»">
+      <div class="head">
+        <span class="eyebrow">Competencia</span>
+        <h2 class="mid">Existen piezas sueltas. Nadie armó esta.</h2>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Quién</th><th>Qué hace</th><th>Por qué no nos tapa</th></tr></thead>
+          <tbody>
+            <tr><td><b>NewsGuard</b></td><td>Califica la confiabilidad de medios de noticias</td><td>Noticias, no trabajos escolares. En inglés. Pensado para empresas y periodistas.</td></tr>
+            <tr><td><b>Ground News</b></td><td>Compara cómo distintos medios cubren un mismo tema</td><td>Sirve para política, no para una tarea de biología.</td></tr>
+            <tr><td><b>Zotero</b></td><td>Administra citas y bibliografías</td><td>Potente pero complejo; está hecho para universitarios. Y no juzga la calidad de la fuente.</td></tr>
+            <tr><td><b>ChatGPT</b></td><td>Responde cualquier cosa</td><td>Es parte del problema: inventa fuentes que no existen.</td></tr>
+            <tr class="us"><td><b>VeriTech</b></td><td>Evalúa la fuente, comprueba la cita y arma la bibliografía</td><td><b>En español, para trabajos de colegio — y ya funciona.</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="num">11</div>
+    </section>
+
+    <!-- 12 -->
+    <section class="slide" data-who="Persona 4 — toma la palabra" data-note="Adelántense a la pregunta más incómoda: «Es una extensión que ve lo que navegan menores de edad.» Respóndanla antes de que la hagan. Si el jurado ve que ya pensaron en esto, el proyecto pasa de idea escolar a propuesta seria.">
+      <div class="head">
+        <span class="eyebrow">La pregunta difícil</span>
+        <h2 class="mid">Es software instalado en el computador de un menor de edad.</h2>
+        <p class="lead">Lo pensamos antes de que nos lo preguntaran. Estas son las reglas que no negociamos:</p>
+      </div>
+      <div class="cols c3">
+        <div class="panel"><h3>Solo en modo tarea</h3><p>El alumno activa VeriTech cuando empieza a trabajar y la apaga al terminar. Fuera de ese modo no registra nada.</p></div>
+        <div class="panel"><h3>Datos agregados</h3><p>El colegio ve estadísticas del curso completo. Jamás el historial de un alumno con nombre y apellido.</p></div>
+        <div class="panel"><h3>El alumno borra</h3><p>Puede vaciar todo lo guardado en cualquier momento, desde un solo botón, sin pedirle permiso a nadie.</p></div>
+      </div>
+      <div class="num">12</div>
+    </section>
+
+    <!-- 13 -->
+    <section class="slide cover" data-who="Persona 4 — cierre" data-note="Baja el ritmo. Las últimas dos frases dichas despacio valen más que toda la diapositiva. Termina exactamente con: «No queremos que nuestros compañeros dejen de equivocarse. Queremos que sepan cuándo están a punto de hacerlo.» Y para. No agregues «eso sería todo» ni «gracias por su atención» — arruina el cierre. Solo para.">
+      <span class="eyebrow">Cierre</span>
+      <h2 class="big" style="max-width:19ch">Verificar no es desconfiar de todo. Es saber en qué apoyarte.</h2>
+      <hr class="rule">
+      <p class="lead" style="font-size:clamp(.9rem,1.9cqw,1.2rem)">No queremos que nuestros compañeros dejen de equivocarse.<br><strong>Queremos que sepan cuándo están a punto de hacerlo.</strong></p>
+      <div class="crew" style="margin-top:auto"><span class="ph">Nombre 1</span><span class="ph">Nombre 2</span><span class="ph">Nombre 3</span><span class="ph">Nombre 4</span></div>
+      <div class="num">13</div>
+    </section>
+
+  </div>
+
+  <div class="bar">
+    <button id="prev" type="button">← Atrás</button>
+    <button id="next" type="button">Siguiente →</button>
+    <span class="count"><span id="cur">1</span>/<span id="tot">13</span></span>
+    <span class="rail"><i id="fill"></i></span>
+    <button id="editar" type="button" aria-pressed="false">Editar (E)</button>
+    <button id="bajar" type="button" hidden>Descargar con mis cambios</button>
+    <button id="full" type="button">Pantalla completa (F)</button>
+    <button id="toggle" type="button" aria-pressed="false">Notas (N)</button>
+  </div>
+  <div class="ayuda" id="ayuda" hidden>
+    <b>Modo edición.</b> Haz clic sobre cualquier recuadro azul y escribe encima: los nombres, el colegio y los tres datos de la encuesta.
+    Los nombres se copian solos a la diapositiva final. Cuando termines, pulsa <b>Descargar con mis cambios</b> y manda ese archivo al grupo.
+    <span class="faltan" id="faltan"></span>
+  </div>
+  <div class="notes" id="notes" hidden>
+    <span class="who" id="who"></span>
+    <p id="note"></p>
+  </div>
+</div>
+
+<script>
+(function(){
+  var slides=[].slice.call(document.querySelectorAll('.slide'));
+  var i=0, notesOn=false;
+  var elNotes=document.getElementById('notes'), elWho=document.getElementById('who'),
+      elNote=document.getElementById('note'), elCur=document.getElementById('cur'),
+      elFill=document.getElementById('fill'), elTog=document.getElementById('toggle');
+  document.getElementById('tot').textContent=slides.length;
+
+  function render(){
+    slides.forEach(function(s,n){ s.hidden = n!==i; });
+    elCur.textContent=i+1;
+    elFill.style.width=((i+1)/slides.length*100)+'%';
+    elWho.textContent=slides[i].dataset.who||'';
+    elNote.innerHTML=slides[i].dataset.note||'';
+    elNotes.hidden=!notesOn;
+    if(window.claude&&window.claude.hot&&window.claude.hot.snapshot){window.claude.hot.snapshot({i:i,notesOn:notesOn});}
+  }
+  function go(d){ i=Math.min(slides.length-1,Math.max(0,i+d)); render(); }
+
+  document.getElementById('prev').onclick=function(){go(-1);};
+  document.getElementById('next').onclick=function(){go(1);};
+  elTog.onclick=function(){ notesOn=!notesOn; elTog.setAttribute('aria-pressed',notesOn); render(); };
+
+  document.getElementById('full').onclick=function(){
+    try{
+      if(document.fullscreenElement){document.exitFullscreen();}
+      else if(document.documentElement.requestFullscreen){document.documentElement.requestFullscreen();}
+    }catch(err){}
+  };
+
+  document.addEventListener('keydown',function(e){
+    // Mientras se escribe dentro de un hueco, el teclado es para escribir.
+    if(document.activeElement&&document.activeElement.isContentEditable){
+      if(e.key==='Enter'){e.preventDefault();document.activeElement.blur();}
+      if(e.key==='Escape'){document.activeElement.blur();}
+      return;
+    }
+    if(e.key==='e'||e.key==='E'){e.preventDefault();document.getElementById('editar').click();return;}
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();go(1);}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(-1);}
+    else if(e.key==='n'||e.key==='N'){elTog.click();}
+    else if(e.key==='f'||e.key==='F'){document.getElementById('full').click();}
+    else if(e.key==='Home'){i=0;render();}
+    else if(e.key==='End'){i=slides.length-1;render();}
+  });
+
+  /* ---------------- modo edición ---------------- */
+  var phs=[].slice.call(document.querySelectorAll('.ph'));
+  var original=phs.map(function(el){return el.textContent;});
+  var elEd=document.getElementById('editar'), elBajar=document.getElementById('bajar'),
+      elAyuda=document.getElementById('ayuda'), elFaltan=document.getElementById('faltan');
+  var editando=false, LS='veritech.pitch.campos';
+
+  function esNombre(t){return /^Nombre \d$/.test(t);}
+  function marcar(){
+    var faltan=0;
+    phs.forEach(function(el,n){
+      var cambiado=el.textContent.trim()!==original[n]&&el.textContent.trim()!=='';
+      el.classList.toggle('listo',cambiado);
+      if(!cambiado)faltan++;
+    });
+    elFaltan.textContent=faltan?('Faltan '+faltan+(faltan===1?' hueco por llenar':' huecos por llenar')):'✓ No falta ninguno';
+    return faltan;
+  }
+  function guardar(){
+    try{localStorage.setItem(LS,JSON.stringify(phs.map(function(el){return el.textContent;})));}catch(e){}
+  }
+  function cargar(){
+    try{
+      var v=JSON.parse(localStorage.getItem(LS)||'null');
+      if(v&&v.length===phs.length)phs.forEach(function(el,n){el.textContent=v[n];});
+    }catch(e){}
+    marcar();
+  }
+
+  phs.forEach(function(el,n){
+    el.addEventListener('input',function(){
+      // Los nombres se repiten en la portada y en el cierre: se copian solos.
+      if(esNombre(original[n])){
+        phs.forEach(function(otro,m){
+          if(m!==n&&original[m]===original[n])otro.textContent=el.textContent;
+        });
+      }
+      marcar();
+    });
+    el.addEventListener('blur',function(){
+      var t=el.textContent.replace(/\s+/g,' ').trim();
+      el.textContent=t||original[n];
+      if(esNombre(original[n])){
+        phs.forEach(function(otro,m){ if(m!==n&&original[m]===original[n])otro.textContent=el.textContent; });
+      }
+      marcar(); guardar();
+    });
+    el.addEventListener('paste',function(e){
+      e.preventDefault();
+      var t=(e.clipboardData||window.clipboardData).getData('text').replace(/\s+/g,' ').trim();
+      document.execCommand('insertText',false,t);
+    });
+  });
+
+  elEd.onclick=function(){
+    editando=!editando;
+    document.body.classList.toggle('edit',editando);
+    elEd.setAttribute('aria-pressed',editando);
+    elBajar.hidden=!editando;
+    elAyuda.hidden=!editando;
+    phs.forEach(function(el){
+      if(editando)el.setAttribute('contenteditable','true');
+      else el.removeAttribute('contenteditable');
+    });
+    if(editando){marcar();
+      var v=phs.filter(function(el){return !el.closest('.slide').hidden;})[0];
+      if(v)v.focus();
+    }
+  };
+
+  elBajar.onclick=function(){
+    var eraEd=editando;
+    // Se descarga la presentación limpia, con los textos ya escritos dentro.
+    document.body.classList.remove('edit');
+    phs.forEach(function(el){el.removeAttribute('contenteditable');});
+    elBajar.hidden=true; elAyuda.hidden=true; elEd.setAttribute('aria-pressed','false');
+    var html='<!doctype html>\n'+document.documentElement.outerHTML;
+    if(eraEd){
+      document.body.classList.add('edit');
+      phs.forEach(function(el){el.setAttribute('contenteditable','true');});
+      elBajar.hidden=false; elAyuda.hidden=false; elEd.setAttribute('aria-pressed','true');
+    }
+    /* Un archivo local o el sitio publicado descargan con un enlace normal;
+       dentro del visor de artefactos hay que pedírselo a la plataforma. */
+    function porEnlace(){
+      try{
+        var a=document.createElement('a');
+        a.href=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'}));
+        a.download='presentacion-veritech.html';
+        document.body.appendChild(a); a.click();
+        setTimeout(function(){URL.revokeObjectURL(a.href); a.remove();},1000);
+        return true;
+      }catch(err){return false;}
+    }
+    if(window.claude&&window.claude.use){
+      window.claude.use('downloads').then(function(d){
+        if(!d){porEnlace();return;}
+        return d.save({filename:'presentacion-veritech.html',data:html}).catch(function(){});
+      }).catch(function(){porEnlace();});
+    } else porEnlace();
+  };
+
+  cargar();
+
+  function start(state){
+    if(state&&typeof state.i==='number'){i=state.i; notesOn=!!state.notesOn; elTog.setAttribute('aria-pressed',notesOn);}
+    render();
+  }
+  if(window.claude&&window.claude.hot&&window.claude.hot.ready){window.claude.hot.ready(start);}
+  else{start((window.claude&&window.claude.hot&&window.claude.hot.data)||{});}
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,12 @@
+# Cabeceras de seguridad que Netlify aplica a todas las páginas.
+#
+# La política de contenido (CSP) va en modo "solo informe": no bloquea nada,
+# solo avisa en la consola del navegador. Tras publicar, abre la web con la
+# consola abierta; si no aparece ningún aviso de CSP, cambia
+# "Content-Security-Policy-Report-Only" por "Content-Security-Policy".
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'

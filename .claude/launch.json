@@ -1,0 +1,2 @@
+{ "version": "0.0.1", "configurations": [
+  { "name": "veritech", "runtimeExecutable": "python3", "runtimeArgs": ["-m","http.server","8830","--directory","/Users/usuario/Hackaton/veritech-sitio"], "port": 8830 } ] }
