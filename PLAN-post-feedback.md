@@ -13,6 +13,8 @@
 
 Para descargar los datos: en Netlify, entra a **Forms**, elige el formulario y pulsa **Download as CSV**.
 
+**Para leerlos sin hacer cuentas:** abre `/analisis-prueba.html` en el sitio publicado y carga ahí los tres CSV. La página calcula todo lo de la sección 2, marca qué criterios se cumplen y copia un resumen en texto. Los archivos se leen en tu navegador y no se suben a ningún lado.
+
 ## 2. Cómo leer los resultados (la semana después del cierre)
 
 **Calibración (M10).** En el CSV de `calibracion`, el porcentaje de filas con `coincide = si` es el acuerdo entre el semáforo y los docentes.
