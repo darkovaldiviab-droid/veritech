@@ -78,21 +78,30 @@ function fuenteCompleta(){
   return null;
 }
 function analizar(){pedirFuente();renderSource();}
+/* En un fragmento sin autor o sin año, el campo se resalta y explica qué escribir */
+function marcarFaltantes(r){
+  var frag=!!(r&&r.fragmento);
+  [["autor",frag&&!r.author],["anio",frag&&r.year==null]].forEach(function(par){
+    var el=$(par[0]), falta=par[1]&&!el.value.trim();
+    el.classList.toggle("falta",falta); $(par[0]+"-aviso").hidden=!falta;
+  });
+}
 function renderSource(){
   var url=$("u").value.trim(), text=$("t").value;
   var cargando=fuenteURL&&fuenteURL.estado==="cargando"&&fuenteURL.url===url;
   var fuente=fuenteCompleta();
-  $("frag").disabled=!!fuente;
+  $("frag").disabled=!!fuente; $("frag-no").hidden=!fuente;
   if(!text.trim()&&!fuente){
     $("verdict").innerHTML='<div class="empty">'+(cargando?"Leyendo la página completa…":
       "Escribe la dirección de la página, pega su texto o sube un archivo, y pulsa Analizar.")+'</div>';
-    $("checks").innerHTML=""; $("frag-sug").hidden=true; last=null; return;
+    $("checks").innerHTML=""; $("frag-sug").hidden=true; last=null; marcarFaltantes(null); return;
   }
   var r=analyzeSource(url,text,{
     textoCompleto:fuente&&fuente.texto, autorFuente:fuente&&fuente.autor, anioFuente:fuente&&fuente.anio, enlaces:fuente&&fuente.enlaces,
     fragmento:$("frag").checked, autor:manual($("autor")), anio:manual($("anio"))});
   last=r; last.url=url; last.text=text; last.full=fuente&&fuente.texto; last.titulo=fuente&&fuente.titulo;
   autollenar($("autor"),r.author); autollenar($("anio"),r.year);
+  marcarFaltantes(r);
   $("frag-sug").hidden=!!fuente||r.fragmento||r.words>=400;
   var t=TITLES[r.level];
   var cuerpo=r.incompleto?"Es un fragmento: para un veredicto final, escribe arriba el autor y el año (búscalos en la portada o en la página), o la dirección de la página.":
@@ -256,7 +265,10 @@ $("clr").addEventListener("click",function(){
   renderSource();
 });
 ["autor","anio"].forEach(function(id){
-  $(id).addEventListener("input",function(){delete this.dataset.auto;});
+  $(id).addEventListener("input",function(){
+    delete this.dataset.auto;
+    if(this.value.trim()){this.classList.remove("falta");$(id+"-aviso").hidden=true;}
+  });
   $(id).addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();renderSource();}});
 });
 $("frag").addEventListener("change",function(){if(last)renderSource();});

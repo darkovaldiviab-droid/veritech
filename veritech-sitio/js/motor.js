@@ -3,7 +3,7 @@
    La prueba veritech-app/test/paridad.test.js lee el bloque MOTORES…RENDER de este archivo. */
 var YEAR=new Date().getFullYear();
 /* Cambiar al modificar reglas o pesos: la calibración guarda con qué versión se calculó cada puntaje. */
-var MOTOR_VERSION="sitio-1.2";
+var MOTOR_VERSION="sitio-1.3";
 
 /* ==================== MOTORES ==================== */
 var FILLER=["en el mundo actual","en la era digital","es importante destacar","es importante mencionar",
@@ -45,6 +45,41 @@ function findYear(text){
   }
   return best;
 }
+/* Profundidad = cuánta sustancia hay, no cuántas palabras.
+   Se cuentan, por cada 300 palabras:
+   - datos concretos: cifras con unidad o %, montos, fechas completas;
+   - atribuciones: «según», «dijo», «afirmó»…, y citas textuales de 5 palabras o más;
+   - referencias: enlaces, (AAAA), [n], et al.
+   y se restan las frases de relleno (FILLER), que cuentan doble.
+   Es una densidad: se calcula igual para 100 que para 3000 palabras, así que la
+   extensión no favorece ni castiga a ningún tipo de fuente (noticia corta o artículo largo).
+   Umbrales (sustancia neta por 300 palabras):
+   - menos de 60 palabras: no hay texto suficiente para medir (amarillo, 0 puntos: neutral);
+   - 5 o más: verde, +6;
+   - 2 o más: amarillo, 0;
+   - menos de 2: rojo, −6. */
+var UNIDADES="%|por ciento|km|kg|g|mg|m|cm|mm|m2|m²|km2|km²|ha|t|toneladas|litros|l|ml|°c|grados|años|meses|días|horas|minutos|personas|habitantes|casos|muertes|pacientes|estudiantes|alumnos|niños|hogares|empresas|especies|millones|mil|billones|soles|dólares|euros|puntos|veces";
+var RE_DATO=new RegExp("(?:(?:s\\/|us\\$|\\$|€)\\s?\\d[\\d.,]*|\\b\\d[\\d.,]*\\s?(?:"+UNIDADES+")(?![a-záéíóúñ]))","gi");
+var RE_FECHA=new RegExp("\\b\\d{1,2}\\s+de\\s+(?:"+MONTHS.join("|")+")(?:\\s+(?:de\\s+)?\\d{4})?","gi");
+var RE_ATRIB=/(?<![a-záéíóúñ])(?:según|de acuerdo con|de acuerdo a|dijo|dice|afirmó|afirma|explicó|explica|señaló|señala|indicó|indica|declaró|informó|informa|precisó|sostuvo|advirtió|aseguró|detalló|reportó|publicó)(?![a-záéíóúñ])/gi;
+var RE_CITA=/[«“"]([^»”"]{20,400})[»”"]/g;
+function profundidad(text,words,enlacesExtra){
+  var low=text.toLowerCase();
+  if(words<60)return {status:"warn",pts:0,detail:"Demasiado breve para juzgar su profundidad ("+words+" palabras)."};
+  var datos=(low.match(RE_DATO)||[]).length+(low.match(RE_FECHA)||[]).length;
+  var citas=0,m; RE_CITA.lastIndex=0;
+  while((m=RE_CITA.exec(text))){if(m[1].trim().split(/\s+/).length>=5)citas++;}
+  var atrib=(low.match(RE_ATRIB)||[]).length+citas;
+  var refs=(text.match(/https?:\/\//g)||[]).length+(text.match(/\([12]\d{3}\)/g)||[]).length+
+    (text.match(/et al\.?/gi)||[]).length+(text.match(/\[\d{1,3}\]/g)||[]).length+enlacesExtra;
+  var relleno=countPhrases(low,FILLER).n;
+  var por300=300/words;
+  var neta=(datos+atrib+refs-2*relleno)*por300;
+  var cuenta=datos+" dato"+(datos===1?"":"s")+" concreto"+(datos===1?"":"s")+", "+atrib+" atribucion"+(atrib===1?"":"es")+" y "+refs+" referencia"+(refs===1?"":"s")+" en "+words+" palabras";
+  if(neta>=5)return {status:"ok",pts:6,detail:"Aporta datos concretos y dice de dónde salen ("+cuenta+")."};
+  if(neta>=2)return {status:"warn",pts:0,detail:"Algo de sustancia, pero pocos datos o fuentes para lo que dice ("+cuenta+")."};
+  return {status:"bad",pts:-6,detail:"Poca sustancia: casi no da datos concretos ni dice de dónde salen ("+cuenta+")."};
+}
 /* opts (opcional): {textoCompleto, autorFuente, anioFuente, enlaces, fragmento, autor, anio}.
    textoCompleto: la fuente entera (la página leída desde su dirección, o el PDF subido).
      Si está, se evalúa la fuente entera y no el párrafo pegado, que es solo lo que se va a citar.
@@ -53,7 +88,7 @@ function findYear(text){
    fragmento: no hay fuente completa y el alumno pegó o subió solo la parte que va a usar.
    autor / anio: escritos a mano por el alumno; mandan sobre todo lo demás.
    Sin opts el resultado es el mismo que en sitio-1.0. */
-var FALTA_EN_FRAGMENTO="No aparece en el fragmento: búscalo en la portada o en la página y escríbelo arriba.";
+var FALTA_EN_FRAGMENTO="No aparece en el fragmento. Escribe arriba el autor del texto original (o el año), que suele estar en la portada o bajo el título.";
 function analyzeSource(url,text,opts){
   opts=opts||{};
   var conCompleto=!!opts.textoCompleto;
@@ -138,12 +173,9 @@ function analyzeSource(url,text,opts){
   else if(frag)add("Precisión","warn","En este fragmento no atribuye la información a nadie. Mira si el resto del documento lo hace.",0);
   else add("Precisión","bad","Nunca dice de dónde viene la información. Todo suena a verdad revelada.",-6);
 
-  /* 9 profundidad (no se evalúa en un fragmento: que sea corto es lo esperable) */
+  /* 9 profundidad: sustancia, no extensión (ver profundidad() más abajo) */
   if(frag)add("Profundidad","na","Es un fragmento: la extensión no se evalúa.",0);
-  else if(words<120)add("Profundidad","bad","Solo "+words+" palabras. Demasiado breve para tratar el tema en serio.",-8);
-  else if(words<400)add("Profundidad","warn",words+" palabras. Sirve para una idea general, no para un trabajo a fondo.",0);
-  else if(words<1200)add("Profundidad","ok",words+" palabras. Extensión suficiente para desarrollar el tema.",5);
-  else add("Profundidad","ok",words+" palabras. Tratamiento extenso del tema.",8);
+  else{var pr=profundidad(text,words,parseInt(opts.enlaces,10)||0);add("Profundidad",pr.status,pr.detail,pr.pts);}
 
   score=Math.max(0,Math.min(100,Math.round(score)));
   /* Un fragmento sin autor o sin fecha no puede salir en verde: el modo fragmento

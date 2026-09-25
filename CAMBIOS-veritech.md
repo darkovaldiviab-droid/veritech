@@ -124,3 +124,29 @@ bash herramientas/empaquetar.sh
 cd dist && npx netlify-cli deploy --dir . --functions netlify/functions --prod
 ```
 (la primera vez pide iniciar sesión en Netlify y elegir el sitio).
+
+# VeriTech — cambios del 24/09/2026 (autor del fragmento, casilla visible y profundidad)
+
+## Cambiado
+- **Autor del texto original.** El campo se llama ahora «Autor del texto original» y explica que es quien escribió la fuente (persona o institución), no el alumno ni el nombre de la web. Si el texto es un fragmento y falta el autor o el año, el campo se resalta en amarillo con un mensaje, que desaparece al escribirlo.
+- **Casilla «fragmento» visible.** Ahora es una tarjeta de al menos 56 px de alto, toda clicable, con casilla de 22 px y la pregunta «¿Es solo una parte de un texto más largo?». Cambia de color al marcarla. Si ya hay fuente completa, aparece atenuada con el aviso «No hace falta».
+- **Profundidad (motor `sitio-1.3`): mide sustancia, no extensión, y no favorece ni castiga a ningún tipo de fuente.**
+  - Qué se cuenta, por cada 300 palabras:
+    - datos concretos: cifras con unidad o %, montos, fechas completas;
+    - atribuciones: «según», «dijo», «afirmó»… y citas textuales;
+    - referencias.
+    - Se restan las frases de relleno.
+  - Es una densidad: se calcula igual para 100 que para 3000 palabras.
+  - Umbrales:
+    - 5 o más: verde, +6;
+    - 2 o más: amarillo, 0;
+    - menos de 2: rojo, −6.
+    - Con menos de 60 palabras no hay texto suficiente para medir: queda neutral (amarillo, 0 puntos).
+  - Antes, un texto largo salía verde solo por ser largo (+5/+8) y uno de menos de 120 palabras, rojo (−8).
+  - Comprobado:
+    - el mismo texto repetido 1, 3 u 8 veces da siempre el mismo color;
+    - una noticia de 220 palabras con datos y fuentes sale verde;
+    - 1440 palabras de relleno salen rojo;
+    - los artículos reales de BBC Mundo y SciELO salen verde.
+  - **Las calibraciones hechas con `sitio-1.2` o anteriores no se comparan directamente con las de `sitio-1.3`.** El campo `version_motor` de cada envío dice con qué motor se calculó.
+- **`veritech-app`:** el motor (`motor/motor.js`) tiene la misma señal de profundidad, y su copia en `extension/motor.js` se actualizó con `cp`, como indica `extension/LEEME.md`. En `test/bordes.test.js`, la prueba «2000 palabras: profundidad en verde» se reemplazó por cuatro pruebas de neutralidad (148/148 en verde).

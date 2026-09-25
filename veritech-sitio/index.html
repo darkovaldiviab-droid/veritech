@@ -149,10 +149,26 @@ input::placeholder,textarea::placeholder{color:var(--muted); opacity:.65}
 .progreso{font-size:.78rem; color:var(--accent); font-weight:500}
 .progreso.error{color:var(--bad)}
 .paginas{display:flex; flex-direction:column; gap:8px; font-size:.78rem}
-.paginas label,.meta-campos label{flex:1 1 120px; min-width:0}
-.check{flex-direction:row; align-items:flex-start; gap:.6em; font-size:.82rem; color:var(--ink); font-weight:500; cursor:pointer}
-.check input{width:auto; margin:.2em 0 0; accent-color:var(--accent); flex:none}
-.check:has(input:disabled){opacity:.55; cursor:default}
+.paginas label{flex:1 1 120px; min-width:0}
+.meta-campos .campo-autor{flex:2 1 220px; min-width:0}
+.meta-campos .campo-anio{flex:1 1 120px; min-width:0}
+.campo-ayuda{font-weight:400; font-size:.72rem; line-height:1.4}
+.campo-aviso{font-weight:600; font-size:.74rem; line-height:1.4; color:var(--warn)}
+input.falta{border:1.5px solid var(--warn); background:var(--warn-bg)}
+
+/* casilla «fragmento»: tarjeta grande, toda clicable */
+.frag-tarjeta{flex-direction:row; align-items:flex-start; gap:12px; min-height:56px; padding:13px 14px;
+  border:1.5px solid var(--line-strong); border-radius:7px; background:var(--sunk); color:var(--ink); cursor:pointer}
+.frag-tarjeta:hover{border-color:var(--accent)}
+.frag-tarjeta input{width:22px; height:22px; margin:1px 0 0; padding:0; accent-color:var(--accent); flex:none; cursor:pointer}
+.frag-tarjeta:focus-within{outline:2px solid var(--accent); outline-offset:2px}
+.frag-tarjeta:has(input:checked){border-color:var(--accent); background:var(--accent-soft)}
+.frag-tarjeta:has(input:disabled){opacity:.55; cursor:default}
+.frag-tarjeta:has(input:disabled) input{cursor:default}
+.frag-texto{display:flex; flex-direction:column; gap:.25em; min-width:0}
+.frag-texto b{font-size:.93rem; font-weight:600; line-height:1.3}
+.frag-texto span{font-size:.76rem; font-weight:400; color:var(--muted); line-height:1.45}
+.frag-texto .frag-no{color:var(--ink); font-weight:500}
 .sugerencia{color:var(--warn)}
 .chk b{font-size:.82rem; font-weight:600; display:block}
 .chk span{font-size:.765rem; color:var(--muted); line-height:1.45; display:block; margin-top:.1em; overflow-wrap:anywhere}
@@ -270,18 +286,25 @@ footer .legal a:hover{color:var(--accent)}
           <textarea id="t" spellcheck="false" placeholder="Pega aquí el párrafo que vas a citar, o todo el texto de la página…"></textarea>
         </label>
 
-        <label class="check" for="frag">
-          <input id="frag" type="checkbox">
-          <span>Es un fragmento de una fuente más larga <span class="hint">(solo la parte que vas a usar)</span></span>
+        <label class="frag-tarjeta" for="frag">
+          <input id="frag" type="checkbox" aria-describedby="frag-ayuda">
+          <span class="frag-texto">
+            <b>¿Es solo una parte de un texto más largo?</b>
+            <span id="frag-ayuda">Márcalo si pegaste o subiste solo el párrafo o la página que vas a citar. Así no te penaliza por la extensión.</span>
+            <span class="frag-no" id="frag-no" hidden>No hace falta: se evaluó la fuente completa.</span>
+          </span>
         </label>
-        <p class="hint sugerencia" id="frag-sug" hidden>Es un texto corto. Si es solo una parte de un documento más largo, marca «fragmento»: así no te penaliza por la extensión.</p>
+        <p class="hint sugerencia" id="frag-sug" hidden>Es un texto corto. Si es solo una parte de un texto más largo, marca la casilla de arriba y escribe el autor y el año del texto original.</p>
 
         <div class="row meta-campos">
-          <label for="autor"><span>Autor <span style="font-weight:400">(opcional)</span></span>
-            <input id="autor" type="text" autocomplete="off" placeholder="Quién firma">
+          <label for="autor" class="campo-autor"><span>Autor del texto original</span>
+            <input id="autor" type="text" autocomplete="off" placeholder="Ej. Ana Torres o Ministerio de Salud" aria-describedby="autor-ayuda autor-aviso">
+            <span class="campo-ayuda" id="autor-ayuda">Quien escribió la fuente (persona o institución), no tú ni el nombre de la web. Suele estar en la portada, bajo el título o al final.</span>
+            <span class="campo-aviso" id="autor-aviso" hidden>Es un fragmento: escribe aquí el autor del texto original para poder evaluarlo.</span>
           </label>
-          <label for="anio"><span>Año <span style="font-weight:400">(opcional)</span></span>
-            <input id="anio" type="number" inputmode="numeric" min="1900" placeholder="Ej. 2024">
+          <label for="anio" class="campo-anio"><span>Año de publicación</span>
+            <input id="anio" type="number" inputmode="numeric" min="1900" placeholder="Ej. 2024" aria-describedby="anio-aviso">
+            <span class="campo-aviso" id="anio-aviso" hidden>Escribe el año en que se publicó el texto original.</span>
           </label>
         </div>
 

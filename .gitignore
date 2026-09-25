@@ -10,3 +10,6 @@ VeriTech-resultados-ULTIMO.xlsx
 VeriTech-resultados-2*.xlsx
 .estado-resultados.json
 herramientas/__pycache__/
+
+# Estado local de la CLI de Netlify
+.netlify/
