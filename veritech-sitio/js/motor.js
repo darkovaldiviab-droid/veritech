@@ -3,7 +3,7 @@
    La prueba veritech-app/test/paridad.test.js lee el bloque MOTORES…RENDER de este archivo. */
 var YEAR=new Date().getFullYear();
 /* Cambiar al modificar reglas o pesos: la calibración guarda con qué versión se calculó cada puntaje. */
-var MOTOR_VERSION="sitio-1.3";
+var MOTOR_VERSION="sitio-1.4";
 
 /* ==================== MOTORES ==================== */
 var FILLER=["en el mundo actual","en la era digital","es importante destacar","es importante mencionar",
@@ -20,6 +20,21 @@ var NUANCE=["según","de acuerdo con","de acuerdo a","sugiere que","podría","lo
 var MONTHS=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","setiembre","octubre","noviembre","diciembre"];
 
 function countPhrases(low,list){var n=0,found=[];for(var i=0;i<list.length;i++){if(low.indexOf(list[i])>=0){n++;found.push(list[i]);}}return{n:n,found:found};}
+
+/* Densidad: veces por cada 300 palabras. El puntaje depende del contenido, no de la
+   extensión: 3 referencias en 300 palabras pesan lo mismo que 30 en 3000.
+   Debajo de 60 palabras se divide por 60 (no hay texto suficiente para medir). */
+function densidad(veces,words){return veces*300/Math.max(words,60);}
+/* Como countPhrases, pero cuenta cada aparición (no solo si la frase está) */
+function contarVeces(low,list){
+  var veces=0,found=[];
+  for(var i=0;i<list.length;i++){
+    var k=0,p=low.indexOf(list[i]);
+    while(p>=0){k++;p=low.indexOf(list[i],p+list[i].length);}
+    if(k){veces+=k;found.push(list[i]);}
+  }
+  return {veces:veces,found:found};
+}
 
 function findAuthor(text){
   var N="[A-ZÁÉÍÓÚÑ][A-Za-zÁÉÍÓÚÑáéíóúñ]+";
@@ -54,7 +69,6 @@ function findYear(text){
    Es una densidad: se calcula igual para 100 que para 3000 palabras, así que la
    extensión no favorece ni castiga a ningún tipo de fuente (noticia corta o artículo largo).
    Umbrales (sustancia neta por 300 palabras):
-   - menos de 60 palabras: no hay texto suficiente para medir (amarillo, 0 puntos: neutral);
    - 5 o más: verde, +6;
    - 2 o más: amarillo, 0;
    - menos de 2: rojo, −6. */
@@ -63,17 +77,37 @@ var RE_DATO=new RegExp("(?:(?:s\\/|us\\$|\\$|€)\\s?\\d[\\d.,]*|\\b\\d[\\d.,]*\
 var RE_FECHA=new RegExp("\\b\\d{1,2}\\s+de\\s+(?:"+MONTHS.join("|")+")(?:\\s+(?:de\\s+)?\\d{4})?","gi");
 var RE_ATRIB=/(?<![a-záéíóúñ])(?:según|de acuerdo con|de acuerdo a|dijo|dice|afirmó|afirma|explicó|explica|señaló|señala|indicó|indica|declaró|informó|informa|precisó|sostuvo|advirtió|aseguró|detalló|reportó|publicó)(?![a-záéíóúñ])/gi;
 var RE_CITA=/[«“"]([^»”"]{20,400})[»”"]/g;
+/* Citas textuales de 5 palabras o más */
+function citasTextuales(text){
+  var k=0,m; RE_CITA.lastIndex=0;
+  while((m=RE_CITA.exec(text))){if(m[1].trim().split(/\s+/).length>=5)k++;}
+  return k;
+}
+/* Atribución (señal Precisión): cuántas veces dice de dónde sale lo que afirma.
+   - verbos y expresiones de atribución («según», «dijo», «señala»…) y citas textuales;
+   - citas académicas: (AAAA), [n], et al.;
+   - matices que separan dato de opinión (resto de NUANCE: «podría», «sugiere que», «se estima»…). */
+var NUANCE_MATIZ=NUANCE.filter(function(x){return ["según","de acuerdo con","de acuerdo a","et al"].indexOf(x)<0;});
+function atribucion(text,low){
+  var verbos=low.match(RE_ATRIB)||[], matiz=contarVeces(low,NUANCE_MATIZ);
+  var academicas=(text.match(/\([12]\d{3}\)/g)||[]).length+(text.match(/et al\.?/gi)||[]).length+(text.match(/\[\d{1,3}\]/g)||[]).length;
+  var citas=citasTextuales(text);
+  var found=[];
+  verbos.slice(0,2).forEach(function(v){if(found.indexOf(v)<0)found.push(v);});
+  matiz.found.slice(0,2).forEach(function(v){found.push(v);});
+  if(academicas)found.push("citas como (2019) o [1]");
+  if(citas)found.push("citas textuales");
+  return {veces:verbos.length+matiz.veces+academicas+citas,found:found};
+}
 function profundidad(text,words,enlacesExtra){
   var low=text.toLowerCase();
-  if(words<60)return {status:"warn",pts:0,detail:"Demasiado breve para juzgar su profundidad ("+words+" palabras)."};
+  if(!words)return {status:"warn",pts:0,detail:"No hay texto que evaluar."};
   var datos=(low.match(RE_DATO)||[]).length+(low.match(RE_FECHA)||[]).length;
-  var citas=0,m; RE_CITA.lastIndex=0;
-  while((m=RE_CITA.exec(text))){if(m[1].trim().split(/\s+/).length>=5)citas++;}
-  var atrib=(low.match(RE_ATRIB)||[]).length+citas;
+  var atrib=(low.match(RE_ATRIB)||[]).length+citasTextuales(text);
   var refs=(text.match(/https?:\/\//g)||[]).length+(text.match(/\([12]\d{3}\)/g)||[]).length+
     (text.match(/et al\.?/gi)||[]).length+(text.match(/\[\d{1,3}\]/g)||[]).length+enlacesExtra;
   var relleno=countPhrases(low,FILLER).n;
-  var por300=300/words;
+  var por300=densidad(1,words);
   var neta=(datos+atrib+refs-2*relleno)*por300;
   var cuenta=datos+" dato"+(datos===1?"":"s")+" concreto"+(datos===1?"":"s")+", "+atrib+" atribucion"+(atrib===1?"":"es")+" y "+refs+" referencia"+(refs===1?"":"s")+" en "+words+" palabras";
   if(neta>=5)return {status:"ok",pts:6,detail:"Aporta datos concretos y dice de dónde salen ("+cuenta+")."};
@@ -123,9 +157,10 @@ function analyzeSource(url,text,opts){
   var links=(full.match(/https?:\/\//g)||[]).length+(parseInt(opts.enlaces,10)||0);
   var acad=(full.match(/\([12]\d{3}\)/g)||[]).length+(full.match(/et al\.?/gi)||[]).length+(full.match(/\[\d{1,3}\]/g)||[]).length;
   var refs=links+acad, enDoc=conCompleto?" en la fuente completa":"";
-  if(refs>=8)add("Referencias","ok",refs+" referencias o enlaces"+enDoc+". Puedes ir a comprobar cada afirmación en su origen.",20);
-  else if(refs>=3)add("Referencias","ok",refs+" referencias"+enDoc+". Apoya lo que dice en fuentes rastreables.",12);
-  else if(refs>=1)add("Referencias","warn","Solo "+refs+" referencia"+(refs>1?"s":"")+enDoc+". Casi todo lo afirma sin respaldo.",4);
+  var dRef=densidad(refs,words), cadaRef=refs?Math.round(words/refs):0;
+  if(refs&&dRef>=1.5)add("Referencias","ok",refs+" referencias o enlaces"+enDoc+" (una cada "+cadaRef+" palabras). Puedes ir a comprobar cada afirmación en su origen.",20);
+  else if(refs&&dRef>=0.5)add("Referencias","ok",refs+" referencias"+enDoc+" (una cada "+cadaRef+" palabras). Apoya lo que dice en fuentes rastreables.",12);
+  else if(refs)add("Referencias","warn","Solo "+refs+" referencia"+(refs>1?"s":"")+enDoc+" para "+words+" palabras. Gran parte de lo que afirma no tiene respaldo.",4);
   else if(frag&&!conCompleto)add("Referencias","warn","El fragmento no trae referencias. Revisa si el documento completo tiene bibliografía al final.",0);
   else add("Referencias","bad","Cero referencias"+enDoc+". Todo lo que afirma hay que creerlo porque sí.",-14);
 
@@ -146,16 +181,31 @@ function analyzeSource(url,text,opts){
   } else add("Dominio","warn","No pegaste la dirección. Añádela arriba y el análisis mejora.",0);
 
   /* 5 relleno / IA */
-  var f=countPhrases(low,FILLER);
-  if(f.n>=4)add("Escritura de relleno","bad",f.n+" frases de relleno («"+f.found.slice(0,3).join("», «")+"»…). Así escribe el texto generado en masa para posicionar en buscadores.",-16);
-  else if(f.n>=2)add("Escritura de relleno","warn",f.n+" frases de relleno («"+f.found.join("», «")+"»). Puede ser texto automático o simplemente flojo.",-7);
-  else add("Escritura de relleno","ok","Sin muletillas de relleno. El texto parece escrito por alguien que tenía algo que decir.",6);
+  var f=contarVeces(low,FILLER), dF=densidad(f.veces,words);
+  if(f.veces>=2&&dF>=1.5)add("Escritura de relleno","bad",f.veces+" muletillas de relleno en "+words+" palabras («"+f.found.slice(0,3).join("», «")+"»…). Así escribe el texto generado en masa para posicionar en buscadores.",-16);
+  else if(f.veces>=2&&dF>=0.5)add("Escritura de relleno","warn",f.veces+" muletillas de relleno en "+words+" palabras («"+f.found.slice(0,3).join("», «")+"»). Puede ser texto automático o simplemente flojo.",-7);
+  else add("Escritura de relleno","ok",f.veces?"Casi sin muletillas de relleno ("+f.veces+" en "+words+" palabras).":"Sin muletillas de relleno. El texto parece escrito por alguien que tenía algo que decir.",6);
 
   /* 6 sensacionalismo */
   var c=countPhrases(low,CLICKBAIT);
-  var bangs=(text.match(/!/g)||[]).length;
-  var caps=(text.match(/\b[A-ZÁÉÍÓÚÑ]{4,}\b/g)||[]).length;
-  var sens=c.n+(bangs>=3?1:0)+(caps>=3?1:0);
+  /* Exclamaciones: proporción de frases que terminan en «!» (1 de cada 5 o más).
+     Gritos, solo en líneas con minúsculas (una línea toda en MAYÚSCULAS suele ser un título):
+     tres o más palabras seguidas en mayúsculas («NO VAS A CREER»), o que haya 2 o más
+     palabras distintas en mayúsculas de 5 letras o más y sean el 3 % o más del texto
+     (un nombre propio en mayúsculas, como una empresa, no basta). Las siglas cortas (INEI, PBI,
+     BCRP) y los títulos no cuentan. Todo es presencia o proporción: no depende de la extensión. */
+  var trozos=text.split(/([.!?\n])/), frases=0, exclamativas=0;
+  for(var ti=0;ti<trozos.length;ti+=2){
+    if(/[a-záéíóúñ0-9]/i.test(trozos[ti])){frases++;if(trozos[ti+1]==="!")exclamativas++;}
+  }
+  var rachas=0, mayusLargas=0, mayusDistintas={};
+  text.split("\n").forEach(function(linea){
+    if(!/[a-záéíóúñ]/.test(linea))return;
+    rachas+=(linea.match(/\b[A-ZÁÉÍÓÚÑ]{2,}(?:\s+[A-ZÁÉÍÓÚÑ]+){2,}\b/g)||[]).length;
+    (linea.match(/\b[A-ZÁÉÍÓÚÑ]{5,}\b/g)||[]).forEach(function(w){mayusLargas++;mayusDistintas[w]=1;});
+  });
+  var gritos=rachas>=1||(Object.keys(mayusDistintas).length>=2&&words&&mayusLargas/words>=0.03);
+  var sens=c.n+(exclamativas/(frases||1)>=0.2?1:0)+(gritos?1:0);
   if(sens>=3)add("Sensacionalismo","bad","Lenguaje de carnada: «"+(c.found[0]||"mayúsculas y signos de exclamación")+"». Busca tu clic, no tu comprensión.",-14);
   else if(sens>=1)add("Sensacionalismo","warn","Algo de lenguaje exagerado. Ojo con el tono.",-6);
   else add("Sensacionalismo","ok","Tono sobrio, sin exageraciones ni carnada.",6);
@@ -167,14 +217,14 @@ function analyzeSource(url,text,opts){
   else add("Certezas sin respaldo","ok","No presenta opiniones disfrazadas de hechos indiscutibles.",4);
 
   /* 8 matiz */
-  var n=countPhrases(low,NUANCE);
-  if(n.n>=4)add("Precisión","ok","Atribuye lo que dice («"+n.found.slice(0,3).join("», «")+"»…). Señal de alguien que sabe distinguir dato de opinión.",10);
-  else if(n.n>=2)add("Precisión","warn","Algo de atribución, pero poca.",4);
+  var n=atribucion(text,low), dN=densidad(n.veces,words);
+  if(n.veces>=2&&dN>=1.5)add("Precisión","ok","Atribuye lo que dice («"+n.found.slice(0,3).join("», «")+"»…). Señal de alguien que sabe distinguir dato de opinión.",10);
+  else if(n.veces>=1&&dN>=0.5)add("Precisión","warn","Algo de atribución, pero poca para lo que afirma ("+n.veces+" en "+words+" palabras).",4);
   else if(frag)add("Precisión","warn","En este fragmento no atribuye la información a nadie. Mira si el resto del documento lo hace.",0);
-  else add("Precisión","bad","Nunca dice de dónde viene la información. Todo suena a verdad revelada.",-6);
+  else add("Precisión","bad",n.veces?"Casi nunca dice de dónde viene la información ("+n.veces+" en "+words+" palabras). Casi todo suena a verdad revelada.":"Nunca dice de dónde viene la información. Todo suena a verdad revelada.",-6);
 
   /* 9 profundidad: sustancia, no extensión (ver profundidad() más abajo) */
-  if(frag)add("Profundidad","na","Es un fragmento: la extensión no se evalúa.",0);
+  if(frag)add("Profundidad","na","Es un fragmento: la profundidad se juzga con la fuente completa (escribe su dirección o sube el PDF).",0);
   else{var pr=profundidad(text,words,parseInt(opts.enlaces,10)||0);add("Profundidad",pr.status,pr.detail,pr.pts);}
 
   score=Math.max(0,Math.min(100,Math.round(score)));

@@ -150,3 +150,42 @@ cd dist && npx netlify-cli deploy --dir . --functions netlify/functions --prod
     - los artículos reales de BBC Mundo y SciELO salen verde.
   - **Las calibraciones hechas con `sitio-1.2` o anteriores no se comparan directamente con las de `sitio-1.3`.** El campo `version_motor` de cada envío dice con qué motor se calculó.
 - **`veritech-app`:** el motor (`motor/motor.js`) tiene la misma señal de profundidad, y su copia en `extension/motor.js` se actualizó con `cp`, como indica `extension/LEEME.md`. En `test/bordes.test.js`, la prueba «2000 palabras: profundidad en verde» se reemplazó por cuatro pruebas de neutralidad (148/148 en verde).
+
+# VeriTech — cambios del 24/09/2026 (el puntaje depende del contenido, no de la extensión)
+
+**Pedido del equipo:** el puntaje tiene que depender del contenido, nunca de cuánto texto hay. Motor `sitio-1.4`.
+
+## Cambiado
+- **Referencias:** se miden por cada 300 palabras.
+  - 1,5 o más: verde, +20;
+  - 0,5 o más: verde, +12;
+  - menos: amarillo, +4.
+  - Cero referencias sigue siendo rojo (−14) en cualquier texto.
+  - Antes eran totales (8 o más daba +20), lo que favorecía a los textos largos.
+- **Precisión (atribución):** cuenta cada vez que el texto dice de dónde sale algo.
+  - Qué cuenta: «según», «dijo», «señala»…, citas textuales, citas académicas como (2019), [1] o et al., y matices como «podría» o «sugiere que».
+  - Umbrales, por cada 300 palabras: 1,5 o más, verde (+10); 0,5 o más, amarillo (+4); menos, rojo (−6).
+  - Antes contaba expresiones distintas de una lista corta, sin verbos de cita ni marcas académicas.
+- **Relleno:** muletillas por cada 300 palabras.
+  - 1,5 o más: rojo (−16);
+  - 0,5 o más: amarillo (−7).
+  - Una sola muletilla nunca es un patrón.
+  - Antes, 4 muletillas distintas daban rojo en cualquier extensión, lo que castigaba a los textos largos.
+- **Sensacionalismo:**
+  - Las frases de carnada siguen contando igual.
+  - Los «!» se miden como proporción: 1 de cada 5 frases.
+  - Solo cuentan como gritos 3 o más palabras seguidas en MAYÚSCULAS («NO VAS A CREER»), o 2 o más palabras distintas en mayúsculas que sumen el 3 % del texto.
+  - Las siglas (INEI, PBI, BCRP), los títulos en mayúsculas y un nombre propio suelto ya no cuentan.
+- **Profundidad:** ya no tiene mínimo de 60 palabras; un texto corto se juzga por su contenido.
+- **Rendimiento:** se cambió una expresión regular que podía congelar la página con textos muy largos. Ahora 30 000 palabras se analizan en unos 20 ms.
+
+## Cómo se comprobó
+- El mismo texto repetido 1, 3 o 10 veces da **exactamente el mismo puntaje**. Se probó con una noticia con datos, un texto de relleno, un texto de carnada y un texto académico.
+- Artículos reales:
+  - BBC Mundo: 100.
+  - SciELO: 100.
+  - Wikipedia «Fotosíntesis»: 100.
+  - Ninguno da falsos positivos de sensacionalismo.
+- `veritech-app`: 150/150 pruebas. Hay pruebas nuevas de neutralidad del puntaje total y de siglas.
+
+**Calibración:** los puntajes de `sitio-1.3` o anteriores no se comparan directamente con los de `sitio-1.4` (ver `version_motor`).
