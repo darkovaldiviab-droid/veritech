@@ -7,6 +7,18 @@
   publish = "."
   functions = "netlify/functions"
 
+# QR del marcapáginas (souvenir): HTTPS://VERITECH-ALEPH.NETLIFY.APP/M
+# El QR va en mayúsculas para que quepa en la versión 2 (25×25 módulos).
+[[redirects]]
+  from = "/M"
+  to = "/m.html"
+  status = 200
+
+[[redirects]]
+  from = "/m"
+  to = "/m.html"
+  status = 200
+
 # El código de la función no se sirve como archivo estático.
 [[redirects]]
   from = "/netlify/*"

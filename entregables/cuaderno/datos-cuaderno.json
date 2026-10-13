@@ -1,0 +1,43 @@
+{
+  "cabecera": "Darko Valdivia · Proyecto: VeriTech · 13/10/2026",
+  "caraA": {
+    "quien": "Valeria (persona tipo), 15 años, 4.º de secundaria del Colegio Aleph: hace su monografía y cita lo primero que sale en Google.",
+    "necesita": "Saber en segundos si una fuente sirve para citarla. Valora lo práctico: algo que use en clase y no le quite tiempo.",
+    "recordar": "Que antes de citar mire 3 cosas: autor, fecha y fuentes. Y que si duda, escanea el QR y VeriTech lo revisa.",
+    "opciones": [
+      {"nombre": "Llavero del logo", "desc": ["Aro de Ø40 mm con el ✓ en relieve", "y anilla. Fácil de imprimir, pero", "solo decora: no ayuda a citar."], "total": "10/15"},
+      {"nombre": "Marcapáginas", "desc": ["140 × 40 mm: logo ✓, las 3 luces", "(autor, fecha, fuentes) y un QR", "que abre la web en el celular."], "total": "14/15"},
+      {"nombre": "Imán semáforo", "desc": ["Semáforo de 3 luces para la", "nevera. Necesita un imán y una", "pausa al imprimir; se usa en casa."], "total": "9/15"}
+    ],
+    "puntos": [[2, 5, 2], [3, 5, 4], [5, 4, 3]],
+    "elegida": "2",
+    "porque": "se usa justo al leer e investigar, y su QR lleva a VeriTech (14/15)",
+    "medidas": "140 × 40 mm (marcapáginas)",
+    "grosor": "2,8 mm = base 2 mm + relieve 0,8 mm",
+    "logo": "Arriba, Ø24 mm, en relieve de 0,8 mm",
+    "dificultad": "Que el QR en relieve (módulos de 1,2 mm) se lea",
+    "nota_checks": "Comprobado en Tinkercad: el QR se decodifica desde la captura, trazos ≥ 0,8 mm, malla cerrada (0 errores), base plana y sin voladizos.",
+    "prueba_primero": "",
+    "prueba_problema": "",
+    "prueba_v2": "",
+    "costo": "≈ S/ 1.20 (15 g de PLA a S/ 80/kg)"
+  },
+  "caraB": {
+    "antes": "…solo servía desde la computadora: había que entrar a la web y pegar el texto a mano.",
+    "ahora": "…escanear el QR, entrar a una página hecha para el celular (/m) y analizar una fuente con solo su enlace.",
+    "relacion": "El QR del marcapáginas abre /m, que repite AUTOR, FECHA y FUENTES: el objeto recuerda las preguntas y la web las comprueba.",
+    "repositorio": "",
+    "commit": "",
+    "pasos_github_ok": false,
+    "pitch": [
+      [["Diseñamos un/una ", false], ["marcapáginas impreso en 3D", true], [" para ", false], ["alumnos de secundaria que buscan fuentes", true], [".", false]],
+      [["Lo elegimos porque ", false], ["se usa justo al investigar y su QR lleva a VeriTech (14/15 en la matriz)", true], [".", false]],
+      [["Tras probarlo, cambiamos ", false], ["el aro del logo (más grueso) y los módulos del QR (unidos) para que se imprima bien", true], [".", false]],
+      [["La web ahora permite ", false], ["entrar desde el QR a /m y analizar una fuente pegando solo su enlace", true], [".", false]]
+    ],
+    "mantener": "",
+    "cambiar": "",
+    "evidencias": [true, true, true, false],
+    "mejoraremos": "imprimirlo en 2 colores y medir cuántos compañeros escanean el QR en menos de 10 s."
+  }
+}

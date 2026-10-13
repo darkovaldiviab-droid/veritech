@@ -364,4 +364,12 @@ $("ai2").addEventListener("click",function(){
 
 /* ==================== ARRANQUE ==================== */
 load(); renderSource(); renderClaim(); renderWork();
+
+/* Llegada desde el QR del marcapáginas (m.html envía /?url=…&desde=marcapaginas) */
+(function(){
+  var q; try{q=new URLSearchParams(location.search);}catch(e){return;}
+  if(q.get("desde")==="marcapaginas")$("desde-marcapaginas").hidden=false;
+  var u=(q.get("url")||"").trim();
+  if(u&&dirValida(u)){$("u").value=u;analizar();}
+})();
 })();
