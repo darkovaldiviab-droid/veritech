@@ -13,3 +13,7 @@ herramientas/__pycache__/
 
 # Estado local de la CLI de Netlify
 .netlify/
+
+# Estado local de la CLI de Vercel
+.vercel/
+sitio-curso/.vercel/

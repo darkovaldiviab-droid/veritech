@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='29' fill='none' stroke='%230F4C9C' stroke-width='5'/%3E%3Cpath d='M19 33 L28 42 L45 23' stroke='%230F4C9C' stroke-width='6' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#E4EAF1; --panel:#FDFEFF; --ink:#0B1726; --muted:#556678;
+  --accent:#0F4C9C; --accent-soft:rgba(15,76,156,.10); --accent-line:rgba(15,76,156,.30);
+  --line:rgba(11,23,38,.13); --grid:rgba(11,23,38,.05); --mark:#FFE9A8; --mark-ink:#5B4300;
+  --shadow:0 1px 2px rgba(11,23,38,.05),0 14px 36px -18px rgba(11,23,38,.35);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#060D16; --panel:#0D1A28; --ink:#E7EDF4; --muted:#8FA3B8;
+  --accent:#6BA5F2; --accent-soft:rgba(107,165,242,.13); --accent-line:rgba(107,165,242,.38);
+  --line:rgba(231,237,244,.13); --grid:rgba(231,237,244,.045); --mark:#5A4A12; --mark-ink:#FFE9A8;
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 18px 44px -20px rgba(0,0,0,.8);
+}}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px; line-height:1.62;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:40px 40px; padding:20px 16px 40px;
+}
+.wrap{max-width:760px; margin-inline:auto; display:flex; flex-direction:column; gap:18px}
+header{display:flex; align-items:center; gap:14px; flex-wrap:wrap}
+.rose{width:40px; height:40px; color:var(--accent); flex:none}
+.brand{font-family:Archivo,sans-serif; font-variation-settings:"wdth" 118,"wght" 800; font-size:1.7rem; line-height:1; letter-spacing:-.03em}
+.sub{font-size:.84rem; color:var(--muted); line-height:1.3; margin:0}
+.back{margin-left:auto; font-size:.8rem; font-weight:600; color:var(--accent); text-decoration:none; border:1px solid var(--accent-line); border-radius:5px; padding:.6em .85em; background:var(--accent-soft)}
+.back:hover{border-color:var(--accent)}
+.card{background:var(--panel); border:1px solid var(--line); border-radius:8px; box-shadow:var(--shadow); padding:26px 28px}
+h1{font-family:Archivo,sans-serif; font-variation-settings:"wdth" 108,"wght" 800; font-size:1.9rem; letter-spacing:-.02em; margin:0 0 .25em}
+.fecha{font-size:.8rem; color:var(--muted); margin:0 0 1.6em}
+h2{font-family:Archivo,sans-serif; font-variation-settings:"wdth" 106,"wght" 700; font-size:1.06rem; margin:1.9em 0 .5em}
+h2:first-of-type{margin-top:0}
+h3{font-family:Archivo,sans-serif; font-size:.95rem; margin:1.3em 0 .35em}
+p,li{margin:0 0 .75em}
+ul{padding-left:1.15em; margin:0 0 .9em}
+li{margin-bottom:.4em}
+a{color:var(--accent)}
+table{width:100%; border-collapse:collapse; font-size:.86rem; margin:0 0 1em}
+th,td{text-align:left; vertical-align:top; padding:.55em .6em; border-bottom:1px solid var(--line)}
+th{font-weight:600; color:var(--muted); font-size:.78rem; text-transform:uppercase; letter-spacing:.04em}
+.nota{border-left:3px solid var(--accent); background:var(--accent-soft); padding:.85em 1em; border-radius:0 6px 6px 0; font-size:.9rem; margin:0 0 1.1em}
+mark.pendiente{background:var(--mark); color:var(--mark-ink); padding:.1em .35em; border-radius:3px; font-weight:600}
+footer{font-size:.78rem; color:var(--muted); text-align:center; line-height:1.9}
+footer a{color:var(--muted); text-decoration:underline; margin:0 .45em}
+footer a:hover{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+@media (max-width:560px){.card{padding:20px 18px} h1{font-size:1.5rem}}
+</style>
+<meta name="description" content="Condiciones de uso del prototipo escolar VeriTech: qué hace, qué no hace y con qué límites.">
+<title>Términos y condiciones · VeriTech</title>
+<link rel="stylesheet" href="/css/volver.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <svg class="rose" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+      <circle cx="32" cy="32" r="29" stroke="currentColor" stroke-width="2.5"/>
+      <path d="M19 33 L28 42 L45 23" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    <div>
+      <div class="brand">VeriTech</div>
+      <p class="sub">Verify Your Sources</p>
+    </div>
+    <a class="back" href="/">← Volver a la herramienta</a>
+  </header>
+  <main class="card">
+<h1>Términos y condiciones</h1>
+<p class="fecha">Última actualización: 22 de septiembre de 2026</p>
+
+<div class="nota">VeriTech es un prototipo escolar gratuito. No vende nada, no pide cuenta y no decide qué es verdad: evalúa señales verificables de una fuente para que tú decidas mejor.</div>
+
+<h2>1. Qué es este sitio</h2>
+<p>VeriTech es un proyecto educativo desarrollado por estudiantes de <mark class="pendiente">[completar: colegio]</mark> en Perú. Lo que ves aquí es una <b>demostración funcional</b> de la idea: una herramienta que analiza señales de calidad de una fuente (si tiene autor, fecha, referencias abiertas, tipo de dominio), comprueba el solapamiento entre una afirmación y el texto que la respalda, y arma una bibliografía en APA 7 o MLA 9.</p>
+<p>Al usar el sitio aceptas estos términos. Si no estás de acuerdo, no lo uses.</p>
+
+<h2>2. Qué hace y qué no hace la herramienta</h2>
+<ul>
+  <li><b>No verifica hechos.</b> VeriTech no determina si un contenido es verdadero o falso, y ninguna puntuación debe leerse como «esto es cierto» o «esto es mentira».</li>
+  <li><b>Evalúa señales formales</b> que pueden estar presentes o ausentes en un texto. Una fuente con buena puntuación puede estar equivocada, y una con mala puntuación puede tener razón.</li>
+  <li><b>La verificación de citas es aproximada</b>: compara términos entre tu afirmación y el texto de la fuente. Un resultado alto no prueba que la fuente respalde tu idea.</li>
+  <li><b>Las citas bibliográficas que genera son un borrador.</b> Revísalas contra la norma APA o MLA antes de entregarlas.</li>
+  <li>El criterio final sobre qué citar y qué no es siempre tuyo. Ese es el propósito del proyecto, no una limitación temporal.</li>
+</ul>
+
+<h2>3. Uso aceptable</h2>
+<p>Puedes usar VeriTech libre y gratuitamente para trabajos escolares o académicos. No lo uses para:</p>
+<ul>
+  <li>presentar como propio un trabajo que no hiciste, ni para evadir las normas de integridad académica de tu institución;</li>
+  <li>procesar textos que no tengas derecho a usar;</li>
+  <li>intentar sobrecargar, vulnerar o modificar el servicio.</li>
+</ul>
+
+<h2>4. Sin cuentas, sin pagos, sin reembolsos</h2>
+<p>El sitio no requiere registro, no cobra nada y no vende productos ni suscripciones. Por lo tanto <b>no existe una política de reembolsos</b>: no hay ningún pago que devolver. Si algún día el proyecto ofreciera un servicio de pago, publicaríamos antes las condiciones y la política de devoluciones correspondientes.</p>
+
+<h2>5. Disponibilidad y cambios</h2>
+<p>Es un proyecto escolar: puede cambiar, fallar o dejar de estar disponible en cualquier momento, sin aviso previo. No garantizamos continuidad ni ausencia de errores.</p>
+
+<h2>6. Responsabilidad</h2>
+<p>El servicio se ofrece «tal cual», sin garantías de ningún tipo. En la medida que permita la ley peruana, el equipo no se hace responsable de decisiones académicas, calificaciones, pérdidas de información guardada en tu navegador ni daños derivados del uso o de la imposibilidad de uso del sitio. Tú eres responsable del contenido que pegas en la herramienta y del uso que des a los resultados.</p>
+
+<h2>7. Propiedad intelectual</h2>
+<ul>
+  <li>El código, los textos y el diseño de este sitio pertenecen al equipo de VeriTech y se comparten con fines educativos.</li>
+  <li><b>El sitio no usa fotografías ni ilustraciones de terceros.</b> Los únicos gráficos son iconos SVG dibujados por el equipo.</li>
+  <li>Las tipografías (Archivo e IBM Plex) se cargan desde Google Fonts y se usan bajo la licencia libre SIL Open Font License de sus autores.</li>
+  <li>Los nombres de dominio y resultados que aparecen en la presentación son <b>ejemplos ilustrativos</b>, no evaluaciones reales de sitios existentes.</li>
+  <li>El texto que pegas en la herramienta sigue siendo de quien lo escribió; nosotros no lo almacenamos ni lo reclamamos.</li>
+</ul>
+
+<h2>8. Testimonios y cifras</h2>
+<p>No publicamos reseñas ni testimonios de usuarios. Las cifras que se muestran en la presentación provienen de la encuesta propia del proyecto y se indican junto con el número de personas encuestadas; cualquier dato sin respaldo aparece marcado como pendiente y no como resultado.</p>
+
+<h2>9. Privacidad</h2>
+<p>El tratamiento de datos se explica en la <a href="/privacidad.html">política de privacidad</a> y en la <a href="/cookies.html">política de cookies y almacenamiento</a>, que forman parte de estos términos.</p>
+
+<h2>10. Ley aplicable y contacto</h2>
+<p>Estos términos se rigen por la legislación peruana. Para cualquier consulta: <mark class="pendiente">[completar: correo del equipo]</mark>.</p>
+  </main>
+  <footer>
+    <a href="/">Herramienta</a>·<a href="/encuesta.html">Encuesta</a>·<a href="/feedback.html">Opinión</a><br>
+    <a href="/privacidad.html">Privacidad</a>·<a href="/terminos.html">Términos y condiciones</a>·<a href="/cookies.html">Cookies y almacenamiento</a><br>
+    Proyecto escolar VeriTech · <mark class="pendiente">[completar: colegio y curso]</mark> · 2026
+  </footer>
+</div>
+<script src="/js/volver.js"></script>
+</body>
+</html>

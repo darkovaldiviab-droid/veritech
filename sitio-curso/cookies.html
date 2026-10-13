@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='29' fill='none' stroke='%230F4C9C' stroke-width='5'/%3E%3Cpath d='M19 33 L28 42 L45 23' stroke='%230F4C9C' stroke-width='6' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#E4EAF1; --panel:#FDFEFF; --ink:#0B1726; --muted:#556678;
+  --accent:#0F4C9C; --accent-soft:rgba(15,76,156,.10); --accent-line:rgba(15,76,156,.30);
+  --line:rgba(11,23,38,.13); --grid:rgba(11,23,38,.05); --mark:#FFE9A8; --mark-ink:#5B4300;
+  --shadow:0 1px 2px rgba(11,23,38,.05),0 14px 36px -18px rgba(11,23,38,.35);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#060D16; --panel:#0D1A28; --ink:#E7EDF4; --muted:#8FA3B8;
+  --accent:#6BA5F2; --accent-soft:rgba(107,165,242,.13); --accent-line:rgba(107,165,242,.38);
+  --line:rgba(231,237,244,.13); --grid:rgba(231,237,244,.045); --mark:#5A4A12; --mark-ink:#FFE9A8;
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 18px 44px -20px rgba(0,0,0,.8);
+}}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px; line-height:1.62;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:40px 40px; padding:20px 16px 40px;
+}
+.wrap{max-width:760px; margin-inline:auto; display:flex; flex-direction:column; gap:18px}
+header{display:flex; align-items:center; gap:14px; flex-wrap:wrap}
+.rose{width:40px; height:40px; color:var(--accent); flex:none}
+.brand{font-family:Archivo,sans-serif; font-variation-settings:"wdth" 118,"wght" 800; font-size:1.7rem; line-height:1; letter-spacing:-.03em}
+.sub{font-size:.84rem; color:var(--muted); line-height:1.3; margin:0}
+.back{margin-left:auto; font-size:.8rem; font-weight:600; color:var(--accent); text-decoration:none; border:1px solid var(--accent-line); border-radius:5px; padding:.6em .85em; background:var(--accent-soft)}
+.back:hover{border-color:var(--accent)}
+.card{background:var(--panel); border:1px solid var(--line); border-radius:8px; box-shadow:var(--shadow); padding:26px 28px}
+h1{font-family:Archivo,sans-serif; font-variation-settings:"wdth" 108,"wght" 800; font-size:1.9rem; letter-spacing:-.02em; margin:0 0 .25em}
+.fecha{font-size:.8rem; color:var(--muted); margin:0 0 1.6em}
+h2{font-family:Archivo,sans-serif; font-variation-settings:"wdth" 106,"wght" 700; font-size:1.06rem; margin:1.9em 0 .5em}
+h2:first-of-type{margin-top:0}
+h3{font-family:Archivo,sans-serif; font-size:.95rem; margin:1.3em 0 .35em}
+p,li{margin:0 0 .75em}
+ul{padding-left:1.15em; margin:0 0 .9em}
+li{margin-bottom:.4em}
+a{color:var(--accent)}
+table{width:100%; border-collapse:collapse; font-size:.86rem; margin:0 0 1em}
+th,td{text-align:left; vertical-align:top; padding:.55em .6em; border-bottom:1px solid var(--line)}
+th{font-weight:600; color:var(--muted); font-size:.78rem; text-transform:uppercase; letter-spacing:.04em}
+.nota{border-left:3px solid var(--accent); background:var(--accent-soft); padding:.85em 1em; border-radius:0 6px 6px 0; font-size:.9rem; margin:0 0 1.1em}
+mark.pendiente{background:var(--mark); color:var(--mark-ink); padding:.1em .35em; border-radius:3px; font-weight:600}
+footer{font-size:.78rem; color:var(--muted); text-align:center; line-height:1.9}
+footer a{color:var(--muted); text-decoration:underline; margin:0 .45em}
+footer a:hover{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+@media (max-width:560px){.card{padding:20px 18px} h1{font-size:1.5rem}}
+@media (max-width:560px){
+  table.apilar thead{display:none}
+  table.apilar tr{display:block;padding:.7em 0;border-bottom:1px solid var(--line)}
+  table.apilar td{display:block;border:0;padding:.12em 0}
+  table.apilar td:first-child{font-weight:600;font-family:Archivo,sans-serif}
+  table.apilar td[data-label]:not(:first-child)::before{content:attr(data-label) ": ";font-weight:600;color:var(--muted)}
+}
+</style>
+<meta name="description" content="VeriTech no usa cookies de analítica ni publicidad: esto es lo que guarda en tu navegador y por qué.">
+<title>Cookies y almacenamiento · VeriTech</title>
+<link rel="stylesheet" href="/css/volver.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <svg class="rose" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+      <circle cx="32" cy="32" r="29" stroke="currentColor" stroke-width="2.5"/>
+      <path d="M19 33 L28 42 L45 23" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    <div>
+      <div class="brand">VeriTech</div>
+      <p class="sub">Verify Your Sources</p>
+    </div>
+    <a class="back" href="/">← Volver a la herramienta</a>
+  </header>
+  <main class="card">
+<h1>Cookies y almacenamiento en tu navegador</h1>
+<p class="fecha">Última actualización: 24 de septiembre de 2026</p>
+
+<div class="nota">Este sitio <b>no instala cookies propias</b> ni de analítica ni de publicidad. Sí guarda cosas en tu navegador con <code>localStorage</code>, y eso nunca sale de tu equipo.</div>
+
+<h2>1. Por qué no verás un banner de cookies</h2>
+<p>Un banner de consentimiento es obligatorio cuando una web instala cookies o tecnologías similares que <b>no son necesarias</b> para prestar el servicio: analítica, publicidad, seguimiento entre sitios. VeriTech no usa ninguna de esas. Lo que sí usamos es almacenamiento local estrictamente funcional, que solo guarda lo que tú mismo creas mientras usas la herramienta.</p>
+<p>Poner un banner que pidiera permiso para cookies inexistentes sería confuso y falso, así que preferimos explicarte exactamente qué se guarda.</p>
+
+<h2>2. Qué se guarda en tu navegador</h2>
+<table class="apilar">
+  <thead><tr><th>Clave</th><th>Qué guarda</th><th>Cuánto dura</th></tr></thead>
+  <tbody>
+    <tr><td data-label="Clave"><code>veritech.work</code></td><td data-label="Qué guarda">Las fuentes que analizas y guardas en «Mi trabajo», con su puntaje y sus datos, para armar tu bibliografía.</td><td data-label="Cuánto dura">Hasta que pulses «Borrar todo» o limpies el navegador.</td></tr>
+    <tr><td data-label="Clave"><code>veritech.borrador</code></td><td data-label="Qué guarda">Las respuestas de la encuesta que ya marcaste, para no perderlas si cierras la página a medias.</td><td data-label="Cuánto dura">Se borra al enviar la encuesta.</td></tr>
+    <tr><td data-label="Clave"><code>veritech.enviada</code></td><td data-label="Qué guarda">Una marca de que ya respondiste la encuesta, para no pedírtelo dos veces.</td><td data-label="Cuánto dura">Hasta que la borres desde la propia página.</td></tr>
+    <tr><td data-label="Clave"><code>veritech.calibracion.n</code> y <code>veritech.calibracion.docente</code></td><td data-label="Qué guarda">Solo en la página de calibración: cuántas fuentes calificó el docente en ese navegador y, si lo escribió, su apodo o iniciales.</td><td data-label="Cuánto dura">Hasta que se limpie el navegador.</td></tr>
+    <tr><td data-label="Clave"><code>veritech.pitch.campos</code></td><td data-label="Qué guarda">Solo en la página de presentación del equipo: los datos que el equipo escribe en el guion del pitch.</td><td data-label="Cuánto dura">Hasta que se limpie el navegador.</td></tr>
+  </tbody>
+</table>
+<p>Nada de esto viaja a ningún servidor, no se comparte entre dispositivos y nosotros no podemos leerlo. Es información tuya, en tu equipo.</p>
+
+<h3>Cómo borrarlo</h3>
+<ul>
+  <li>En «Mi trabajo», el botón <b>Borrar todo</b> elimina las fuentes guardadas.</li>
+  <li>En la pantalla final de la encuesta, el enlace «responder de nuevo» borra la marca de envío y el borrador.</li>
+  <li>Desde tu navegador: ajustes de privacidad → borrar datos de sitios → busca el dominio de VeriTech.</li>
+</ul>
+
+<h2>3. Servicios de terceros</h2>
+<table class="apilar">
+  <thead><tr><th>Servicio</th><th>Qué hace</th><th>Qué recibe</th></tr></thead>
+  <tbody>
+    <tr><td data-label="Servicio">Google Fonts</td><td data-label="Qué hace">Sirve las tipografías Archivo e IBM Plex.</td><td data-label="Qué recibe">Tu dirección IP y datos técnicos del navegador, por el hecho de descargar el archivo. No instala cookies.</td></tr>
+    <tr><td data-label="Servicio">Netlify</td><td data-label="Qué hace">Aloja la web y recibe los formularios.</td><td data-label="Qué recibe">Datos técnicos de conexión en sus registros de servidor; puede usar cookies estrictamente necesarias de seguridad o balanceo.</td></tr>
+  </tbody>
+</table>
+<p>No hay vídeos, mapas, píxeles de redes sociales, chats ni ningún otro contenido de terceros incrustado en el sitio.</p>
+<p>Si prefieres evitar por completo la conexión con Google, el equipo puede alojar las tipografías en el propio dominio; está anotado como mejora pendiente del proyecto.</p>
+
+<h2>4. Más información</h2>
+<p>Qué datos tratamos y con qué base legal se explica en la <a href="/privacidad.html">política de privacidad</a>. Dudas: <mark class="pendiente">[completar: correo del equipo]</mark>.</p>
+  </main>
+  <footer>
+    <a href="/">Herramienta</a>·<a href="/encuesta.html">Encuesta</a>·<a href="/feedback.html">Opinión</a><br>
+    <a href="/privacidad.html">Privacidad</a>·<a href="/terminos.html">Términos y condiciones</a>·<a href="/cookies.html">Cookies y almacenamiento</a><br>
+    Proyecto escolar VeriTech · <mark class="pendiente">[completar: colegio y curso]</mark> · 2026
+  </footer>
+</div>
+<script src="/js/volver.js"></script>
+</body>
+</html>

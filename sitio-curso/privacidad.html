@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='29' fill='none' stroke='%230F4C9C' stroke-width='5'/%3E%3Cpath d='M19 33 L28 42 L45 23' stroke='%230F4C9C' stroke-width='6' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#E4EAF1; --panel:#FDFEFF; --ink:#0B1726; --muted:#556678;
+  --accent:#0F4C9C; --accent-soft:rgba(15,76,156,.10); --accent-line:rgba(15,76,156,.30);
+  --line:rgba(11,23,38,.13); --grid:rgba(11,23,38,.05); --mark:#FFE9A8; --mark-ink:#5B4300;
+  --shadow:0 1px 2px rgba(11,23,38,.05),0 14px 36px -18px rgba(11,23,38,.35);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#060D16; --panel:#0D1A28; --ink:#E7EDF4; --muted:#8FA3B8;
+  --accent:#6BA5F2; --accent-soft:rgba(107,165,242,.13); --accent-line:rgba(107,165,242,.38);
+  --line:rgba(231,237,244,.13); --grid:rgba(231,237,244,.045); --mark:#5A4A12; --mark-ink:#FFE9A8;
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 18px 44px -20px rgba(0,0,0,.8);
+}}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px; line-height:1.62;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:40px 40px; padding:20px 16px 40px;
+}
+.wrap{max-width:760px; margin-inline:auto; display:flex; flex-direction:column; gap:18px}
+header{display:flex; align-items:center; gap:14px; flex-wrap:wrap}
+.rose{width:40px; height:40px; color:var(--accent); flex:none}
+.brand{font-family:Archivo,sans-serif; font-variation-settings:"wdth" 118,"wght" 800; font-size:1.7rem; line-height:1; letter-spacing:-.03em}
+.sub{font-size:.84rem; color:var(--muted); line-height:1.3; margin:0}
+.back{margin-left:auto; font-size:.8rem; font-weight:600; color:var(--accent); text-decoration:none; border:1px solid var(--accent-line); border-radius:5px; padding:.6em .85em; background:var(--accent-soft)}
+.back:hover{border-color:var(--accent)}
+.card{background:var(--panel); border:1px solid var(--line); border-radius:8px; box-shadow:var(--shadow); padding:26px 28px}
+h1{font-family:Archivo,sans-serif; font-variation-settings:"wdth" 108,"wght" 800; font-size:1.9rem; letter-spacing:-.02em; margin:0 0 .25em}
+.fecha{font-size:.8rem; color:var(--muted); margin:0 0 1.6em}
+h2{font-family:Archivo,sans-serif; font-variation-settings:"wdth" 106,"wght" 700; font-size:1.06rem; margin:1.9em 0 .5em}
+h2:first-of-type{margin-top:0}
+h3{font-family:Archivo,sans-serif; font-size:.95rem; margin:1.3em 0 .35em}
+p,li{margin:0 0 .75em}
+ul{padding-left:1.15em; margin:0 0 .9em}
+li{margin-bottom:.4em}
+a{color:var(--accent)}
+table{width:100%; border-collapse:collapse; font-size:.86rem; margin:0 0 1em}
+th,td{text-align:left; vertical-align:top; padding:.55em .6em; border-bottom:1px solid var(--line)}
+th{font-weight:600; color:var(--muted); font-size:.78rem; text-transform:uppercase; letter-spacing:.04em}
+.nota{border-left:3px solid var(--accent); background:var(--accent-soft); padding:.85em 1em; border-radius:0 6px 6px 0; font-size:.9rem; margin:0 0 1.1em}
+mark.pendiente{background:var(--mark); color:var(--mark-ink); padding:.1em .35em; border-radius:3px; font-weight:600}
+footer{font-size:.78rem; color:var(--muted); text-align:center; line-height:1.9}
+footer a{color:var(--muted); text-decoration:underline; margin:0 .45em}
+footer a:hover{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+@media (max-width:560px){.card{padding:20px 18px} h1{font-size:1.5rem}}
+@media (max-width:560px){
+  table.apilar thead{display:none}
+  table.apilar tr{display:block;padding:.7em 0;border-bottom:1px solid var(--line)}
+  table.apilar td{display:block;border:0;padding:.12em 0}
+  table.apilar td:first-child{font-weight:600;font-family:Archivo,sans-serif}
+  table.apilar td[data-label]:not(:first-child)::before{content:attr(data-label) ": ";font-weight:600;color:var(--muted)}
+}
+</style>
+<meta name="description" content="Cómo trata VeriTech los datos de la encuesta, del formulario de opinión y del almacenamiento del navegador.">
+<title>Política de privacidad · VeriTech</title>
+<link rel="stylesheet" href="/css/volver.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <svg class="rose" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+      <circle cx="32" cy="32" r="29" stroke="currentColor" stroke-width="2.5"/>
+      <path d="M19 33 L28 42 L45 23" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    <div>
+      <div class="brand">VeriTech</div>
+      <p class="sub">Verify Your Sources</p>
+    </div>
+    <a class="back" href="/">← Volver a la herramienta</a>
+  </header>
+  <main class="card">
+<h1>Política de privacidad</h1>
+<p class="fecha">Última actualización: 24 de septiembre de 2026</p>
+
+<div class="nota">Resumen en una línea: la encuesta y la opinión de estudiantes no piden nombre ni correo, lo que pegas o subes a la herramienta nunca sale de tu navegador (solo la dirección de una página, si la escribes, pasa por nuestro servidor para leerla), y no usamos analítica ni publicidad.</div>
+
+<h2>1. Quién trata tus datos</h2>
+<p>VeriTech es un proyecto escolar sin fines de lucro desarrollado por <mark class="pendiente">[completar: nombres del equipo]</mark>, estudiantes de <mark class="pendiente">[completar: colegio]</mark>, en Perú.</p>
+<p>Responsable del tratamiento: <mark class="pendiente">[completar: nombre del responsable]</mark>. Correo de contacto: <mark class="pendiente">[completar: correo del equipo]</mark>.</p>
+
+<h2>2. Qué datos recogemos y para qué</h2>
+<table class="apilar">
+  <thead><tr><th>Dónde</th><th>Qué recogemos</th><th>Para qué</th></tr></thead>
+  <tbody>
+    <tr><td data-label="Dónde">Encuesta</td><td data-label="Qué recogemos">Tus 7 respuestas de opción múltiple. No pedimos nombre, correo, edad ni colegio.</td><td data-label="Para qué">Medir cómo buscan y citan información los estudiantes, y presentar los resultados agregados en el proyecto.</td></tr>
+    <tr><td data-label="Dónde">Opinión de estudiantes</td><td data-label="Qué recogemos">Puntuaciones, tus comentarios en texto libre y, si quieres, tu grado. No pedimos nombre ni correo.</td><td data-label="Para qué">Decidir qué mejorar del prototipo.</td></tr>
+    <tr><td data-label="Dónde">Opinión docente</td><td data-label="Qué recogemos">Área y grado, respuestas y comentarios y, solo si el docente lo escribe, un correo de contacto.</td><td data-label="Para qué">Decidir qué mejorar y si VeriTech sirve al colegio. El correo solo se usa para una conversación de seguimiento y se borra al terminar la prueba.</td></tr>
+    <tr><td data-label="Dónde">Calibración (docentes)</td><td data-label="Qué recogemos">La dirección de la página evaluada, el área, el juicio del docente y su motivo, el resultado del análisis de VeriTech y, si quiere, sus iniciales o un apodo. El texto de la página no se envía.</td><td data-label="Para qué">Medir si el semáforo coincide con el criterio de los docentes y ajustarlo.</td></tr>
+    <tr><td data-label="Dónde">Herramienta de análisis</td><td data-label="Qué recogemos">Nada. El texto que pegas y los archivos que subes (PDF, infografías, capturas) se leen en tu navegador. No se envían a ningún servidor ni se guardan: al cerrar o recargar la página desaparecen.</td><td data-label="Para qué">—</td></tr>
+    <tr><td data-label="Dónde">Dirección de la página que analizas</td><td data-label="Qué recogemos">Si escribes la dirección de una página, esa dirección (solo ella, nunca tu texto) se envía a nuestro servidor en Netlify, que descarga la página o el PDF y te lo devuelve para analizarlo en tu navegador. No la guardamos; como cualquier petición, puede quedar en los registros técnicos del proveedor. La página visitada ve una visita de nuestro servidor, no la tuya.</td><td data-label="Para qué">Evaluar la fuente completa (autor, fecha, referencias) aunque solo pegues el párrafo que vas a citar.</td></tr>
+    <tr><td data-label="Dónde">Navegación</td><td data-label="Qué recogemos">Nuestro proveedor de hosting puede registrar datos técnicos (dirección IP, navegador, fecha) en sus registros de servidor.</td><td data-label="Para qué">Que la web funcione y esté protegida contra abusos.</td></tr>
+  </tbody>
+</table>
+<p>Netlify, el servicio que recibe los formularios, guarda junto a cada respuesta la dirección IP y el tipo de navegador de quien la envía. No los usamos para identificar a nadie y se borran junto con las respuestas.</p>
+<p>No usamos analítica, cookies publicitarias, píxeles de redes sociales ni perfilado. No vendemos ni cedemos datos a nadie con fines comerciales.</p>
+
+<h3>Solo lo necesario</h3>
+<p>Recogemos únicamente lo que necesitamos para responder la pregunta del proyecto. Por eso la encuesta no pide ningún dato identificable. En los campos de texto libre de los formularios, <b>por favor no escribas tu nombre, el de otras personas, tu correo ni ningún dato personal</b>: si lo haces, lo eliminaremos al revisar las respuestas.</p>
+
+<h2>3. Con qué base legal</h2>
+<p>Tratamos estos datos con tu <b>consentimiento previo, informado y expreso</b>, que das al marcar la casilla antes de empezar la encuesta o de enviar cualquier formulario, conforme a la Ley N.º 29733, Ley de Protección de Datos Personales, y su reglamento. Puedes retirar tu consentimiento en cualquier momento escribiéndonos.</p>
+
+<h2>4. Si eres menor de edad</h2>
+<p>Este proyecto se comparte dentro de un colegio, así que es probable que respondan menores de edad. Si tienes menos de 14 años, pide permiso a tu padre, madre o apoderado antes de responder la encuesta o el formulario de opinión. Si detectamos datos de un menor sin ese permiso, los eliminamos.</p>
+
+<h2>5. Quién más ve los datos</h2>
+<ul>
+  <li><b>Netlify</b> (Netlify, Inc., Estados Unidos) aloja la web y recibe los envíos de los formularios. Esto implica una <b>transferencia internacional</b> de datos a Estados Unidos.</li>
+  <li><b>Google Fonts</b> (Google LLC, Estados Unidos): las tipografías se cargan desde servidores de Google, así que tu navegador les comunica tu dirección IP al abrir cualquier página. No se instala ninguna cookie por este motivo.</li>
+  <li>Las respuestas agregadas (porcentajes, nunca respuestas individuales con datos personales) se muestran en la presentación del proyecto y en la página de resultados.</li>
+</ul>
+<p>Nadie más tiene acceso. No hay publicidad ni patrocinadores.</p>
+
+<h2>6. Cuánto tiempo los guardamos</h2>
+<p>Las respuestas se conservan hasta el final del año escolar 2026 y como máximo hasta <mark class="pendiente">[completar: fecha límite, p. ej. 31/12/2026]</mark>. Después se eliminan de los formularios del proveedor. Lo que se guarda en tu navegador (ver la <a href="/cookies.html">política de cookies y almacenamiento</a>) permanece hasta que tú lo borres.</p>
+
+<h2>7. Tus derechos</h2>
+<p>Puedes ejercer tus derechos de <b>acceso, rectificación, cancelación y oposición</b> escribiendo a <mark class="pendiente">[completar: correo del equipo]</mark>. Responderemos en los plazos que fija la Ley N.º 29733.</p>
+<p>Ten en cuenta que la encuesta no pide datos que te identifiquen: si tu respuesta no contiene ningún dato que permita identificarte, no podremos localizarla para borrarla individualmente, pero sí podemos eliminar el conjunto completo si lo pides antes de que cerremos el proyecto.</p>
+<p>Si consideras que no atendimos tu solicitud, puedes presentar un reclamo ante la Autoridad Nacional de Protección de Datos Personales del Ministerio de Justicia y Derechos Humanos del Perú.</p>
+
+<h2>8. Seguridad</h2>
+<p>La web se sirve por HTTPS. Los envíos de formularios quedan en el panel del proveedor, protegido con contraseña y accesible solo por el equipo. Al ser un proyecto escolar, no tratamos datos sensibles y por eso mantenemos la recolección al mínimo.</p>
+
+<h2>9. Cambios</h2>
+<p>Si cambiamos esta política, actualizaremos la fecha del encabezado. La versión vigente es siempre la publicada en esta página.</p>
+  </main>
+  <footer>
+    <a href="/">Herramienta</a>·<a href="/encuesta.html">Encuesta</a>·<a href="/feedback.html">Opinión</a><br>
+    <a href="/privacidad.html">Privacidad</a>·<a href="/terminos.html">Términos y condiciones</a>·<a href="/cookies.html">Cookies y almacenamiento</a><br>
+    Proyecto escolar VeriTech · <mark class="pendiente">[completar: colegio y curso]</mark> · 2026
+  </footer>
+</div>
+<script src="/js/volver.js"></script>
+</body>
+</html>

@@ -1,0 +1,269 @@
+/* VeriTech · motor de señales (semáforo de fuentes y verificador de citas).
+   Lo usan index.js y calibracion.js. No toca el DOM ni la red.
+   La prueba veritech-app/test/paridad.test.js lee el bloque MOTORES…RENDER de este archivo. */
+var YEAR=new Date().getFullYear();
+/* Cambiar al modificar reglas o pesos: la calibración guarda con qué versión se calculó cada puntaje. */
+var MOTOR_VERSION="sitio-1.4";
+
+/* ==================== MOTORES ==================== */
+var FILLER=["en el mundo actual","en la era digital","es importante destacar","es importante mencionar",
+"cabe destacar","cabe mencionar","juega un papel fundamental","juega un papel crucial","desempeña un papel fundamental",
+"en última instancia","sin lugar a dudas","abre un mundo de posibilidades","vale la pena señalar",
+"en el mundo de hoy","revoluciona la forma","sumérgete","desbloquea el potencial","en definitiva"];
+var CLICKBAIT=["no vas a creer","los científicos no quieren","increíble","impactante","lo que pasó después",
+"nunca imaginarás","el secreto que","esto te sorprenderá","verdades ocultas","el truco que","te dejará sin palabras",
+"nadie te ha dicho","lo que nadie sabe"];
+var ABSOLUTE=["está comprobado que","está demostrado que","todos los expertos coinciden","los expertos coinciden",
+"es un hecho indiscutible","es un hecho que","nunca falla","siempre funciona","sin excepción alguna","es indudable que"];
+var NUANCE=["según","de acuerdo con","de acuerdo a","sugiere que","podría","los datos indican","el estudio",
+"la investigación","et al","fuente:","citado en","se estima","los resultados muestran","evidencia","publicado en"];
+var MONTHS=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","setiembre","octubre","noviembre","diciembre"];
+
+function countPhrases(low,list){var n=0,found=[];for(var i=0;i<list.length;i++){if(low.indexOf(list[i])>=0){n++;found.push(list[i]);}}return{n:n,found:found};}
+
+/* Densidad: veces por cada 300 palabras. El puntaje depende del contenido, no de la
+   extensión: 3 referencias en 300 palabras pesan lo mismo que 30 en 3000.
+   Debajo de 60 palabras se divide por 60 (no hay texto suficiente para medir). */
+function densidad(veces,words){return veces*300/Math.max(words,60);}
+/* Como countPhrases, pero cuenta cada aparición (no solo si la frase está) */
+function contarVeces(low,list){
+  var veces=0,found=[];
+  for(var i=0;i<list.length;i++){
+    var k=0,p=low.indexOf(list[i]);
+    while(p>=0){k++;p=low.indexOf(list[i],p+list[i].length);}
+    if(k){veces+=k;found.push(list[i]);}
+  }
+  return {veces:veces,found:found};
+}
+
+function findAuthor(text){
+  var N="[A-ZÁÉÍÓÚÑ][A-Za-zÁÉÍÓÚÑáéíóúñ]+";
+  var TIT="(?:Dr[ao]?|Dra|Prof|Lic|Mtr[ao]?|Ing|Mg)\\.[ \\t]*";
+  var pats=[
+    new RegExp("(?:^|\\n)[ \\t]*(?:[Pp]or|[Aa]utor(?:a|es)?|[Ee]scrito por|[Rr]edactado por|[Tt]exto de)[ \\t]*:?[ \\t]+((?:"+TIT+")?"+N+"(?:[ \\t]+"+N+"){1,3})"),
+    new RegExp("(?:^|\\n|[ \\t])((?:"+TIT+")"+N+"(?:[ \\t]+"+N+"){1,3})"),
+    /\bBy[ \t]+([A-Z][a-z]+(?:[ \t]+[A-Z][a-z]+){1,3})/
+  ];
+  for(var i=0;i<pats.length;i++){var m=text.match(pats[i]);if(m)return m[1].trim();}
+  return null;
+}
+function findYear(text){
+  var low=text.toLowerCase(),m,best=null;
+  var mm=low.match(new RegExp("\\b\\d{1,2}\\s+de\\s+("+MONTHS.join("|")+")\\s+(?:de\\s+)?(\\d{4})"));
+  if(mm)best=parseInt(mm[2],10);
+  if(!best&&(m=text.match(/\b(20\d{2}|19\d{2})-(\d{2})-(\d{2})\b/)))best=parseInt(m[1],10);
+  if(!best&&(m=text.match(/\b\d{1,2}\/\d{1,2}\/(20\d{2}|19\d{2})\b/)))best=parseInt(m[1],10);
+  if(!best&&(m=low.match(/(?:publicado|actualizado|fecha|última revisión)[^\d]{0,24}(20\d{2}|19\d{2})/)))best=parseInt(m[1],10);
+  if(!best){
+    var all=text.match(/\b(19[5-9]\d|20[0-4]\d)\b/g);
+    if(all){var ys=all.map(Number).filter(function(y){return y<=YEAR;});if(ys.length)best=Math.max.apply(null,ys);}
+  }
+  return best;
+}
+/* Profundidad = cuánta sustancia hay, no cuántas palabras.
+   Se cuentan, por cada 300 palabras:
+   - datos concretos: cifras con unidad o %, montos, fechas completas;
+   - atribuciones: «según», «dijo», «afirmó»…, y citas textuales de 5 palabras o más;
+   - referencias: enlaces, (AAAA), [n], et al.
+   y se restan las frases de relleno (FILLER), que cuentan doble.
+   Es una densidad: se calcula igual para 100 que para 3000 palabras, así que la
+   extensión no favorece ni castiga a ningún tipo de fuente (noticia corta o artículo largo).
+   Umbrales (sustancia neta por 300 palabras):
+   - 5 o más: verde, +6;
+   - 2 o más: amarillo, 0;
+   - menos de 2: rojo, −6. */
+var UNIDADES="%|por ciento|km|kg|g|mg|m|cm|mm|m2|m²|km2|km²|ha|t|toneladas|litros|l|ml|°c|grados|años|meses|días|horas|minutos|personas|habitantes|casos|muertes|pacientes|estudiantes|alumnos|niños|hogares|empresas|especies|millones|mil|billones|soles|dólares|euros|puntos|veces";
+var RE_DATO=new RegExp("(?:(?:s\\/|us\\$|\\$|€)\\s?\\d[\\d.,]*|\\b\\d[\\d.,]*\\s?(?:"+UNIDADES+")(?![a-záéíóúñ]))","gi");
+var RE_FECHA=new RegExp("\\b\\d{1,2}\\s+de\\s+(?:"+MONTHS.join("|")+")(?:\\s+(?:de\\s+)?\\d{4})?","gi");
+var RE_ATRIB=/(?<![a-záéíóúñ])(?:según|de acuerdo con|de acuerdo a|dijo|dice|afirmó|afirma|explicó|explica|señaló|señala|indicó|indica|declaró|informó|informa|precisó|sostuvo|advirtió|aseguró|detalló|reportó|publicó)(?![a-záéíóúñ])/gi;
+var RE_CITA=/[«“"]([^»”"]{20,400})[»”"]/g;
+/* Citas textuales de 5 palabras o más */
+function citasTextuales(text){
+  var k=0,m; RE_CITA.lastIndex=0;
+  while((m=RE_CITA.exec(text))){if(m[1].trim().split(/\s+/).length>=5)k++;}
+  return k;
+}
+/* Atribución (señal Precisión): cuántas veces dice de dónde sale lo que afirma.
+   - verbos y expresiones de atribución («según», «dijo», «señala»…) y citas textuales;
+   - citas académicas: (AAAA), [n], et al.;
+   - matices que separan dato de opinión (resto de NUANCE: «podría», «sugiere que», «se estima»…). */
+var NUANCE_MATIZ=NUANCE.filter(function(x){return ["según","de acuerdo con","de acuerdo a","et al"].indexOf(x)<0;});
+function atribucion(text,low){
+  var verbos=low.match(RE_ATRIB)||[], matiz=contarVeces(low,NUANCE_MATIZ);
+  var academicas=(text.match(/\([12]\d{3}\)/g)||[]).length+(text.match(/et al\.?/gi)||[]).length+(text.match(/\[\d{1,3}\]/g)||[]).length;
+  var citas=citasTextuales(text);
+  var found=[];
+  verbos.slice(0,2).forEach(function(v){if(found.indexOf(v)<0)found.push(v);});
+  matiz.found.slice(0,2).forEach(function(v){found.push(v);});
+  if(academicas)found.push("citas como (2019) o [1]");
+  if(citas)found.push("citas textuales");
+  return {veces:verbos.length+matiz.veces+academicas+citas,found:found};
+}
+function profundidad(text,words,enlacesExtra){
+  var low=text.toLowerCase();
+  if(!words)return {status:"warn",pts:0,detail:"No hay texto que evaluar."};
+  var datos=(low.match(RE_DATO)||[]).length+(low.match(RE_FECHA)||[]).length;
+  var atrib=(low.match(RE_ATRIB)||[]).length+citasTextuales(text);
+  var refs=(text.match(/https?:\/\//g)||[]).length+(text.match(/\([12]\d{3}\)/g)||[]).length+
+    (text.match(/et al\.?/gi)||[]).length+(text.match(/\[\d{1,3}\]/g)||[]).length+enlacesExtra;
+  var relleno=countPhrases(low,FILLER).n;
+  var por300=densidad(1,words);
+  var neta=(datos+atrib+refs-2*relleno)*por300;
+  var cuenta=datos+" dato"+(datos===1?"":"s")+" concreto"+(datos===1?"":"s")+", "+atrib+" atribucion"+(atrib===1?"":"es")+" y "+refs+" referencia"+(refs===1?"":"s")+" en "+words+" palabras";
+  if(neta>=5)return {status:"ok",pts:6,detail:"Aporta datos concretos y dice de dónde salen ("+cuenta+")."};
+  if(neta>=2)return {status:"warn",pts:0,detail:"Algo de sustancia, pero pocos datos o fuentes para lo que dice ("+cuenta+")."};
+  return {status:"bad",pts:-6,detail:"Poca sustancia: casi no da datos concretos ni dice de dónde salen ("+cuenta+")."};
+}
+/* opts (opcional): {textoCompleto, autorFuente, anioFuente, enlaces, fragmento, autor, anio}.
+   textoCompleto: la fuente entera (la página leída desde su dirección, o el PDF subido).
+     Si está, se evalúa la fuente entera y no el párrafo pegado, que es solo lo que se va a citar.
+   autorFuente / anioFuente: datos que trae la propia fuente (metadatos de la página o del PDF).
+   enlaces: enlaces a otros sitios dentro del contenido de la página (en una web no se ven como «https://»).
+   fragmento: no hay fuente completa y el alumno pegó o subió solo la parte que va a usar.
+   autor / anio: escritos a mano por el alumno; mandan sobre todo lo demás.
+   Sin opts el resultado es el mismo que en sitio-1.0. */
+var FALTA_EN_FRAGMENTO="No aparece en el fragmento. Escribe arriba el autor del texto original (o el año), que suele estar en la portada o bajo el título.";
+function analyzeSource(url,text,opts){
+  opts=opts||{};
+  var conCompleto=!!opts.textoCompleto;
+  if(conCompleto)text=opts.textoCompleto;
+  var checks=[],score=50,low=text.toLowerCase();
+  var words=text.trim()?text.trim().split(/\s+/).length:0;
+  var frag=!!opts.fragmento&&!conCompleto, full=text;
+  var DE_LA_FUENTE=" (según los datos de la página)";
+  function add(label,status,detail,pts){checks.push({label:label,status:status,detail:detail,pts:pts});score+=pts;}
+
+  /* 1 autoría */
+  var autorManual=String(opts.autor||"").trim(), autorFuente=String(opts.autorFuente||"").trim();
+  var author=autorManual||autorFuente||findAuthor(full);
+  if(autorManual)add("Autoría","ok","Firmado por "+author+" (indicado por ti). Se puede rastrear quién responde por lo que dice.",18);
+  else if(autorFuente)add("Autoría","ok","Firmado por "+author+DE_LA_FUENTE+". Se puede rastrear quién responde por lo que dice.",18);
+  else if(author)add("Autoría","ok","Firmado por "+author+". Se puede rastrear quién responde por lo que dice.",18);
+  else if(frag)add("Autoría","warn",FALTA_EN_FRAGMENTO,0);
+  else add("Autoría","bad","Nadie firma este texto. Si no hay un responsable, no hay a quién pedirle cuentas.",-14);
+
+  /* 2 fecha */
+  var anioManual=parseInt(opts.anio,10), anioFuente=parseInt(opts.anioFuente,10);
+  if(!(anioManual>=1900&&anioManual<=YEAR))anioManual=null;
+  if(!(anioFuente>=1900&&anioFuente<=YEAR))anioFuente=null;
+  var y=anioManual||anioFuente||findYear(full), tuyo=anioManual?" (indicado por ti)":anioFuente?DE_LA_FUENTE:"";
+  if(y===null&&frag)add("Fecha","warn",FALTA_EN_FRAGMENTO,0);
+  else if(y===null)add("Fecha","bad","No aparece ninguna fecha. No sabes si esto se escribió ayer o hace quince años.",-12);
+  else if(y>=YEAR-2)add("Fecha","ok","Publicado en "+y+tuyo+". Información reciente.",16);
+  else if(y>=YEAR-6)add("Fecha","warn","Publicado en "+y+tuyo+". Tiene "+(YEAR-y)+" años: útil, pero comprueba si hay algo más nuevo.",7);
+  else add("Fecha","bad","Publicado en "+y+tuyo+" — hace "+(YEAR-y)+" años. En ciencia y tecnología eso suele estar obsoleto.",-6);
+
+  /* 3 referencias (en el documento completo, si lo hay) */
+  var links=(full.match(/https?:\/\//g)||[]).length+(parseInt(opts.enlaces,10)||0);
+  var acad=(full.match(/\([12]\d{3}\)/g)||[]).length+(full.match(/et al\.?/gi)||[]).length+(full.match(/\[\d{1,3}\]/g)||[]).length;
+  var refs=links+acad, enDoc=conCompleto?" en la fuente completa":"";
+  var dRef=densidad(refs,words), cadaRef=refs?Math.round(words/refs):0;
+  if(refs&&dRef>=1.5)add("Referencias","ok",refs+" referencias o enlaces"+enDoc+" (una cada "+cadaRef+" palabras). Puedes ir a comprobar cada afirmación en su origen.",20);
+  else if(refs&&dRef>=0.5)add("Referencias","ok",refs+" referencias"+enDoc+" (una cada "+cadaRef+" palabras). Apoya lo que dice en fuentes rastreables.",12);
+  else if(refs)add("Referencias","warn","Solo "+refs+" referencia"+(refs>1?"s":"")+enDoc+" para "+words+" palabras. Gran parte de lo que afirma no tiene respaldo.",4);
+  else if(frag&&!conCompleto)add("Referencias","warn","El fragmento no trae referencias. Revisa si el documento completo tiene bibliografía al final.",0);
+  else add("Referencias","bad","Cero referencias"+enDoc+". Todo lo que afirma hay que creerlo porque sí.",-14);
+
+  /* 4 dominio */
+  if(url&&/^https?:\/\//i.test(url)){
+    var host="";try{host=new URL(url).hostname.toLowerCase().replace(/^www\./,"");}catch(e){host="";}
+    if(host){
+      if(/\.(edu|gov|gob|mil)(\.[a-z]{2})?$/.test(host)||/\.ac\.[a-z]{2}$/.test(host))
+        add("Dominio","ok",host+" es un dominio universitario o de gobierno. No se entregan a cualquiera.",14);
+      else if(/(blogspot|wordpress\.com|wixsite|blogger|medium\.com|tumblr)/.test(host))
+        add("Dominio","warn",host+" es una plataforma de blogs: cualquiera publica sin revisión previa.",-6);
+      else if(/\.(info|biz|xyz|click|online|site|top)$/.test(host)||/\d{2,}/.test(host)||(host.match(/-/g)||[]).length>=2)
+        add("Dominio","bad",host+" tiene las marcas típicas de un sitio hecho para atraer clics, no para informar.",-12);
+      else if(/\.org(\.[a-z]{2})?$/.test(host))
+        add("Dominio","warn",host+" es una organización. Mira qué defiende antes de darlo por neutral.",4);
+      else add("Dominio","warn",host+" es un dominio comercial común. El dominio solo no dice nada: mira el resto.",0);
+    }else add("Dominio","warn","No se pudo leer la dirección.",0);
+  } else add("Dominio","warn","No pegaste la dirección. Añádela arriba y el análisis mejora.",0);
+
+  /* 5 relleno / IA */
+  var f=contarVeces(low,FILLER), dF=densidad(f.veces,words);
+  if(f.veces>=2&&dF>=1.5)add("Escritura de relleno","bad",f.veces+" muletillas de relleno en "+words+" palabras («"+f.found.slice(0,3).join("», «")+"»…). Así escribe el texto generado en masa para posicionar en buscadores.",-16);
+  else if(f.veces>=2&&dF>=0.5)add("Escritura de relleno","warn",f.veces+" muletillas de relleno en "+words+" palabras («"+f.found.slice(0,3).join("», «")+"»). Puede ser texto automático o simplemente flojo.",-7);
+  else add("Escritura de relleno","ok",f.veces?"Casi sin muletillas de relleno ("+f.veces+" en "+words+" palabras).":"Sin muletillas de relleno. El texto parece escrito por alguien que tenía algo que decir.",6);
+
+  /* 6 sensacionalismo */
+  var c=countPhrases(low,CLICKBAIT);
+  /* Exclamaciones: proporción de frases que terminan en «!» (1 de cada 5 o más).
+     Gritos, solo en líneas con minúsculas (una línea toda en MAYÚSCULAS suele ser un título):
+     tres o más palabras seguidas en mayúsculas («NO VAS A CREER»), o que haya 2 o más
+     palabras distintas en mayúsculas de 5 letras o más y sean el 3 % o más del texto
+     (un nombre propio en mayúsculas, como una empresa, no basta). Las siglas cortas (INEI, PBI,
+     BCRP) y los títulos no cuentan. Todo es presencia o proporción: no depende de la extensión. */
+  var trozos=text.split(/([.!?\n])/), frases=0, exclamativas=0;
+  for(var ti=0;ti<trozos.length;ti+=2){
+    if(/[a-záéíóúñ0-9]/i.test(trozos[ti])){frases++;if(trozos[ti+1]==="!")exclamativas++;}
+  }
+  var rachas=0, mayusLargas=0, mayusDistintas={};
+  text.split("\n").forEach(function(linea){
+    if(!/[a-záéíóúñ]/.test(linea))return;
+    rachas+=(linea.match(/\b[A-ZÁÉÍÓÚÑ]{2,}(?:\s+[A-ZÁÉÍÓÚÑ]+){2,}\b/g)||[]).length;
+    (linea.match(/\b[A-ZÁÉÍÓÚÑ]{5,}\b/g)||[]).forEach(function(w){mayusLargas++;mayusDistintas[w]=1;});
+  });
+  var gritos=rachas>=1||(Object.keys(mayusDistintas).length>=2&&words&&mayusLargas/words>=0.03);
+  var sens=c.n+(exclamativas/(frases||1)>=0.2?1:0)+(gritos?1:0);
+  if(sens>=3)add("Sensacionalismo","bad","Lenguaje de carnada: «"+(c.found[0]||"mayúsculas y signos de exclamación")+"». Busca tu clic, no tu comprensión.",-14);
+  else if(sens>=1)add("Sensacionalismo","warn","Algo de lenguaje exagerado. Ojo con el tono.",-6);
+  else add("Sensacionalismo","ok","Tono sobrio, sin exageraciones ni carnada.",6);
+
+  /* 7 certeza absoluta */
+  var a=countPhrases(low,ABSOLUTE);
+  if(a.n>=2)add("Certezas sin respaldo","bad","Afirma en absoluto («"+a.found.slice(0,2).join("», «")+"») sin mostrar de dónde lo saca. La ciencia rara vez habla así.",-9);
+  else if(a.n===1)add("Certezas sin respaldo","warn","Usa «"+a.found[0]+"» sin citar quién lo demostró.",-4);
+  else add("Certezas sin respaldo","ok","No presenta opiniones disfrazadas de hechos indiscutibles.",4);
+
+  /* 8 matiz */
+  var n=atribucion(text,low), dN=densidad(n.veces,words);
+  if(n.veces>=2&&dN>=1.5)add("Precisión","ok","Atribuye lo que dice («"+n.found.slice(0,3).join("», «")+"»…). Señal de alguien que sabe distinguir dato de opinión.",10);
+  else if(n.veces>=1&&dN>=0.5)add("Precisión","warn","Algo de atribución, pero poca para lo que afirma ("+n.veces+" en "+words+" palabras).",4);
+  else if(frag)add("Precisión","warn","En este fragmento no atribuye la información a nadie. Mira si el resto del documento lo hace.",0);
+  else add("Precisión","bad",n.veces?"Casi nunca dice de dónde viene la información ("+n.veces+" en "+words+" palabras). Casi todo suena a verdad revelada.":"Nunca dice de dónde viene la información. Todo suena a verdad revelada.",-6);
+
+  /* 9 profundidad: sustancia, no extensión (ver profundidad() más abajo) */
+  if(frag)add("Profundidad","na","Es un fragmento: la profundidad se juzga con la fuente completa (escribe su dirección o sube el PDF).",0);
+  else{var pr=profundidad(text,words,parseInt(opts.enlaces,10)||0);add("Profundidad",pr.status,pr.detail,pr.pts);}
+
+  score=Math.max(0,Math.min(100,Math.round(score)));
+  /* Un fragmento sin autor o sin fecha no puede salir en verde: el modo fragmento
+     no penaliza lo que falta, pero tampoco lo da por bueno. */
+  var incompleto=frag&&(!author||y===null);
+  if(incompleto)score=Math.min(score,69);
+  var level=score>=70?"ok":(score>=40?"warn":"bad");
+  var res={score:score,level:level,checks:checks,author:author,year:y,words:words};
+  /* campos extra solo cuando se usan: sin opts, el objeto es el de sitio-1.0 */
+  if(frag){res.fragmento=true;res.incompleto=incompleto;}
+  if(conCompleto)res.fuenteCompleta=true;
+  return res;
+}
+
+var STOP=("de la que el en y a los del se las por un para con no una su al lo como más pero sus le ya o "+
+"este sí porque esta entre cuando muy sin sobre también me hasta hay donde quien desde todo nos durante todos "+
+"uno les ni contra otros ese eso ante ellos e esto mí antes algunos qué unos yo otro otras otra él tanto esa "+
+"estos mucho quienes nada muchos cual poco ella estar estas algunas algo nosotros es son fue ser han ha haber "+
+"su sus dos tres cada toda todas the of and to in a is that it for on").split(/\s+/);
+function terms(s){
+  return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9ñ\s]/g," ")
+    .split(/\s+/).filter(function(w){return w.length>3&&STOP.indexOf(w)<0;});
+}
+function stem(w){return w.replace(/(ciones|cion|mente|idades|idad|ancia|encia|ando|iendo|ados|adas|ado|ada|es|as|os|s)$/,"");}
+function checkClaim(claim,src){
+  var ct=terms(claim),st=terms(src).map(stem);
+  /* se compara sin tildes, pero se muestra la palabra tal como la escribiste */
+  var shown={};
+  claim.toLowerCase().replace(/[^a-z0-9áéíóúüñ\s]/g," ").split(/\s+/).forEach(function(w){
+    var f=w.normalize("NFD").replace(/[\u0300-\u036f]/g,""); if(f&&!shown[f])shown[f]=w;
+  });
+  var uniq=[],seen={};
+  ct.forEach(function(w){var k=stem(w); if(!seen[k]){seen[k]=1;uniq.push({word:shown[w]||w,key:k});}});
+  var hits=uniq.filter(function(o){return st.indexOf(o.key)>=0;});
+  var misses=uniq.filter(function(o){return st.indexOf(o.key)<0;});
+  var pct=uniq.length?Math.round(hits.length/uniq.length*100):0;
+  var level=pct>=65?"ok":(pct>=35?"warn":"bad");
+  return {pct:pct,level:level,hits:hits,misses:misses,total:uniq.length};
+}
+
+/* ==================== RENDER (fin del motor) */

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Docentes califican fuentes reales para medir si el semáforo de VeriTech coincide con su criterio.">
+<meta name="color-scheme" content="light dark">
+<title>Calibración · VeriTech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#e4eaf1;--panel:#fdfeff;--sunk:#edf1f6;--ink:#0b1726;--muted:#556678;--accent:#0f4c9c;--on-accent:#ffffff;--soft:rgba(15,76,156,.09);--aline:rgba(15,76,156,.32);--line:rgba(11,23,38,.14);--strong:rgba(11,23,38,.28);--ok:#1d6349;--okbg:rgba(29,99,73,.11);--grid:rgba(11,23,38,.05);--shadow:0 1px 2px rgba(11,23,38,.05),0 18px 45px -24px rgba(11,23,38,.45)}
+@media(prefers-color-scheme:dark){:root{--bg:#060d16;--panel:#0d1a28;--sunk:#08111c;--ink:#e7edf4;--muted:#8fa3b8;--accent:#6ba5f2;--on-accent:#04101f;--soft:rgba(107,165,242,.12);--aline:rgba(107,165,242,.4);--line:rgba(231,237,244,.13);--strong:rgba(231,237,244,.3);--ok:#5dbe94;--okbg:rgba(93,190,148,.13);--grid:rgba(231,237,244,.045);--shadow:0 18px 44px -20px rgba(0,0,0,.8)}}
+*{box-sizing:border-box}body{margin:0;background-color:var(--bg);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px;color:var(--ink);font:16px/1.55 "IBM Plex Sans",sans-serif;padding:22px 16px 44px}.wrap{max-width:680px;margin:auto}.top{display:flex;align-items:center;gap:12px;margin-bottom:18px}.rose{width:38px;color:var(--accent)}.brand{font:800 1.5rem/1 Archivo,sans-serif;font-variation-settings:"wdth" 116}.top p{margin:.2em 0 0;color:var(--muted);font-size:.82rem}.back{margin-left:auto;color:var(--accent);font:600 .69rem "IBM Plex Mono",monospace;text-decoration:none;text-transform:uppercase;letter-spacing:.07em}.hero{border-left:4px solid var(--accent);padding:5px 0 5px 17px;margin:24px 0 18px}.hero h1{font:800 clamp(2rem,8vw,3.6rem)/.96 Archivo,sans-serif;font-variation-settings:"wdth" 112;letter-spacing:-.04em;margin:0}.hero p{color:var(--muted);max-width:52ch;margin:.8em 0 0}.meta{font:600 .67rem "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-top:12px}.form{display:grid;gap:14px}.q{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:20px;box-shadow:var(--shadow)}fieldset{margin:0;min-width:0}.q legend{padding:0;margin:0;width:100%;float:left}.q legend+*{clear:both}.num{font:600 .65rem "IBM Plex Mono",monospace;letter-spacing:.15em;text-transform:uppercase;color:var(--accent)}.question{display:block;font:700 1.08rem/1.3 Archivo,sans-serif;font-variation-settings:"wdth" 106;margin:.35em 0 .9em}.required{color:var(--accent)}.choices{display:grid;gap:8px}.choice{display:flex;gap:11px;align-items:flex-start;padding:11px 13px;border:1px solid var(--line);border-radius:6px;background:var(--sunk);cursor:pointer}.choice:hover{border-color:var(--aline)}.choice:has(input:checked){border-color:var(--accent);background:var(--soft)}.choice input{accent-color:var(--accent);width:18px;height:18px;flex:none;margin:.15em 0 0}.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.scale label{display:grid;place-items:center;gap:6px;padding:10px 3px;border:1px solid var(--line);border-radius:6px;background:var(--sunk);cursor:pointer;font:600 .78rem "IBM Plex Mono",monospace}.scale label:has(input:checked){border-color:var(--accent);background:var(--soft);color:var(--accent)}.scale input{accent-color:var(--accent)}.ends{display:flex;justify-content:space-between;color:var(--muted);font-size:.74rem;margin-top:7px}textarea,input[type=text],select{width:100%;border:1px solid var(--line);border-radius:6px;background:var(--sunk);color:var(--ink);font:inherit;padding:12px 13px}textarea{min-height:110px;resize:vertical}textarea:focus,input:focus,select:focus{outline:2px solid var(--accent);outline-offset:-1px}.help{color:var(--muted);font-size:.78rem;margin:.7em 0 0}.consent{display:flex;gap:10px;align-items:flex-start;font-size:.85rem;line-height:1.45;color:var(--ink);background:var(--soft);border:1px solid var(--aline);border-radius:9px;padding:13px 14px;cursor:pointer;margin-bottom:14px}
+.consent input{width:20px;height:20px;flex:none;margin:1px 0 0;accent-color:var(--accent);cursor:pointer}
+.consent a{color:var(--accent)}
+.docente{background:var(--panel);border:1px solid var(--aline);border-left:3px solid var(--accent);border-radius:8px;padding:12px 14px;font-size:.88rem;margin:0 0 16px}
+.docente a{color:var(--accent);font-weight:600}
+.pie{font-size:.74rem;color:var(--muted);text-align:center;line-height:1.9;padding:22px 0 4px}
+.pie a{color:var(--muted);text-decoration:underline}
+.pie a:hover{color:var(--accent)}
+.send{position:sticky;bottom:12px;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:14px;box-shadow:var(--shadow)}button{width:100%;border:1px solid var(--accent);border-radius:7px;background:var(--accent);color:var(--on-accent);padding:14px;font:600 .78rem "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}button:hover{filter:brightness(1.1)}button:disabled{opacity:.55;cursor:wait}.error{color:#a8342a;text-align:center;font-size:.82rem;margin:8px 0 0}.thanks{background:var(--panel);border:1px solid var(--ok);border-radius:10px;padding:36px 24px;text-align:center;box-shadow:var(--shadow)}.thanks svg{width:50px;color:var(--ok)}.thanks h2{font:800 1.8rem Archivo,sans-serif;color:var(--ok);margin:.5em 0}.thanks p{color:var(--muted);margin:auto;max-width:42ch}[hidden]{display:none!important}@media(max-width:480px){.scale{gap:4px}.q{padding:17px}.back{font-size:.62rem}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+.small{font-size:.8rem;color:var(--muted);margin:.4em 0 .8em}
+input[type=email]{width:100%;border:1px solid var(--line);border-radius:6px;background:var(--sunk);color:var(--ink);font:inherit;padding:12px 13px}
+input[type=url]{width:100%;border:1px solid var(--line);border-radius:6px;background:var(--sunk);color:var(--ink);font:inherit;padding:12px 13px}
+.pasos{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:16px 18px 6px;margin:0 0 16px;box-shadow:var(--shadow)}
+.pasos ol{margin:0;padding-left:1.2em}.pasos li{margin:0 0 .6em;font-size:.92rem}
+.contador{font:600 .72rem "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 12px}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0;text-align:left}
+.cmp div{border:1px solid var(--line);border-radius:8px;padding:12px;background:var(--sunk)}
+.cmp span{display:block;font:600 .64rem "IBM Plex Mono",monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cmp b{display:block;font:800 1.15rem Archivo,sans-serif;margin-top:.2em}
+.n-ok{color:var(--ok)}.n-warn{color:#8c5a0b}.n-bad{color:#a8342a}
+@media(prefers-color-scheme:dark){.n-warn{color:#e2a945}.n-bad{color:#ee8574}}
+.thanks .otra{margin-top:16px}
+</style>
+<link rel="stylesheet" href="/css/volver.css">
+</head>
+<body>
+<main class="wrap">
+  <header class="top">
+    <svg class="rose" viewBox="0 0 64 64" fill="none" aria-hidden="true"><circle cx="32" cy="32" r="29" stroke="currentColor" stroke-width="3"/><path d="M19 33 L28 42 L45 23" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+    <div><div class="brand">VeriTech</div><p>Calibración con docentes</p></div>
+    <a class="back" href="/guia-prueba.html">Guía de la prueba</a>
+  </header>
+  <section class="hero">
+    <h1>¿Coincide<br>con usted?</h1>
+    <p>Queremos saber si el semáforo de VeriTech juzga las fuentes como lo haría un docente. Usted califica una fuente y, después de enviar, ve qué puntaje le dio VeriTech.</p>
+    <div class="meta">1–2 minutos por fuente · Ideal: 10 a 20 fuentes</div>
+  </section>
+
+  <div class="pasos">
+    <ol>
+      <li>Elija fuentes <b>reales</b> que sus alumnos podrían usar: mezcle buenas, dudosas y malas.</li>
+      <li>Pegue la dirección y el texto de la página (selecciónelo todo con <b>Ctrl+A</b> o <b>Cmd+A</b> y cópielo).</li>
+      <li>Marque su juicio <b>antes</b> de ver el puntaje de VeriTech. Así la comparación es justa.</li>
+    </ol>
+  </div>
+  <p class="contador" id="contador" aria-live="polite"></p>
+
+  <form class="form" id="calibracion" method="POST" name="calibracion" data-netlify="true" netlify-honeypot="trampa">
+    <input type="hidden" name="form-name" value="calibracion">
+    <p hidden><label>No completar: <input name="trampa"></label></p>
+    <input type="hidden" name="puntaje_veritech"><input type="hidden" name="nivel_veritech">
+    <input type="hidden" name="coincide"><input type="hidden" name="senales">
+    <input type="hidden" name="palabras"><input type="hidden" name="version_motor">
+
+    <label class="q"><span class="num">01 · Quién califica</span><span class="question">Sus iniciales o un apodo</span><input type="text" name="docente" maxlength="40" autocomplete="off" placeholder="Ej.: MR o Docente A"><span class="help">Opcional. Solo sirve para agrupar sus calificaciones; se recuerda en este navegador.</span></label>
+
+    <label class="q"><span class="num">02 · Área</span><span class="question">¿Para qué área sería esta fuente?&nbsp;<span class="required" aria-label="obligatorio">*</span></span><select name="area" required><option value="">Seleccione una opción</option><option>Comunicación</option><option>Ciencia y Tecnología</option><option>Ciencias Sociales</option><option>Inglés</option><option>Desarrollo Personal, Ciudadanía y Cívica</option><option>Otra</option></select></label>
+
+    <label class="q"><span class="num">03 · La fuente</span><span class="question">Dirección de la página&nbsp;<span class="required" aria-label="obligatorio">*</span></span><input type="url" name="url" id="url" required maxlength="600" placeholder="https://…"></label>
+
+    <label class="q"><span class="num">04 · El texto</span><span class="question">Pegue el texto de la página&nbsp;<span class="required" aria-label="obligatorio">*</span></span><textarea id="texto" required minlength="80" placeholder="Pegue aquí todo el texto de la página…"></textarea><span class="help">El texto se analiza en su navegador y <b>no se envía</b>: solo enviamos la dirección, su juicio y el resultado del análisis.</span></label>
+
+    <fieldset class="q"><legend><span class="num">05 · Su juicio</span><span class="question">¿Dejaría que un alumno cite esta fuente en un trabajo?&nbsp;<span class="required" aria-label="obligatorio">*</span></span></legend>
+      <div class="choices"><label class="choice"><input type="radio" name="juicio_docente" value="confiable" required>Sí, es confiable</label><label class="choice"><input type="radio" name="juicio_docente" value="dudosa">Con reservas: habría que contrastarla</label><label class="choice"><input type="radio" name="juicio_docente" value="no confiable">No, no debería citarla</label></div>
+    </fieldset>
+
+    <label class="q"><span class="num">06 · Por qué</span><span class="question">¿En qué se fijó para decidir?</span><textarea name="motivo" maxlength="1000" placeholder="Opcional. Ej.: es de un ministerio pero está desactualizada…"></textarea></label>
+
+    <label class="consent" for="acepto"><input type="checkbox" id="acepto" name="consentimiento" value="Sí, acepto" required><span>Acepto que esta calificación se use para ajustar VeriTech. <a href="/privacidad.html" target="_blank" rel="noopener">Cómo tratamos los datos</a></span></label>
+    <div class="send"><button id="send" type="submit">Enviar y ver el puntaje de VeriTech</button><p class="error" id="error" role="alert" hidden></p></div>
+  </form>
+
+  <section class="thanks" id="thanks" tabindex="-1" hidden>
+    <h2>Calificación guardada</h2>
+    <div class="cmp"><div><span>Su juicio</span><b id="r-docente"></b></div><div><span>VeriTech</span><b id="r-veritech"></b></div></div>
+    <p id="r-coincide"></p>
+    <button type="button" class="otra" id="otra">Calificar otra fuente</button>
+  </section>
+  <footer class="pie">
+    <a href="/guia-prueba.html">Guía de la prueba</a> · <a href="/">Herramienta</a> · <a href="/opinion-docentes.html">Opinión docente</a> · <a href="/privacidad.html">Privacidad</a> · <a href="/terminos.html">Términos</a>
+  </footer>
+</main>
+<script src="/js/motor.js"></script>
+<script src="/js/calibracion.js"></script>
+<script src="/js/formulario.js"></script>
+<script src="/js/volver.js"></script>
+</body>
+</html>

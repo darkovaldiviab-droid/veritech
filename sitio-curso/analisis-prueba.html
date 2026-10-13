@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Resume los resultados de la prueba del colegio a partir de los CSV de Netlify Forms.">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='29' fill='none' stroke='%230F4C9C' stroke-width='5'/%3E%3Cpath d='M19 33 L28 42 L45 23' stroke='%230F4C9C' stroke-width='6' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
+<style>html{color-scheme:light dark}body{margin:0;font-family:system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Análisis de la prueba · VeriTech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#E4EAF1; --panel:#FDFEFF; --sunk:#EDF1F6; --ink:#0B1726; --muted:#556678;
+  --accent:#0F4C9C; --on-accent:#FFFFFF; --accent-soft:rgba(15,76,156,.09); --accent-line:rgba(15,76,156,.32);
+  --line:rgba(11,23,38,.13); --line-strong:rgba(11,23,38,.26);
+  --ok:#1D6349; --ok-bg:rgba(29,99,73,.11); --bad:#A8342A;
+  --grid:rgba(11,23,38,.05);
+  --shadow:0 1px 2px rgba(11,23,38,.05),0 14px 36px -18px rgba(11,23,38,.35);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#060D16; --panel:#0D1A28; --sunk:#08111C; --ink:#E7EDF4; --muted:#8FA3B8;
+  --accent:#6BA5F2; --on-accent:#04101F; --accent-soft:rgba(107,165,242,.12); --accent-line:rgba(107,165,242,.4);
+  --line:rgba(231,237,244,.13); --line-strong:rgba(231,237,244,.28);
+  --ok:#5DBE94; --ok-bg:rgba(93,190,148,.13); --bad:#EE8574;
+  --grid:rgba(231,237,244,.045);
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 18px 44px -20px rgba(0,0,0,.8);
+}}
+:root[data-theme="dark"]{
+  --bg:#060D16; --panel:#0D1A28; --sunk:#08111C; --ink:#E7EDF4; --muted:#8FA3B8;
+  --accent:#6BA5F2; --on-accent:#04101F; --accent-soft:rgba(107,165,242,.12); --accent-line:rgba(107,165,242,.4);
+  --line:rgba(231,237,244,.13); --line-strong:rgba(231,237,244,.28);
+  --ok:#5DBE94; --ok-bg:rgba(93,190,148,.13); --bad:#EE8574;
+  --grid:rgba(231,237,244,.045);
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 18px 44px -20px rgba(0,0,0,.8);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px; line-height:1.55;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:40px 40px;
+  padding-block:22px; padding-left:16px; padding-right:16px;
+}
+.wrap{max-width:880px; margin-inline:auto; display:flex; flex-direction:column; gap:16px}
+h1,h2,h3{font-family:Archivo,sans-serif; margin:0; text-wrap:balance; letter-spacing:-.02em}
+p{margin:0}
+header{display:flex; align-items:center; gap:12px}
+.rose{width:34px; height:34px; color:var(--accent); flex:none}
+h1{font-variation-settings:"wdth" 116,"wght" 800; font-size:1.45rem; line-height:1}
+.sub{font-size:.8rem; color:var(--muted); line-height:1.3}
+
+.card{background:var(--panel); border:1px solid var(--line); border-radius:9px; box-shadow:var(--shadow); padding:18px; display:flex; flex-direction:column; gap:12px}
+.card h2{font-size:1rem; font-variation-settings:"wdth" 108,"wght" 700}
+.pasos{display:flex; flex-direction:column; gap:.7em; counter-reset:p}
+.paso{display:grid; grid-template-columns:auto 1fr; gap:.85em; align-items:start; font-size:.87rem; color:var(--muted); line-height:1.5}
+.paso b{
+  font-family:"IBM Plex Mono",monospace; font-size:.68rem; color:var(--accent);
+  border:1px solid var(--accent); border-radius:99px; width:1.85em; height:1.85em;
+  display:grid; place-items:center; flex:none;
+}
+.paso strong{color:var(--ink); font-weight:600}
+textarea{
+  font-family:"IBM Plex Mono",monospace; font-size:.78rem; color:var(--ink); background:var(--sunk);
+  border:1px solid var(--line); border-radius:7px; padding:12px; width:100%; min-height:130px;
+  resize:vertical; line-height:1.5;
+}
+textarea:focus{outline:2px solid var(--accent); outline-offset:-1px}
+button{
+  font-family:"IBM Plex Mono",monospace; font-size:.73rem; font-weight:600; letter-spacing:.07em;
+  text-transform:uppercase; border-radius:6px; padding:.75em 1.1em; cursor:pointer;
+  background:var(--panel); color:var(--ink); border:1px solid var(--line-strong);
+}
+button:hover{border-color:var(--accent); color:var(--accent)}
+button:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+button.primary{background:var(--accent); border-color:var(--accent); color:var(--on-accent)}
+button.primary:hover{filter:brightness(1.1); color:#fff}
+.row{display:flex; gap:9px; flex-wrap:wrap}
+
+.n{
+  display:flex; align-items:baseline; gap:.5em; font-family:"IBM Plex Mono",monospace;
+  font-size:.75rem; color:var(--muted); border-bottom:1px solid var(--line); padding-bottom:.7em;
+}
+.n b{font-family:Archivo,sans-serif; font-size:1.8rem; font-weight:800; color:var(--accent); font-variant-numeric:tabular-nums}
+.stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:12px}
+.stat{border:1px solid var(--line); border-radius:8px; padding:14px; display:flex; flex-direction:column; gap:.4em; background:var(--sunk)}
+.stat .big{font-family:Archivo,sans-serif; font-size:2.5rem; font-weight:800; line-height:1; color:var(--accent); font-variant-numeric:tabular-nums}
+.stat .lbl{font-size:.8rem; color:var(--muted); line-height:1.45}
+.stat .base{font-family:"IBM Plex Mono",monospace; font-size:.66rem; color:var(--muted); opacity:.85}
+.frase{
+  background:var(--accent-soft); border:1px solid var(--accent-line); border-radius:8px; padding:14px;
+  display:flex; flex-direction:column; gap:.6em;
+}
+.frase p{font-size:.92rem; line-height:1.55}
+.desglose{display:flex; flex-direction:column; gap:10px}
+.dgrupo b{font-size:.82rem; font-weight:600; display:block; margin-bottom:.4em}
+.barra{display:grid; grid-template-columns:minmax(120px,1.2fr) 2fr auto; gap:9px; align-items:center; font-size:.78rem; margin-bottom:4px}
+.barra span:first-child{color:var(--muted); overflow-wrap:anywhere}
+.bar{height:7px; background:var(--sunk); border:1px solid var(--line); border-radius:99px; overflow:hidden}
+.bar i{display:block; height:100%; background:var(--accent)}
+.barra .pct{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; color:var(--ink); white-space:nowrap}
+.aviso{font-size:.82rem; color:var(--bad); line-height:1.5}
+.vacio{color:var(--muted); font-size:.85rem; text-align:center; padding:26px 10px; border:1px dashed var(--line-strong); border-radius:8px}
+.flash{position:fixed; left:50%; bottom:18px; transform:translateX(-50%); z-index:50; font-size:.82rem; font-weight:500;
+  padding:.7em 1.1em; border-radius:7px; border:1px solid var(--ok); background:var(--ok-bg); color:var(--ok); box-shadow:var(--shadow)}
+footer a{color:var(--muted); text-decoration:underline}
+footer a:hover{color:var(--accent)}
+footer{font-size:.74rem; color:var(--muted); text-align:center}
+.wrap{max-width:960px}
+.card h3{font-size:.9rem; font-variation-settings:"wdth" 106,"wght" 700; margin-top:.4em}
+.archivo{display:flex; flex-wrap:wrap; gap:9px; align-items:center}
+.archivo label.boton{
+  font-family:"IBM Plex Mono",monospace; font-size:.73rem; font-weight:600; letter-spacing:.07em; text-transform:uppercase;
+  border-radius:6px; padding:.75em 1.1em; cursor:pointer; background:var(--accent); color:var(--on-accent); border:1px solid var(--accent)}
+.archivo label.boton:hover{filter:brightness(1.1)}
+.archivo label.boton:focus-within{outline:2px solid var(--accent); outline-offset:2px}
+.archivo input[type=file]{position:absolute; width:1px; height:1px; opacity:0}
+.archivo .nombre{font-size:.8rem; color:var(--muted); overflow-wrap:anywhere}
+details summary{cursor:pointer; font-size:.8rem; color:var(--accent); font-weight:600}
+details[open] summary{margin-bottom:8px}
+.semaforo{display:flex; flex-direction:column; gap:8px}
+.criterio{display:grid; grid-template-columns:auto 1fr; gap:10px; align-items:start; padding:10px 12px; border:1px solid var(--line); border-radius:8px; background:var(--sunk)}
+.criterio .icono{width:1.6em; height:1.6em; border-radius:50%; display:grid; place-items:center; font-weight:700; font-size:.85rem; flex:none}
+.est-si .icono{background:var(--ok-bg); color:var(--ok); border:1px solid var(--ok)}
+.est-no .icono{background:rgba(168,52,42,.1); color:var(--bad); border:1px solid var(--bad)}
+.est-sin-datos .icono{background:var(--panel); color:var(--muted); border:1px dashed var(--line-strong)}
+.criterio p{font-size:.87rem}
+.criterio small{display:block; color:var(--muted); font-size:.78rem; margin-top:.15em}
+.conclusion{font-weight:600; font-size:.92rem}
+.alerta{border:1px solid var(--bad); color:var(--bad); background:rgba(168,52,42,.08); border-radius:8px; padding:10px 12px; font-size:.86rem}
+.stat .big.ok{color:var(--ok)} .stat .big.bad{color:var(--bad)}
+.tabla-wrap{overflow-x:auto}
+table{border-collapse:collapse; width:100%; font-size:.82rem}
+th,td{text-align:left; padding:.5em .6em; border-bottom:1px solid var(--line); vertical-align:top}
+th{font-weight:600; color:var(--muted); font-size:.74rem}
+td.num,th.num{text-align:center; font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums}
+td.diag{background:var(--ok-bg); color:var(--ok); font-weight:700}
+.lista{margin:0; padding-left:1.1em; display:flex; flex-direction:column; gap:.45em; font-size:.85rem}
+.lista li{overflow-wrap:anywhere}
+.lista small{color:var(--muted)}
+.nota-p{font-size:.78rem; color:var(--muted); line-height:1.5}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <svg class="rose" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+      <circle cx="32" cy="32" r="29" stroke="currentColor" stroke-width="3"/>
+      <path d="M19 33 L28 42 L45 23" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+    <div>
+      <h1>Análisis de la prueba</h1>
+      <p class="sub">Solo para el equipo · Los archivos se leen en tu navegador y no se suben a ningún lado</p>
+    </div>
+  </header>
+
+  <div class="card">
+    <h2>Cómo traer los datos</h2>
+    <div class="pasos">
+      <div class="paso"><b>1</b><p>Entra a <strong>app.netlify.com</strong>, abre tu proyecto y ve a <strong>Forms</strong>.</p></div>
+      <div class="paso"><b>2</b><p>En cada formulario (<strong>calibracion</strong>, <strong>opinion-docentes</strong> y <strong>opinion-sobre-la-web</strong>) pulsa <strong>Download CSV</strong>.</p></div>
+      <div class="paso"><b>3</b><p>Abre cada archivo en su sección de abajo. El resumen se arma solo.</p></div>
+    </div>
+  </div>
+
+  <div class="card" id="resumen">
+    <h2>¿Pedimos el piloto?</h2>
+    <p class="nota-p">Criterios del plan post-feedback. Falta uno más que se revisa a mano: que la dirección acepte el piloto gratuito o pida más información.</p>
+    <div class="semaforo" id="criterios"></div>
+    <p class="conclusion" id="conclusion"></p>
+    <p class="alerta" id="alerta" hidden></p>
+    <div class="row"><button type="button" id="copiar">Copiar resumen en texto</button></div>
+  </div>
+
+  <section class="card" data-tipo="calibracion">
+    <h2>1. Calibración (docentes)</h2>
+    <div class="archivo"><label class="boton">Abrir CSV de calibracion<input type="file" accept=".csv,text/csv"></label><span class="nombre"></span></div>
+    <details><summary>O pegar el texto del CSV</summary><textarea spellcheck="false" placeholder="Pega aquí el contenido del archivo…"></textarea><div class="row"><button class="primary" type="button">Analizar</button></div></details>
+    <p class="aviso" role="alert" hidden></p>
+    <div class="salida" aria-live="polite"></div>
+  </section>
+
+  <section class="card" data-tipo="docentes">
+    <h2>2. Opinión docente</h2>
+    <div class="archivo"><label class="boton">Abrir CSV de opinion-docentes<input type="file" accept=".csv,text/csv"></label><span class="nombre"></span></div>
+    <details><summary>O pegar el texto del CSV</summary><textarea spellcheck="false" placeholder="Pega aquí el contenido del archivo…"></textarea><div class="row"><button class="primary" type="button">Analizar</button></div></details>
+    <p class="aviso" role="alert" hidden></p>
+    <div class="salida" aria-live="polite"></div>
+  </section>
+
+  <section class="card" data-tipo="estudiantes">
+    <h2>3. Opinión de estudiantes</h2>
+    <div class="archivo"><label class="boton">Abrir CSV de opinion-sobre-la-web<input type="file" accept=".csv,text/csv"></label><span class="nombre"></span></div>
+    <details><summary>O pegar el texto del CSV</summary><textarea spellcheck="false" placeholder="Pega aquí el contenido del archivo…"></textarea><div class="row"><button class="primary" type="button">Analizar</button></div></details>
+    <p class="aviso" role="alert" hidden></p>
+    <div class="salida" aria-live="polite"></div>
+  </section>
+
+  <footer>Proyecto VeriTech · Los porcentajes se redondean al entero más cercano<br><a href="/guia-prueba.html">Guía de la prueba</a> · <a href="/resultados.html">Resultados de la encuesta</a> · <a href="/privacidad.html">Privacidad</a></footer>
+</div>
+<p class="flash" id="flash" role="status" hidden></p>
+
+<script src="/js/analisis.js"></script>
+<script src="/js/analisis-ui.js"></script>
+</body>
+</html>

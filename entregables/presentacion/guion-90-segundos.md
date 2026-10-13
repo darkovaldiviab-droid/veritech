@@ -19,10 +19,10 @@ Cuando hagas la prueba real con otra persona, cambia la frase de 40–60 s por l
 - **¿Por qué no basta con la web?** La web no está abierta cuando lees un libro; el marcapáginas sí, y te devuelve a ella.
 - **¿El QR en relieve se lee?** Con dos colores, sí (relieve oscuro sobre base clara). En un solo color hay que pintar el relieve. En Tinkercad lo comprobamos: el QR se decodifica desde la captura.
 - **¿Cuánto cuesta para un salón?** 30 × 15 g = 450 g de PLA, unos S/ 36 en material (PLA a S/ 80/kg, supuesto).
-- **¿Qué cambiaste en la web?** Una página nueva `/m` para el celular; el analizador lee `?url=` del enlace y muestra el aviso «Llegaste desde tu marcapáginas»; `/M` y `/m` redirigen en Netlify.
+- **¿Qué cambiaste en la web?** Una página nueva `/m` para el celular; el analizador lee `?url=` del enlace y muestra el aviso «Llegaste desde tu marcapáginas»; `/M` y `/m` llevan a esa página (copia del sitio publicada en Vercel para este curso).
 
 ## Antes de presentar
 
-1. Comprueba que https://veritech-aleph.netlify.app/M abre la página nueva (hay que publicar la web).
+1. Comprueba que https://veritech-souvenir.vercel.app/M abre la página nueva (ya está publicada).
 2. Escanea el QR de la diapositiva 6 con tu celular.
 3. Ensaya con cronómetro: si pasas de 90 s, recorta la diapositiva del modelo.

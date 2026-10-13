@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Formulario para docentes que probaron VeriTech: utilidad en clase, precisión del semáforo y qué haría falta para usarlo.">
+<meta name="color-scheme" content="light dark">
+<title>Opinión docente · VeriTech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#e4eaf1;--panel:#fdfeff;--sunk:#edf1f6;--ink:#0b1726;--muted:#556678;--accent:#0f4c9c;--on-accent:#ffffff;--soft:rgba(15,76,156,.09);--aline:rgba(15,76,156,.32);--line:rgba(11,23,38,.14);--strong:rgba(11,23,38,.28);--ok:#1d6349;--okbg:rgba(29,99,73,.11);--grid:rgba(11,23,38,.05);--shadow:0 1px 2px rgba(11,23,38,.05),0 18px 45px -24px rgba(11,23,38,.45)}
+@media(prefers-color-scheme:dark){:root{--bg:#060d16;--panel:#0d1a28;--sunk:#08111c;--ink:#e7edf4;--muted:#8fa3b8;--accent:#6ba5f2;--on-accent:#04101f;--soft:rgba(107,165,242,.12);--aline:rgba(107,165,242,.4);--line:rgba(231,237,244,.13);--strong:rgba(231,237,244,.3);--ok:#5dbe94;--okbg:rgba(93,190,148,.13);--grid:rgba(231,237,244,.045);--shadow:0 18px 44px -20px rgba(0,0,0,.8)}}
+*{box-sizing:border-box}body{margin:0;background-color:var(--bg);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:40px 40px;color:var(--ink);font:16px/1.55 "IBM Plex Sans",sans-serif;padding:22px 16px 44px}.wrap{max-width:680px;margin:auto}.top{display:flex;align-items:center;gap:12px;margin-bottom:18px}.rose{width:38px;color:var(--accent)}.brand{font:800 1.5rem/1 Archivo,sans-serif;font-variation-settings:"wdth" 116}.top p{margin:.2em 0 0;color:var(--muted);font-size:.82rem}.back{margin-left:auto;color:var(--accent);font:600 .69rem "IBM Plex Mono",monospace;text-decoration:none;text-transform:uppercase;letter-spacing:.07em}.hero{border-left:4px solid var(--accent);padding:5px 0 5px 17px;margin:24px 0 18px}.hero h1{font:800 clamp(2rem,8vw,3.6rem)/.96 Archivo,sans-serif;font-variation-settings:"wdth" 112;letter-spacing:-.04em;margin:0}.hero p{color:var(--muted);max-width:52ch;margin:.8em 0 0}.meta{font:600 .67rem "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-top:12px}.form{display:grid;gap:14px}.q{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:20px;box-shadow:var(--shadow)}fieldset{margin:0;min-width:0}.q legend{padding:0;margin:0;width:100%;float:left}.q legend+*{clear:both}.num{font:600 .65rem "IBM Plex Mono",monospace;letter-spacing:.15em;text-transform:uppercase;color:var(--accent)}.question{display:block;font:700 1.08rem/1.3 Archivo,sans-serif;font-variation-settings:"wdth" 106;margin:.35em 0 .9em}.required{color:var(--accent)}.choices{display:grid;gap:8px}.choice{display:flex;gap:11px;align-items:flex-start;padding:11px 13px;border:1px solid var(--line);border-radius:6px;background:var(--sunk);cursor:pointer}.choice:hover{border-color:var(--aline)}.choice:has(input:checked){border-color:var(--accent);background:var(--soft)}.choice input{accent-color:var(--accent);width:18px;height:18px;flex:none;margin:.15em 0 0}.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.scale label{display:grid;place-items:center;gap:6px;padding:10px 3px;border:1px solid var(--line);border-radius:6px;background:var(--sunk);cursor:pointer;font:600 .78rem "IBM Plex Mono",monospace}.scale label:has(input:checked){border-color:var(--accent);background:var(--soft);color:var(--accent)}.scale input{accent-color:var(--accent)}.ends{display:flex;justify-content:space-between;color:var(--muted);font-size:.74rem;margin-top:7px}textarea,input[type=text],select{width:100%;border:1px solid var(--line);border-radius:6px;background:var(--sunk);color:var(--ink);font:inherit;padding:12px 13px}textarea{min-height:110px;resize:vertical}textarea:focus,input:focus,select:focus{outline:2px solid var(--accent);outline-offset:-1px}.help{color:var(--muted);font-size:.78rem;margin:.7em 0 0}.consent{display:flex;gap:10px;align-items:flex-start;font-size:.85rem;line-height:1.45;color:var(--ink);background:var(--soft);border:1px solid var(--aline);border-radius:9px;padding:13px 14px;cursor:pointer;margin-bottom:14px}
+.consent input{width:20px;height:20px;flex:none;margin:1px 0 0;accent-color:var(--accent);cursor:pointer}
+.consent a{color:var(--accent)}
+.docente{background:var(--panel);border:1px solid var(--aline);border-left:3px solid var(--accent);border-radius:8px;padding:12px 14px;font-size:.88rem;margin:0 0 16px}
+.docente a{color:var(--accent);font-weight:600}
+.pie{font-size:.74rem;color:var(--muted);text-align:center;line-height:1.9;padding:22px 0 4px}
+.pie a{color:var(--muted);text-decoration:underline}
+.pie a:hover{color:var(--accent)}
+.send{position:sticky;bottom:12px;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:14px;box-shadow:var(--shadow)}button{width:100%;border:1px solid var(--accent);border-radius:7px;background:var(--accent);color:var(--on-accent);padding:14px;font:600 .78rem "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}button:hover{filter:brightness(1.1)}button:disabled{opacity:.55;cursor:wait}.error{color:#a8342a;text-align:center;font-size:.82rem;margin:8px 0 0}.thanks{background:var(--panel);border:1px solid var(--ok);border-radius:10px;padding:36px 24px;text-align:center;box-shadow:var(--shadow)}.thanks svg{width:50px;color:var(--ok)}.thanks h2{font:800 1.8rem Archivo,sans-serif;color:var(--ok);margin:.5em 0}.thanks p{color:var(--muted);margin:auto;max-width:42ch}[hidden]{display:none!important}@media(max-width:480px){.scale{gap:4px}.q{padding:17px}.back{font-size:.62rem}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+.sub{display:block;font-weight:600;font-size:.92rem;color:var(--ink);margin:16px 0 8px}
+input[type=email]{width:100%;border:1px solid var(--line);border-radius:6px;background:var(--sunk);color:var(--ink);font:inherit;padding:12px 13px}
+</style>
+<link rel="stylesheet" href="/css/volver.css">
+</head>
+<body>
+<main class="wrap">
+  <header class="top">
+    <svg class="rose" viewBox="0 0 64 64" fill="none" aria-hidden="true"><circle cx="32" cy="32" r="29" stroke="currentColor" stroke-width="3"/><path d="M19 33 L28 42 L45 23" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+    <div><div class="brand">VeriTech</div><p>Opinión de docentes</p></div>
+    <a class="back" href="/guia-prueba.html">Guía de la prueba</a>
+  </header>
+  <section class="hero">
+    <h1>¿Le sirve<br>en clase?</h1>
+    <p>Usted conoce el criterio que queremos enseñar. Sus respuestas deciden qué construimos primero y si VeriTech vale la pena para el colegio.</p>
+    <div class="meta">12 preguntas · 6 minutos · Sin datos de alumnos</div>
+  </section>
+
+  <form class="form" id="docentes" method="POST" name="opinion-docentes" data-netlify="true" netlify-honeypot="trampa">
+    <input type="hidden" name="form-name" value="opinion-docentes">
+    <p hidden><label>No completar: <input name="trampa"></label></p>
+
+    <label class="q"><span class="num">01 · Su curso</span><span class="question">¿Qué área enseña?&nbsp;<span class="required" aria-label="obligatorio">*</span></span><select name="area" required><option value="">Seleccione una opción</option><option>Comunicación</option><option>Ciencia y Tecnología</option><option>Ciencias Sociales</option><option>Inglés</option><option>Desarrollo Personal, Ciudadanía y Cívica</option><option>Otra</option></select></label>
+
+    <label class="q"><span class="num">02 · Grado</span><span class="question">¿Con qué grado probó VeriTech (o lo usaría)?</span><select name="grado"><option value="">Prefiero no decirlo</option><option>1.º de secundaria</option><option>2.º de secundaria</option><option>3.º de secundaria</option><option>4.º de secundaria</option><option>5.º de secundaria</option><option>Varios grados</option></select></label>
+
+    <fieldset class="q"><legend><span class="num">03 · Qué probó</span><span class="question">¿Qué partes de VeriTech probó? Marque todas las que correspondan.</span></legend>
+      <div class="choices"><label class="choice"><input type="checkbox" name="funciones_probadas[]" value="Semaforo de fuentes">Semáforo de fuentes (analizar una página)</label><label class="choice"><input type="checkbox" name="funciones_probadas[]" value="Verificar una cita">Verificar si una cita respalda una afirmación</label><label class="choice"><input type="checkbox" name="funciones_probadas[]" value="Bibliografia">Mi trabajo y bibliografía APA/MLA</label><label class="choice"><input type="checkbox" name="funciones_probadas[]" value="Calibracion">Calibración (calificar fuentes reales)</label><label class="choice"><input type="checkbox" name="funciones_probadas[]" value="Vista previa del panel">Vista previa del panel del profesor</label></div>
+    </fieldset>
+
+    <fieldset class="q"><legend><span class="num">04 · Utilidad</span><span class="question">¿Qué tan útil le parece el semáforo de fuentes para sus alumnos?&nbsp;<span class="required" aria-label="obligatorio">*</span></span></legend>
+      <div class="scale"><label><input type="radio" name="utilidad_semaforo" value="1 - Nada útil" required>1</label><label><input type="radio" name="utilidad_semaforo" value="2">2</label><label><input type="radio" name="utilidad_semaforo" value="3">3</label><label><input type="radio" name="utilidad_semaforo" value="4">4</label><label><input type="radio" name="utilidad_semaforo" value="5 - Muy útil">5</label></div><div class="ends"><span>Nada útil</span><span>Muy útil</span></div>
+    </fieldset>
+
+    <fieldset class="q"><legend><span class="num">05 · Precisión</span><span class="question">Cuando analizó fuentes que usted conoce, ¿el color de VeriTech coincidió con su propio criterio?&nbsp;<span class="required" aria-label="obligatorio">*</span></span></legend>
+      <div class="choices"><label class="choice"><input type="radio" name="coincide_criterio" value="Casi siempre" required>Casi siempre</label><label class="choice"><input type="radio" name="coincide_criterio" value="A veces">A veces</label><label class="choice"><input type="radio" name="coincide_criterio" value="Pocas veces">Pocas veces</label><label class="choice"><input type="radio" name="coincide_criterio" value="No lo compare">No lo comparé</label></div>
+    </fieldset>
+
+    <label class="q"><span class="num">06 · Un ejemplo</span><span class="question">Si no coincidió, cuéntenos un caso: qué fuente era, qué color le dio VeriTech y cuál le habría dado usted.</span><textarea name="ejemplo_desacuerdo" maxlength="1500" placeholder="Ej.: una página del Minedu salió amarilla porque no tenía autor firmado…"></textarea></label>
+
+    <fieldset class="q"><legend><span class="num">07 · Claridad</span><span class="question">¿Sus alumnos entenderían solos por qué una fuente sale verde, amarilla o roja?&nbsp;<span class="required" aria-label="obligatorio">*</span></span></legend>
+      <div class="choices"><label class="choice"><input type="radio" name="claridad" value="Si, solos" required>Sí, sin ayuda</label><label class="choice"><input type="radio" name="claridad" value="Con una explicacion breve">Con una explicación breve en clase</label><label class="choice"><input type="radio" name="claridad" value="No">No, las razones no son claras</label></div>
+    </fieldset>
+
+    <fieldset class="q"><legend><span class="num">08 · En clase</span><span class="question">¿Usaría VeriTech en una tarea real con sus alumnos?&nbsp;<span class="required" aria-label="obligatorio">*</span></span></legend>
+      <div class="choices"><label class="choice"><input type="radio" name="usaria_en_clase" value="Si, en la proxima tarea" required>Sí, en la próxima tarea con fuentes</label><label class="choice"><input type="radio" name="usaria_en_clase" value="Si, con cambios">Sí, si se cambian algunas cosas</label><label class="choice"><input type="radio" name="usaria_en_clase" value="No por ahora">No por ahora</label></div>
+    </fieldset>
+
+    <fieldset class="q"><legend><span class="num">09 · Lo imprescindible</span><span class="question">¿Qué necesitaría para usarlo de forma habitual? Marque lo imprescindible.</span></legend>
+      <div class="choices"><label class="choice"><input type="checkbox" name="imprescindible[]" value="Ver las fuentes que entrega cada alumno">Ver las fuentes que entrega cada alumno en una tarea, con su color</label><label class="choice"><input type="checkbox" name="imprescindible[]" value="Informe del curso">Un informe del curso (qué tipo de fuentes usan, sin datos individuales)</label><label class="choice"><input type="checkbox" name="imprescindible[]" value="Extension instalada">Que funcione solo en el navegador, sin copiar y pegar</label><label class="choice"><input type="checkbox" name="imprescindible[]" value="Mas formatos de cita">Más formatos: libros, artículos de revista, fecha de consulta</label><label class="choice"><input type="checkbox" name="imprescindible[]" value="Integracion Classroom o Teams">Integración con Google Classroom o Microsoft Teams</label><label class="choice"><input type="checkbox" name="imprescindible[]" value="Capacitacion">Una capacitación breve o una guía para docentes</label><label class="choice"><input type="checkbox" name="imprescindible[]" value="Fuentes peruanas">Que reconozca fuentes peruanas confiables (.gob.pe, .edu.pe, revistas nacionales)</label></div>
+      <label class="sub" for="imprescindible_otro">¿Algo más que sea imprescindible?</label><textarea id="imprescindible_otro" name="imprescindible_otro" maxlength="800" placeholder="Opcional"></textarea>
+    </fieldset>
+
+    <label class="q"><span class="num">10 · Qué cambiaría</span><span class="question">Si pudiera cambiar o agregar una sola cosa, ¿cuál sería?&nbsp;<span class="required" aria-label="obligatorio">*</span></span><textarea name="cambio_principal" maxlength="1500" required placeholder="Lo más importante para usted…"></textarea></label>
+
+    <fieldset class="q"><legend><span class="num">11 · Valor para el colegio</span><span class="question">Si VeriTech tuviera lo que marcó como imprescindible, ¿cree que el colegio debería contratarlo?&nbsp;<span class="required" aria-label="obligatorio">*</span></span></legend>
+      <div class="choices"><label class="choice"><input type="radio" name="contratar" value="Si" required>Sí</label><label class="choice"><input type="radio" name="contratar" value="Tal vez">Tal vez, depende del precio</label><label class="choice"><input type="radio" name="contratar" value="No">No</label><label class="choice"><input type="radio" name="contratar" value="No me corresponde">No me corresponde opinar</label></div>
+      <label class="sub" for="precio_razonable">¿Qué monto le parecería razonable, y en qué unidad (por alumno al mes, por curso, por año…)?</label><input type="text" id="precio_razonable" name="precio_razonable" maxlength="200" placeholder="Opcional. Ej.: S/ … por alumno al mes">
+    </fieldset>
+
+    <label class="q"><span class="num">12 · Privacidad</span><span class="question">¿Le preocupa algo sobre los datos de los alumnos o sobre cómo se usaría VeriTech?</span><textarea name="preocupaciones" maxlength="1500" placeholder="Opcional"></textarea></label>
+
+    <label class="q"><span class="num">Opcional · Contacto</span><span class="question">¿Podemos escribirle para una conversación de 15 minutos sobre sus respuestas?</span><input type="email" name="correo_contacto" maxlength="120" autocomplete="email" placeholder="correo@colegio.edu.pe"><span class="help">Solo si quiere. Lo usaremos únicamente para esa conversación y lo borraremos al terminar la prueba.</span></label>
+
+    <label class="consent" for="acepto"><input type="checkbox" id="acepto" name="consentimiento" value="Sí, acepto" required><span>Acepto que mis respuestas se usen para mejorar VeriTech. No escriba nombres de alumnos ni datos personales de terceros. <a href="/privacidad.html" target="_blank" rel="noopener">Cómo tratamos los datos</a></span></label>
+    <div class="send"><button id="send" type="submit">Enviar mi opinión</button><p class="error" id="error" role="alert" hidden></p></div>
+  </form>
+
+  <section class="thanks" id="thanks" tabindex="-1" hidden><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><circle cx="24" cy="24" r="21" stroke="currentColor" stroke-width="2"/><path d="m14 24 7 7 14-15" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><h2>Muchas gracias.</h2><p>Su opinión quedó registrada. Si aún no lo hizo, nos ayudaría mucho que califique algunas fuentes en la <a href="/calibracion.html">página de calibración</a>.</p></section>
+  <footer class="pie">
+    <a href="/guia-prueba.html">Guía de la prueba</a> · <a href="/">Herramienta</a> · <a href="/calibracion.html">Calibración</a> · <a href="/privacidad.html">Privacidad</a> · <a href="/terminos.html">Términos</a> · <a href="/cookies.html">Cookies y almacenamiento</a>
+  </footer>
+</main>
+<script src="/js/formulario.js"></script>
+<script src="/js/volver.js"></script>
+</body>
+</html>
