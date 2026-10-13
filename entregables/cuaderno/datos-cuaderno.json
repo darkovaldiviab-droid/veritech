@@ -5,11 +5,51 @@
     "necesita": "Saber en segundos si una fuente sirve para citarla. Valora lo práctico: algo que use en clase y no le quite tiempo.",
     "recordar": "Que antes de citar mire 3 cosas: autor, fecha y fuentes. Y que si duda, escanea el QR y VeriTech lo revisa.",
     "opciones": [
-      {"nombre": "Llavero del logo", "desc": ["Aro de Ø40 mm con el ✓ en relieve", "y anilla. Fácil de imprimir, pero", "solo decora: no ayuda a citar."], "total": "10/15"},
-      {"nombre": "Marcapáginas", "desc": ["140 × 40 mm: logo ✓, las 3 luces", "(autor, fecha, fuentes) y un QR", "que abre la web en el celular."], "total": "14/15"},
-      {"nombre": "Imán semáforo", "desc": ["Semáforo de 3 luces para la", "nevera. Necesita un imán y una", "pausa al imprimir; se usa en casa."], "total": "9/15"}
+      {
+        "nombre": "Llavero del logo",
+        "desc": [
+          "Aro de Ø40 mm con el ✓ en relieve",
+          "y anilla. Fácil de imprimir, pero",
+          "solo decora: no ayuda a citar."
+        ],
+        "total": "10/15"
+      },
+      {
+        "nombre": "Marcapáginas",
+        "desc": [
+          "140 × 40 mm: logo ✓, las 3 luces",
+          "(autor, fecha, fuentes) y un QR",
+          "que abre la web en el celular."
+        ],
+        "total": "14/15"
+      },
+      {
+        "nombre": "Imán semáforo",
+        "desc": [
+          "Semáforo de 3 luces para la",
+          "nevera. Necesita un imán y una",
+          "pausa al imprimir; se usa en casa."
+        ],
+        "total": "9/15"
+      }
     ],
-    "puntos": [[2, 5, 2], [3, 5, 4], [5, 4, 3]],
+    "puntos": [
+      [
+        2,
+        5,
+        2
+      ],
+      [
+        3,
+        5,
+        4
+      ],
+      [
+        5,
+        4,
+        3
+      ]
+    ],
     "elegida": "2",
     "porque": "se usa justo al leer e investigar, y su QR lleva a VeriTech (14/15)",
     "medidas": "140 × 40 mm (marcapáginas)",
@@ -26,18 +66,83 @@
     "antes": "…solo servía desde la computadora: había que entrar a la web y pegar el texto a mano.",
     "ahora": "…escanear el QR, entrar a una página hecha para el celular (/m) y analizar una fuente con solo su enlace.",
     "relacion": "El QR del marcapáginas abre /m, que repite AUTOR, FECHA y FUENTES: el objeto recuerda las preguntas y la web las comprueba.",
-    "repositorio": "",
-    "commit": "",
-    "pasos_github_ok": false,
+    "repositorio": "github.com/darkovaldiviab-droid/veritech (rama souvenir-marcapaginas)",
+    "commit": "1875260 · Souvenir VeriTech: marcapáginas con QR y página /m para el celular",
+    "pasos_github_ok": true,
     "pitch": [
-      [["Diseñamos un/una ", false], ["marcapáginas impreso en 3D", true], [" para ", false], ["alumnos de secundaria que buscan fuentes", true], [".", false]],
-      [["Lo elegimos porque ", false], ["se usa justo al investigar y su QR lleva a VeriTech (14/15 en la matriz)", true], [".", false]],
-      [["Tras probarlo, cambiamos ", false], ["el aro del logo (más grueso) y los módulos del QR (unidos) para que se imprima bien", true], [".", false]],
-      [["La web ahora permite ", false], ["entrar desde el QR a /m y analizar una fuente pegando solo su enlace", true], [".", false]]
+      [
+        [
+          "Diseñamos un/una ",
+          false
+        ],
+        [
+          "marcapáginas impreso en 3D",
+          true
+        ],
+        [
+          " para ",
+          false
+        ],
+        [
+          "alumnos de secundaria que buscan fuentes",
+          true
+        ],
+        [
+          ".",
+          false
+        ]
+      ],
+      [
+        [
+          "Lo elegimos porque ",
+          false
+        ],
+        [
+          "se usa justo al investigar y su QR lleva a VeriTech (14/15 en la matriz)",
+          true
+        ],
+        [
+          ".",
+          false
+        ]
+      ],
+      [
+        [
+          "Tras probarlo, cambiamos ",
+          false
+        ],
+        [
+          "el aro del logo (más grueso) y los módulos del QR (unidos) para que se imprima bien",
+          true
+        ],
+        [
+          ".",
+          false
+        ]
+      ],
+      [
+        [
+          "La web ahora permite ",
+          false
+        ],
+        [
+          "entrar desde el QR a /m y analizar una fuente pegando solo su enlace",
+          true
+        ],
+        [
+          ".",
+          false
+        ]
+      ]
     ],
     "mantener": "",
     "cambiar": "",
-    "evidencias": [true, true, true, false],
+    "evidencias": [
+      true,
+      true,
+      true,
+      true
+    ],
     "mejoraremos": "imprimirlo en 2 colores y medir cuántos compañeros escanean el QR en menos de 10 s."
   }
 }
